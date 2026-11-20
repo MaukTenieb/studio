@@ -6,6 +6,10 @@ Gravité choisie : la plus haute des gravités d'origine, baissée d'un cran qua
 
 ## Fait
 
+- 20 nov. 21 h 04 : E-20 ; E-26 ; E-41 ; E-43 ; E-59 ; E-61 ; E-62 ; E-64 ; E-74 ; E-75 ; E-83 ; E-98 ; E-99 ; E-100. Bouton + du projet vide masqué tiroir ouvert ; aimant : repères de film et bords des clips à 10 px d'abord, tempo libre au centième de seconde ; coupure générale ⏻ (arrêt, séquenceur coupé, chaînes reconstruites, bus dub muet 0,3 s) ; zoom arrière jusqu'à 0,25 px/s et touche « tout le projet » ; Copier remplit le presse-papier sans dupliquer ; poignées de fondu sur le clip choisi seulement, nom masqué sous 48 px ; onglets des pads en grille de 44 px ; mode simple sans métronome, boucle, aimant, tempo libre, chronomètre, retour d'écoute, Flashback, accordeur ni nouveau projet dans l'en-tête ; recherche dans les noms français et anglais et dans les boîtes à bruit ; barre du clip masquée rack ouvert ; trois courbes de fondu (⟋ linéaire, ◜ exponentielle, ∫ en S) en lecture et à l'export ; feuille Créer en 3 × 2 au téléphone debout ; Créer en pictogramme seul dans le pied de l'Atelier sous 760 px ; axes des pads à 12 px en #ffe3a0. Contrôle iPhone 13 : 0 cible sous 44 px et 0 texte sous 11 px dans la scène.
+
+- 20 nov. 21 h 01 : E-22 ; E-45 ; E-46 ; E-47 ; E-48 ; E-85 ; E-86 ; E-87 ; E-88. Séquenceur : swing calculé sur la position dans la rangée (pas 17 d'un cycle de 17 : 0 au lieu de +0,5 pas) ; pas manqués sautés en direct, anticipation 0,2 s (0,6 s onglet caché) ; coups joués dans la chaîne de leur piste ; « ⟳ n » écrit n cycles entiers par rangée (17 pas × 2 = 34 clips) ; décalage négatif : bloc repoussé d'un pas (premier coup à 0,105 s pour −20 ms) ; appui long sur un pas : décalage ±50 %, probabilité, niveau, pastille sur la cellule ; dé à graine affichée, même graine même motif ; curseurs k et rotation de l'euclidien. Au doigt, cellules de 44 px au moins en lignes (50 × 40 debout, 47 × 40 couché, contre 10,6 × 27).
+
 - 20 nov. 19 h 43 : E-44 ; E-65. Dérive gravée : touche ● de la dérive, chaque réglage suivi s'écrit en enveloppe fx: toutes les 200 ms et passe à l'export (filtre : 14 points par réglage en 3,5 s, rendu sans erreur). Couleurs : l'accent #f2e3a6 et ses variantes deviennent #ffe3a0, les ambres et rouges hors palette deviennent #ffa726 et #c9302a (27 remplacements) ; les polices Barlow et Courier Prime restent, DA.md réserve ses quatre familles à la borne.
 
 - 20 nov. 19 h 41 : E-11 ; E-12 ; E-21. Console au téléphone : touche D de 44 px, tranche Master épinglée au bord droit, réglage de réinjection visible. Coupes de film : seuil adaptatif (4 fois la médiane des 2 s précédentes, 0,04 au moins) et lecture deux fois moins rapide ; film gris à 5 % d'écart : 4 coupes trouvées sur 4, à 6 ms près (contre 0). Mastering : Neutral devient le réglage d'origine des projets neufs, Neutral et Classical en tête du tiroir Master, relèvement de sonie borné à +6 dB (la compensation du gain de rattrapage des compresseurs reste à faire).
@@ -24,18 +28,6 @@ Gravité choisie : la plus haute des gravités d'origine, baissée d'un cran qua
 
 ### Important
 
-- E-20 · important · Le gros bouton + du projet vide passe par-dessus les tiroirs et la ligne de temps.
-  - Experts : 3 (10-10, 09-14, 06-08). Gravités d'origine : 10-10 important, 09-14 détail, 06-08 important (partie bouton +).
-  - Preuve : `#emptyGo{z-index:6}` (ligne 295) : disque de 96 px sur le tiroir Master (10, 06) et sur la ligne de temps pendant une prise (09). Captures : [10-pc1366-simple-master](captures/10-pc1366-simple-master.webp), [09-voix-en-cours-iphone-paysage](captures/09-voix-en-cours-iphone-paysage.webp).
-  - Correction : `body.drawer-open #emptyGo, body.rec #emptyGo{display:none}`, classes posées par `drawer()` (ligne 2558) et au départ de l'enregistrement.
-  - Charge de la machine : existe quelle que soit la charge.
-
-- E-22 · important · Le swing suit la parité du compteur général : sur 15, 17, 19 ou 21 pas, le même pas alterne swing et grille droite.
-  - Experts : 2 (05-03, 09-07). Gravités d'origine : 05-03 important, 09-07 important.
-  - Preuve : `SEQ.step%2` (ligne 2655) et `i%2` (ligne 2659). Pas 3 d'un cycle de 17 : +62,5 ms puis 0 ms d'un cycle à l'autre (05) ; 15 pas : cycle 2 décalé à l'inverse du cycle 1 (09).
-  - Correction : Calculer la parité sur la position dans la rangée (`kr%2`, `kr = step % rlen(r)`) dans `seqTick` et `seqWrite` ; swing par rangée.
-  - Charge de la machine : existe quelle que soit la charge.
-
 - E-23 · important · Zéro réponse impulsionnelle enregistrée, zéro position de micro.
   - Experts : 2 (04-06, 06-09). Gravités d'origine : 04-06 important, 06-09 détail.
   - Preuve : Grotte, silo, cathédrale et 20 pièces = bruit filtré et réflexions posées (lignes 718, 829-836) ; `convx` (ligne 2099) destructif, sans mix, pré-délai ni écoute (04, 06).
@@ -46,12 +38,6 @@ Gravité choisie : la plus haute des gravités d'origine, baissée d'un cran qua
   - Experts : 2 (07-09, 09-10). Gravités d'origine : 07-09 important, 09-10 important (partie licence).
   - Preuve : `negroprisonsongs` (Alan Lomax, 1947) passe le filtre en « publicdomain » (07) ; « Come Away with Me » de Norah Jones (2002) affiché CC0 (09) ; crédits en « PD » ou « CC BY » sans version ni lien (07, `creditsTxt` ligne 1312).
   - Correction : Étendre `IA_SKIP` aux fonds à droits connus (prises Lomax, Folkways, Ocora rediffusés) ; pictogramme de doute sur un titre présent dans MusicBrainz avec un label commercial ; URL complète `licenseurl` dans les crédits ; distinguer Marque du domaine public et CC0.
-  - Charge de la machine : existe quelle que soit la charge.
-
-- E-26 · important · Aimant aveugle aux coupes, aux notes et aux attaques ; pas de 100 ms en tempo libre.
-  - Experts : 2 (01-06, 09-15). Gravités d'origine : 01-06 important, 09-15 détail.
-  - Preuve : `snapT` (ligne 1057) : grille seule, `Math.round(x*10)/10` en mode libre. Nappe posée à 11,000 s pour une coupe à 11,04 s (01) ; 100 ms d'arrondi en tempo libre (09).
-  - Correction : Dans `snapT`, essayer d'abord les repères de film, les notes et les attaques des clips voisins à 10 px ou moins, puis la grille ; en mode libre, pas de 10 ms.
   - Charge de la machine : existe quelle que soit la charge.
 
 - E-27 · important · Stems en 44,1 kHz 16 bits sans dither, de durées inégales, sans 2-pop ni code temporel.
@@ -132,42 +118,6 @@ Gravité choisie : la plus haute des gravités d'origine, baissée d'un cran qua
   - Correction : Gain de rattrapage par chaîne, mesuré une fois sur bruit rose à −24 dBFS RMS, pour un écart de ±3 dB (même principe que `dist`, ligne 737).
   - Charge de la machine : existe quelle que soit la charge.
 
-- E-41 · important · Zéro touche de coupure générale.
-  - Experts : 1 (03-10). Gravités d'origine : 03-10 important.
-  - Preuve : Zéro résultat pour « panic » et « panique » dans index.html ; la coupure au repos (`restGate`, ligne 963) rend le silence en 2 à 3 s (03).
-  - Correction : Pictogramme ⏻ dans l'en-tête et le menu ⋯ : master coupé en 10 ms, lignes à retard et boucles vidées (`rebuildChains`).
-  - Charge de la machine : existe quelle que soit la charge.
-
-- E-43 · important · Zoom arrière bloqué à 8 px/s.
-  - Experts : 1 (04-03). Gravités d'origine : 04-03 important.
-  - Preuve : `clamp(state.pps*f,8,800)` (ligne 2405) : 1 min 35 s visible sur 10 min 32 s de projet (04, S4). Capture : [04-s4-projet-long-pc1366](captures/04-s4-projet-long-pc1366.webp).
-  - Correction : Plancher à 0,25 px/s ; pictogramme crochets « tout le projet » : `pps = largeur utile / projEnd()`.
-  - Charge de la machine : existe quelle que soit la charge.
-
-- E-45 · important · La lecture en direct du séquenceur part en rafales quand le fil principal prend du retard.
-  - Experts : 1 (05-01). Gravités d'origine : 05-01 important.
-  - Preuve : Ligne 2655 : les pas en retard partent à `Math.max(c.currentTime,t)`, ensemble. 76 intervalles nuls sur 87, paquet de 59 coups (05, S9, avec un blocage volontaire de 400 ms).
-  - Correction : Dans `seqTick`, si `SEQ.next < c.currentTime`, sauter les pas manqués puis recaler `SEQ.next` ; anticipation de 0,2 s quand l'onglet ralentit.
-  - Charge de la machine : existe quelle que soit la charge. Le mécanisme de rattrapage existe à toute charge ; un calcul lourd du studio (écart du fil principal) le déclenche aussi.
-
-- E-46 · important · Séquenceur au téléphone debout : cellules de 10,6 px, touche E et décalage hors de l'écran.
-  - Experts : 1 (05-02). Gravités d'origine : 05-02 important (partie debout).
-  - Preuve : Cellules de 10,6 × 27 px, pas de 13,6 px ; décalage à x = 397 et E à x = 515 pour 390 px ; un toucher ouvre la feuille de son par erreur (05). Captures : [05-iphone-17pas-doigt](captures/05-iphone-17pas-doigt.webp), [05-iphone-motif17](captures/05-iphone-motif17.webp).
-  - Correction : Pages de 8 pas (1-8, 9-16, 17-21) avec cellules de 44 px, ou rangée en double hauteur ; curseurs et E empilés sous la rangée en mode réglages.
-  - Charge de la machine : existe quelle que soit la charge.
-
-- E-47 · important · « Mesures écrites » compte des blocs de 16 pas et casse le cycle impair.
-  - Experts : 1 (05-04). Gravités d'origine : 05-04 important.
-  - Preuve : `total=Math.round(SEQ.bars*16)` (ligne 2657) : 4 mesures à 17 pas = 64 pas, dernier cycle à 13/17 (05, S3).
-  - Correction : Écrire `SEQ.bars × SEQ.n` pas, ou un nombre entier de cycles du PPCM des rangées (plafonné) ; pictogramme de cycle à la place du mot « bars ».
-  - Charge de la machine : existe quelle que soit la charge.
-
-- E-48 · important · Zéro réglage par pas : ni décalage, ni probabilité, ni niveau.
-  - Experts : 1 (05-05). Gravités d'origine : 05-05 important.
-  - Preuve : Probabilité et décalage par rangée seulement (ligne 2652) (05, S5, S6).
-  - Correction : Appui long sur une cellule : carré à trois réglages (décalage −50 à +50 % du pas, probabilité, niveau), pastilles sur la cellule ; tableaux `r.ms[]`, `r.p[]`, `r.g[]` de 32 cases.
-  - Charge de la machine : existe quelle que soit la charge.
-
 - E-49 · important · Les enregistrements Musopen restent illisibles (FLAC, Ogg, ZIP).
   - Experts : 1 (06-05). Gravités d'origine : 06-05 important.
   - Preuve : `iaItem` garde `/\.mp3$/` (ligne 1426) ; musopen-dvd : 1 ZIP, 0 MP3 (06, S3).
@@ -222,34 +172,10 @@ Gravité choisie : la plus haute des gravités d'origine, baissée d'un cran qua
   - Correction : Graduations 50 Hz à 10 kHz à gauche, secondes en bas ; Hz, dB et temps sous le doigt ou la souris.
   - Charge de la machine : existe quelle que soit la charge.
 
-- E-59 · important · « Copier » duplique aussi le clip.
-  - Experts : 1 (08-09). Gravités d'origine : 08-09 important.
-  - Preuve : Ligne 1701 : `clipboard={...c}` puis `dupSel()` ; un second clip apparaît à 4,75 s sur la piste 02 (08, S7). Capture : [08-pc-convolution-dialogue](captures/08-pc-convolution-dialogue.webp).
-  - Correction : Copier = presse-papier seul ; Dupliquer reste dans le menu de l'appui long.
-  - Charge de la machine : existe quelle que soit la charge.
-
-- E-61 · important · Noms de clips coupés et poignées de fondu sur chaque clip après Écrire.
-  - Experts : 1 (10-07). Gravités d'origine : 10-07 important (partie affichage).
-  - Preuve : 21 noms rognés sur pc1920 (« Un », « Ho », « Gra ») ; noms hors de `tele()` (ligne 2583) (10, S4, S11). Capture : [10-pc1366-simple-clip](captures/10-pc1366-simple-clip.webp).
-  - Correction : Nom masqué sous 48 px de clip, défilement au choix du clip au-delà ; poignées de fondu sur le clip choisi seulement. L'écriture garde un clip par coup (voir contradictions).
-  - Charge de la machine : existe quelle que soit la charge.
-
-- E-62 · important · Onglets des modes de pads rognés et bas.
-  - Experts : 1 (10-08). Gravités d'origine : 10-08 important.
-  - Preuve : 10 onglets de 23 px de haut, 9 sur 10 rognés sur iphone, 5 sur 10 sur pc1366 (10, S6). Capture : [10-iphone-simple-pads](captures/10-iphone-simple-pads.webp).
-  - Correction : Grille de 10 pictogrammes de 44 × 44 px sur deux rangées, ou commutateur rotatif photographié à 10 crans.
-  - Charge de la machine : existe quelle que soit la charge.
-
 - E-63 · important · Proportions différentes d'un format à l'autre.
   - Experts : 1 (10-09). Gravités d'origine : 10-09 important.
   - Preuve : Tête de piste à 36 %, 27 %, 18 %, 13 % de la largeur ; pistes à 49 %, 25 %, 83 %, 87 % de la hauteur ; bouton Lecture 40 × 42, 30 × 42, 37 × 34, 42 × 42 (10, S9).
   - Correction : Tête de piste `clamp(120px,22vw,240px)` ; bibliothèque sur le côté long, 30 % de celui-ci ; tiroir ouvert à 50 % de la zone de travail ; bouton Lecture carré à l'unité `--u`. Contrôle : écart des rapports sous 5 points.
-  - Charge de la machine : existe quelle que soit la charge.
-
-- E-64 · important · Le mode simple laisse 18 commandes dans l'en-tête de l'ordinateur.
-  - Experts : 1 (10-11). Gravités d'origine : 10-11 important.
-  - Preuve : Ligne 291 : masque des touches du pied seulement ; 18 commandes sur pc1366 et pc1920 (10, S2).
-  - Correction : Masquer en mode simple `#bMetro,#bLoop,#bSnap,#bFree,#bCount,#bMon,#bFlash,#bTuner,#bNew` ; 9 commandes restent. Chronomètre et Flashback restent dans l'Atelier (voir contradictions).
   - Charge de la machine : existe quelle que soit la charge.
 
 - E-66 · important · Surfaces encore dessinées : pistes vides, bouton +, grille Master.
@@ -270,18 +196,6 @@ Gravité choisie : la plus haute des gravités d'origine, baissée d'un cran qua
   - Experts : 2 (05-10, 01-17). Gravités d'origine : 05-10 détail, 01-17 détail ; 08 (S10, sans numéro).
   - Preuve : +2,894 à +2,917 ms sur toutes les pistes (05, S3) ; latence fixe de 2,9 ms sur la scène (08, S10) ; clics de coupe à +2,4 ms et crête −6,26 dBFS pour −3,74 à la source (01, S8).
   - Correction : Trouver le nœud qui crée le quantum (boucle de retard ou worklet de la chaîne de piste) et rogner 128 échantillons en tête du rendu ; stems au gain unité, panoramique neutre sans loi de −3 dB.
-  - Charge de la machine : existe quelle que soit la charge.
-
-- E-74 · détail · La recherche ignore les boîtes à bruit et les noms français.
-  - Experts : 2 (02-11, 04-12). Gravités d'origine : 02-11 détail, 04-12 détail (partie recherche).
-  - Preuve : « sirène », « laser », « dub » : zéro boîte à bruit (02) ; « drone » : zéro son du kit en français (04). Capture : [02-recherche-sirene-pc1366](captures/02-recherche-sirene-pc1366.webp).
-  - Correction : Indexer `NB_LIST` et `NB_FR` (lignes 1882-1883) ; chercher dans le nom anglais et le nom français de chaque son.
-  - Charge de la machine : existe quelle que soit la charge.
-
-- E-75 · détail · Sur ordinateur, la barre d'actions du clip passe par-dessus le rack.
-  - Experts : 1 (03-13). Gravités d'origine : 03-13 détail.
-  - Preuve : Sur 1 366 × 768, Delete, Copy, Loop, Slice et More masquent les boutons de la Distorsion et de l'Écraseur (03). Capture : [03-larsen-pose-pc1366](captures/03-larsen-pose-pc1366.webp).
-  - Correction : Barre au-dessus du clip choisi, dans la zone des pistes, ou masquée quand le rack est ouvert.
   - Charge de la machine : existe quelle que soit la charge.
 
 - E-76 · détail · Compteur du film au dixième de seconde, sans images ni SMPTE.
@@ -326,40 +240,10 @@ Gravité choisie : la plus haute des gravités d'origine, baissée d'un cran qua
   - Correction : Au relâchement, couper l'entrée de l'écho et laisser la boucle jusqu'à −60 dB.
   - Charge de la machine : existe quelle que soit la charge.
 
-- E-83 · détail · Fondus linéaires seulement.
-  - Experts : 1 (04-10). Gravités d'origine : 04-10 détail.
-  - Preuve : `linearRampToValueAtTime` (ligne 1219) (04, S7).
-  - Correction : Trois courbes (linéaire, exponentielle, S) par pictogramme dans la feuille Fondus.
-  - Charge de la machine : existe quelle que soit la charge.
-
 - E-84 · détail · Le gel spectral fluctue de 6,8 dB.
   - Experts : 1 (04-11). Gravités d'origine : 04-11 détail.
   - Preuve : Écart-type 1,14 dB, plage 6,8 dB sur 60 s (04, S10).
   - Correction : Recouvrement de 4 et phases qui avancent d'une trame à l'autre.
-  - Charge de la machine : existe quelle que soit la charge.
-
-- E-85 · détail · Un décalage négatif s'annule sur le premier coup.
-  - Experts : 1 (05-06). Gravités d'origine : 05-06 détail.
-  - Preuve : `Math.max(0,…)` (ligne 2659) : −13 ms sur 33 coups sur 34 (05, S6).
-  - Correction : Décaler tout le bloc écrit de `-r.ms`, ou commencer l'écriture une mesure plus loin.
-  - Charge de la machine : existe quelle que soit la charge.
-
-- E-86 · détail · Tirage sans graine.
-  - Experts : 1 (05-07). Gravités d'origine : 05-07 détail.
-  - Preuve : 10 écritures, 10 motifs différents (`Math.random()`, ligne 2659) (05, S5).
-  - Correction : Dé numéroté affichant la graine, comme Circuit bend (ligne 2096).
-  - Charge de la machine : existe quelle que soit la charge.
-
-- E-87 · détail · Euclidien sans k explicite ni rotation.
-  - Experts : 1 (05-08). Gravités d'origine : 05-08 détail.
-  - Preuve : k tiré des cellules allumées, zéro rotation (05, S4).
-  - Correction : Deux curseurs (k de 0 à n, rotation de 0 à n − 1), ou appui long sur E puis glissé.
-  - Charge de la machine : existe quelle que soit la charge.
-
-- E-88 · détail · La lecture en direct du séquenceur contourne la piste.
-  - Experts : 1 (05-09). Gravités d'origine : 05-09 détail.
-  - Preuve : `x.connect(master.input)` (ligne 2655) : piste 01 coupée, 16 départs en 1,5 s (05, S9).
-  - Correction : Brancher chaque coup sur l'entrée de la chaîne de sa piste (`chains.get(id).input`).
   - Charge de la machine : existe quelle que soit la charge.
 
 - E-89 · détail · Le SP-1200 ajoute un filtre de sortie absent de la machine.
@@ -408,24 +292,6 @@ Gravité choisie : la plus haute des gravités d'origine, baissée d'un cran qua
   - Experts : 1 (08-16). Gravités d'origine : 08-16 détail.
   - Preuve : Tout traitement spectral remplace le clip hors ligne (08, S6).
   - Correction : AudioWorklet de gel et de flou spectral par piste, commande au doigt.
-  - Charge de la machine : existe quelle que soit la charge.
-
-- E-98 · détail · Feuille Créer rognée sur téléphone.
-  - Experts : 1 (10-14). Gravités d'origine : 10-14 détail.
-  - Preuve : Cases Film et Platines coupées à mi-hauteur (10). Capture : [10-iphone-simple-creer](captures/10-iphone-simple-creer.webp).
-  - Correction : Grille de 3 × 2 cases de 110 × 110 px en portrait.
-  - Charge de la machine : existe quelle que soit la charge.
-
-- E-99 · détail · Case Créer coupée dans le pied de l'Atelier.
-  - Experts : 1 (10-15). Gravités d'origine : 10-15 détail.
-  - Preuve : « Crée » sur iphone (10). Capture : [10-iphone-atelier-console](captures/10-iphone-atelier-console.webp).
-  - Correction : Pictogramme seul sous 760 px en Atelier (`body:not(.simple) #bCreate .lbl{display:none}`).
-  - Charge de la machine : existe quelle que soit la charge.
-
-- E-100 · détail · Axes des pads peu lisibles.
-  - Experts : 1 (10-16). Gravités d'origine : 10-16 détail.
-  - Preuve : 9,4 à 10,5 px, vert ou gris sur fond sombre (10). Capture : [10-pc1366-pad-souris](captures/10-pc1366-pad-souris.webp).
-  - Correction : 12 px en #ffe3a0, ou pictogrammes d'axe.
   - Charge de la machine : existe quelle que soit la charge.
 
 ## Écarté, avec raison

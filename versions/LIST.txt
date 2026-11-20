@@ -1,3 +1,4 @@
+2026-11-20-21h04|658a80d|séquenceur, interface
 2026-11-20-19h43|f788815|dérive gravée, couleurs de la palette
 2026-11-20-19h41|cfaa0d9|coupes à seuil adaptatif, Neutral par défaut, tranche Master épinglée
 2026-11-20-19h40|6c38ae6|collections, boîtes tribute to, fiche de terrain, libellés
