@@ -67,6 +67,7 @@ aside nav button.on{color:var(--amber);background:none;border-bottom-color:var(-
 .snd .t{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .snd small{color:var(--dim);white-space:nowrap}
 .snd.loading{opacity:.5}
+.cats{display:flex;flex-wrap:wrap;gap:4px}.cats button{height:calc(var(--u)*.8);font-size:.9em}.item{border:1px solid var(--line);border-radius:3px;padding:4px 6px;cursor:pointer;background:#191715}.item .t{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.item small{color:var(--dim)}.files{display:flex;flex-direction:column;gap:3px;margin:3px 0 6px 10px}
 .note{color:var(--dim);font-size:.9em;padding:4px 2px}
 .note a{color:var(--amber)}
 #ghost{position:fixed;pointer-events:none;z-index:50;padding:4px 8px;background:var(--amber);color:#1a1206;border-radius:3px;display:none;white-space:nowrap}
@@ -163,6 +164,7 @@ dialog .row{display:flex;gap:6px;justify-content:flex-end;margin-top:10px}
   <nav>
     <button data-p="kit" class="on" title="Kit">KIT</button>
     <button data-p="fs" title="Freesound"><svg><use href="#i-search"/></svg></button>
+    <button data-p="ia" title="Internet Archive">IA</button>
     <button data-p="mine" title="Files"><svg><use href="#i-file"/></svg></button>
     <button id="bSide" title="Panel" style="flex:0 0 var(--u)"><svg><use href="#i-panel"/></svg></button>
   </nav>
@@ -170,6 +172,11 @@ dialog .row{display:flex;gap:6px;justify-content:flex-end;margin-top:10px}
   <div class="pane" id="p-fs">
     <form class="search" id="fsForm"><input id="fsQ" placeholder="drone, metal, radio…" enterkeyhint="search"><button><svg><use href="#i-search"/></svg></button><button type="button" id="bFsKey" title="Freesound key"><svg><use href="#i-gear"/></svg></button></form>
     <div id="fsList"></div>
+  </div>
+  <div class="pane" id="p-ia">
+    <form class="search" id="iaForm"><input id="iaQ" placeholder="rain, Mali, ballad, piano…" enterkeyhint="search"><button><svg><use href="#i-search"/></svg></button></form>
+    <div id="iaCats" class="cats"></div>
+    <div id="iaList"></div>
   </div>
   <div class="pane" id="p-mine">
     <button id="bImport"><svg><use href="#i-file"/></svg><span data-t="import">Import audio</span></button>
@@ -387,7 +394,7 @@ async function exportWav(){
   const name="studio-"+new Date().toISOString().slice(0,16).replace(/[:T]/g,"-");
   download(wavBlob(b),name+".wav");
   const cred=[...used].filter(s=>s.credit);
-  if(cred.length){const txt=(lang==="fr"?"Sons utilisés":"Sounds used")+"\n\n"+cred.map(s=>`"${s.credit.title}" by ${s.credit.author} — ${s.credit.license} — ${s.credit.url}`).join("\n")+"\n\nFreesound — https://freesound.org\n";download(new Blob([txt],{type:"text/plain"}),name+"-credits.txt")}
+  if(cred.length){const txt=(lang==="fr"?"Sons utilisés":"Sounds used")+"\n\n"+cred.map(s=>`"${s.credit.title}" by ${s.credit.author} — ${s.credit.license} — ${s.credit.url}`).join("\n")+"\n";download(new Blob([txt],{type:"text/plain"}),name+"-credits.txt")}
   $("#status").textContent="";toast(t("exported"));
 }
 function wavBlob(b){const nc=b.numberOfChannels,n=b.length,ab=new ArrayBuffer(44+n*nc*2),v=new DataView(ab);
@@ -429,11 +436,47 @@ async function ensureSound(item){
   const st=await dbGet("snd",item.id).catch(()=>null);
   if(st){const c=audio();const b=c.createBuffer(st.chans.length,st.chans[0].length,st.sr);st.chans.forEach((d,i)=>b.copyToChannel(d,i));return addSound({id:st.id,name:st.name,buffer:b,src:st.src,credit:st.credit})}
   if(!item.remote)return null;
-  const url=FS_PROXY?`${FS_PROXY}/preview?u=${encodeURIComponent(item.remote)}`:item.remote;
-  const ab=await (await fetch(url)).arrayBuffer();const b=await audio().decodeAudioData(ab);
+  const url=FS_PROXY&&item.src==="freesound"?`${FS_PROXY}/preview?u=${encodeURIComponent(item.remote)}`:item.remote;
+  const ab=await (await fetch(url)).arrayBuffer();let b=await audio().decodeAudioData(ab);b=trimBuf(b,240);
   const s=addSound({id:item.id,name:item.name,buffer:b,src:item.src,credit:item.credit});storeSound(s);renderMine();return s;
 }
 
+function trimBuf(b,max){if(b.duration<=max)return b;const n=Math.floor(max*b.sampleRate),o=audio().createBuffer(b.numberOfChannels,n,b.sampleRate);for(let c=0;c<b.numberOfChannels;c++)o.copyToChannel(b.getChannelData(c).subarray(0,n),c);return o}
+/* ---------- Internet Archive ---------- */
+const IA_CATS={en:[["Field","subject:(\"field recording\" OR \"field recordings\" OR soundscape)"],["Ethno","subject:(ethnographic OR ethnography OR ethnomusicology)"],["Trad","subject:(\"traditional music\" OR \"folk music\" OR folklore OR \"folk songs\")"],["Chants","subject:(chant OR chants OR \"work song\" OR lullaby OR ballad)"],["Jazz","subject:(jazz OR ragtime OR blues)"],["Classical","subject:(classical OR symphony OR orchestra OR piano OR opera)"],["Concert","subject:(concert OR live)"],["Oral","subject:(\"oral history\" OR interview OR sociology)"],["Nature","subject:(birds OR bioacoustics OR animals OR insects)"],["City","subject:(city OR street OR market OR traffic OR station)"]]};
+IA_CATS.fr=IA_CATS.en.map(([n,q])=>[{Field:"Terrain",Trad:"Trad",Chants:"Chants",Classical:"Classique",Oral:"Enquêtes",City:"Ville"}[n]||n,q]);
+const IA_LIC=/publicdomain|\/zero\/|\/by\/|\/by-sa\//;
+const IA_SKIP='-collection:(78rpm OR roiocollection OR podcasts_mirror OR podcasts_mirror_gnuarchives)';
+const iaLic=u=>/zero/.test(u)?"CC0":/publicdomain/.test(u)?"PD":/by-sa/.test(u)?"CC BY-SA":"CC BY";
+let iaCat=null,iaPage=1,iaQ="";
+function renderIaCats(){$("#iaCats").replaceChildren(...IA_CATS[lang].map(([n,q],i)=>{const b=el("button",{class:iaCat===i?"on":""},n);b.onclick=()=>{iaCat=iaCat===i?null:i;renderIaCats();iaSearch($("#iaQ").value.trim())};return b}))}
+async function iaSearch(q,more){
+  if(!more){iaPage=1;iaQ=q}
+  const parts=["mediatype:audio","licenseurl:*",IA_SKIP];if(iaQ)parts.push("("+iaQ+")");if(iaCat!==null)parts.push(IA_CATS.en[iaCat][1]);
+  if(!iaQ&&iaCat===null)return;
+  if(!more)$("#iaList").replaceChildren(el("div",{class:"note"},"…"));
+  const url=`https://archive.org/advancedsearch.php?q=${encodeURIComponent(parts.join(" AND "))}&fl[]=identifier&fl[]=title&fl[]=creator&fl[]=licenseurl&fl[]=date&sort[]=downloads+desc&rows=60&page=${iaPage}&output=json`;
+  try{const j=await (await fetch(url)).json();const docs=j.response.docs.filter(d=>IA_LIC.test(d.licenseurl||""));
+    if(!more)$("#iaList").replaceChildren();$("#iaList").querySelector(".more")?.remove();
+    if(!docs.length&&!more)$("#iaList").append(el("div",{class:"note"},t("nores")));
+    for(const d of docs)$("#iaList").append(iaItem(d));
+    if(j.response.numFound>iaPage*60){iaPage++;$("#iaList").append(el("button",{class:"more",onclick:()=>iaSearch(iaQ,true)},"+"))}
+  }catch(e){$("#iaList").replaceChildren(el("div",{class:"note"},"Internet Archive ✕"))}
+}
+function iaItem(d){
+  const title=[].concat(d.title||d.identifier)[0],creator=[].concat(d.creator||"")[0];
+  const box=el("div",{class:"item"},el("span",{class:"t",title},title),el("small",{},[iaLic(d.licenseurl),creator,[].concat(d.date||"")[0]?.slice(0,4)].filter(Boolean).join(" · ")));
+  const files=el("div",{class:"files"});let open=false;
+  box.onclick=async()=>{if(open){files.replaceChildren();open=false;return}open=true;files.replaceChildren(el("div",{class:"note"},"…"));
+    try{const m=await (await fetch(`https://archive.org/metadata/${d.identifier}`)).json();
+      const fl=(m.files||[]).filter(f=>/\.mp3$/i.test(f.name)&&(+f.size||0)<40e6).slice(0,40);
+      files.replaceChildren(...(fl.length?fl.map(f=>sndRow({id:"ia:"+d.identifier+"/"+f.name,name:(f.title||f.name.replace(/\.mp3$/i,"")),src:"ia",dur:(String(f.length||0).includes(":")?String(f.length).split(":").reduce((a,x)=>a*60+ +x,0):+f.length||0),
+        remote:`https://archive.org/download/${d.identifier}/${f.name.split("/").map(encodeURIComponent).join("/")}`,
+        credit:{title:f.title||title,author:creator||"Internet Archive",license:iaLic(d.licenseurl),url:`https://archive.org/details/${d.identifier}`}})):[el("div",{class:"note"},t("nores"))]))}
+    catch(e){files.replaceChildren(el("div",{class:"note"},"✕"))}};
+  return el("div",{},box,files);
+}
+$("#iaForm").onsubmit=e=>{e.preventDefault();iaSearch($("#iaQ").value.trim())};
 /* ---------- preview ---------- */
 let prevSrc=null;
 async function preview(item,row){
@@ -613,7 +656,7 @@ addEventListener("keydown",e=>{if(e.target.tagName==="INPUT"&&e.target.type!=="r
   else if(e.key==="r"&&!e.ctrlKey&&!e.metaKey)$("#bRec").click()
   else if(e.key==="l")$("#bLoop").click()
   else if(e.key==="Home")$("#bBack").click()});
-function applyLang(){document.documentElement.lang=lang;$("#bLang").textContent=lang==="fr"?"EN":"FR";document.querySelectorAll("[data-t]").forEach(n=>n.textContent=t(n.dataset.t))}
+function applyLang(){document.documentElement.lang=lang;if(typeof renderIaCats==="function")renderIaCats();$("#bLang").textContent=lang==="fr"?"EN":"FR";document.querySelectorAll("[data-t]").forEach(n=>n.textContent=t(n.dataset.t))}
 $("#bLang").onclick=()=>{lang=lang==="fr"?"en":"fr";localStorage.setItem("st.lang",lang);applyLang()};
 addEventListener("resize",()=>render());
 /* first gesture unlocks audio on iOS */
