@@ -18,7 +18,7 @@ Critères de qualité appliqués à chaque lot : direction artistique, réalisme
 - Masterings, sonie (LUFS), réverbérations de pièces naturelles.
 - Bouton Master à la manière de BandLab Mastering : Universal, Fire, Clarity, Tape, Natural, Cinematic, Spatial, Punch et 18 autres masterings du studio (26 en tout) ; écoute A/B à sonie égale ; intensité sur 11 niveaux ; égaliseur 3 bandes ; cible de sonie ; mastering de référence ; export d'une sortie ou de toutes les sorties cochées.
 - Bibliothèques libres : Freesound, Internet Archive, Wikimedia Commons, Jamendo.
-- Collections : 1 171 entrées (packs par genre avec leurs éléments, instruments, kits d'artistes, objets, machines, armes, médias, humeurs, animaux, voix, langues, chants, lieux, matériel d'enregistrement, infrasons, synthèse).
+- Collections : 1 210 entrées (packs par genre avec leurs éléments, instruments, kits d'artistes, objets, machines, armes, médias, humeurs, animaux, voix, langues, chants, lieux, matériel d'enregistrement, infrasons, synthèse).
 - Kits : sons synthétisés, 26 kits par style, Fauna Korhogo (coupes des sorties de chaque Mask), la Borne (88 objets réels).
 - Kits d'artistes : catalogue Korhogo sur Internet Archive (Mauk Tenieb, C7H5N3O6, dogXim, Ts'ui Pên, Auvergne) et trente preneurs de son de Freesound.
 - Barre de recherche sur tous les kits, collections et sons.
@@ -30,7 +30,7 @@ Critères de qualité appliqués à chaque lot : direction artistique, réalisme
 - Séquenceur à pas de Musik : mesures de 15, 16, 17, 19 ou 21 pas (tirage impair à l'ouverture), dé de motifs, écoute en boucle, écriture en clips audio sur les pistes.
 - Intensité et égaliseur du Master enregistrés avec le projet.
 - Palette de commandes (Ctrl+K, « / » ou la touche dédiée) : transport, tiroirs, export, masterings, sonie, effets et chaînes sur la piste choisie, boîtes à bruit, recherche de sons.
-- Pompage en un clic (grave seul, calé sur le temps, limiteur de sécurité) ; repliement d'onde ; chaînes « Voice breaker » et « Swedish chainsaw » (noms des kits de Musik).
+- Pompage en un clic (grave seul, calé sur le temps, limiteur de sécurité) ; repliement d'onde ; chaînes « Voix saturée » et « Tronçonneuse suédoise (HM-2) », du nom du son de la pédale Boss HM-2.
 - Générateurs de bruits : blanc, rose, brun, interférences radio, oscillateurs qui dérivent.
 - Séquenceur génératif : longueur propre à chaque rangée (polymétrie), probabilité de déclenchement, décalage en millisecondes, remplissage euclidien, swing général ; l'écriture en clips réalise une variation.
 - Export par lots : tranches d'un clip détectées entre les silences, normalisées à −1 dB de crête, nommées selon UCS (CatID_Nom_Créateur_Source).
@@ -56,7 +56,7 @@ Critères de qualité appliqués à chaque lot : direction artistique, réalisme
 - Scène en distances réelles : 6 m de large, 14 m de profondeur. Le son de chaque objet met le temps de l'air pour arriver (jusqu'à 44 ms), ce qui donne l'effet Doppler quand on le déplace vite. L'objet rougit en s'éloignant, bleuit en s'approchant, et indique l'écart en cents.
 - Vignettes KamOrhogo contrôlées avec de vraies vidéos sonores : l'image s'affiche sur les pistes 19 et suivantes, sur ordinateur et téléphone ; un double-clic pose le son de la vidéo en clip sur sa piste.
 
-- Couleur des échantillonneurs dans le rack : SP-1200 (26,04 kHz, 12 bits), MPC60 (40 kHz, 12 bits), ASR-10 (29,76 kHz, 16 bits), S950 (22,05 kHz, 12 bits), chacun avec son filtre de sortie et une saturation à gain constant.
+- Couleur des échantillonneurs dans le rack : SP-1200 (26,04 kHz, 12 bits), MPC60 (40 kHz, 12 bits), MPC3000 (44,1 kHz, 16 bits), ASR-10 (29,76 kHz, 16 bits), S950 (22,05 kHz, 12 bits), chacun avec son filtre de sortie et une saturation à gain constant.
 - Sous-grave : une octave sous la fondamentale, graves ramenés au centre sous la fréquence choisie.
 - Grands espaces : grotte, silo (échos de paroi métallique), cathédrale ; la tenue allonge la queue jusqu'à une minute, avec une lente dérive de hauteur.
 - Boîtes à bruit : sirène dub et laser analogique, chacun dans un écho à bande qui s'emballe.
@@ -79,7 +79,7 @@ Critères de qualité appliqués à chaque lot : direction artistique, réalisme
   - noms des effets en français quand le studio parle français.
 - Sauvegardes datées et jouables : https://mauktenieb.github.io/studio/versions/
 
-- Musique de film (20 nov., 6 h 29 : « OST ») : on importe une vidéo (bouton d'import ou glisser-déposer). Elle passe sur un écran au-dessus des pistes, qu'on déplace ou agrandit, calée sur la tête de lecture. Son son va sur la première piste libre à partir de 19, ses coupes deviennent des repères « plan n » sur la règle, à une ou deux images près. Le tempo se cale ensuite sur ces coupes. Le film revient à la réouverture du studio.
+- Musique de film (20 nov., 6 h 29 : « OST ») : on importe une vidéo (bouton d'import ou glisser-déposer). Elle passe sur un écran au-dessus des pistes, qu'on déplace ou agrandit, calée sur la tête de lecture. Son son va sur la première piste libre à partir de 19, ses coupes deviennent des repères « plan n » sur la règle, calées à 10 ms près par dichotomie sur les images (mesure : 3,005 à 3,009 s pour une coupe réelle à 3,003 s). Le tempo se cale ensuite sur ces coupes. Le film revient à la réouverture du studio.
 - Chants de Papouasie et ethnographie par région ; sous-grave dosé (les sessions façon Lustmord et Roly Porter ne saturent plus).
 
 ## À faire
@@ -94,7 +94,9 @@ Critères de qualité appliqués à chaque lot : direction artistique, réalisme
 
 ## Jugement par quatre instances séparées (20 nov., 12 h 03)
 
-Juges : son, direction artistique et écrans, fidélité aux demandes, code et sécurité. Rapports : /home/claude/judges/<juge>/RAPPORT.md (hors dépôt). Notes reçues : son 4/10, DA 5/10, fidélité 5/10, code 5/10.
+Juges : son, direction artistique et écrans, fidélité aux demandes, code et sécurité. Rapports : /home/claude/judges/<juge>/RAPPORT.md (hors dépôt). Notes reçues au premier passage : son 4/10, DA 5/10, fidélité 5/10, code 5/10. Second passage : DA 6/10, fidélité 6/10.
+
+Lettres grecques : la boîte Α à Ζ « tribute to » sort la chaîne Α à Ζ de Musik du même nom ; c'est le même objet, vu depuis la bibliothèque.
 
 Corrigé après jugement :
 - bouton Début et touche Origine (id en double avec le retour de la dérive) ;
@@ -109,5 +111,5 @@ Corrigé après jugement :
 - polices et encodeur MP3 hébergés dans le dépôt (zéro requête vers Google Fonts et jsDelivr) ;
 - sauvegardes datées : chacune a sa propre base, reçoit une copie du projet courant à sa première ouverture et ne touche plus jamais au projet en ligne ;
 - catégories 78 tours retirées : leur mention « domaine public » repose sur des déclarations contestées en justice ;
-- chiffres du registre et du README alignés sur le code.
+- chiffres du registre et du README revérifiés par le juge de la fidélité, puis corrigés là où il les a trouvés faux (collections, coupes du film, origine des noms de chaînes).
 - son (juge 4/10) : Résonateur stable (Q de boucle en dB corrigé, réinjection plafonnée à 0,95, saturation de pente 1 : zéro NaN) ; bus dub stable à tout retour (saturation de pente 1, ressort borné à 0,8 de gain par FFT, échos qui s'éteignent en 5 à 6 s) ; sonomètre interne exact au dixième de LU près de la référence BS.1770 de 30 Hz à 1 kHz ; filtres de séparation de bandes et multibande à somme plate (Q de Butterworth en dB) ; queue d'export calculée sur les effets présents (jusqu'à 60 s) ; dérive sans saut sur les durées d'écho, tailles, pièces et tenues ; grands espaces à énergie unité et posés une fois au master dans les boîtes ; outils de clip au niveau de crête de la source ; Doppler adouci ; synthèse spectrale sans ondulation (0,55 dB au lieu de 3,04) ; sous-grave à reconstruction exacte ; suivi de hauteur jusqu'à 40 Hz.
