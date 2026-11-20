@@ -5,7 +5,7 @@ Claude relit ce fichier avant chaque lot, puis REQUESTS.md. Chaque ligne reprend
 ## Pistes
 
 - Pistes numérotées de 01 à 32, indifféremment. Jamais de « pistes de batterie », jamais de pistes nommées Kick, Snare, Hat ou Drone. Le projet s'ouvre sur les 32 pistes vides.
-- Pistes 01 à 18 : les Masks de la Fauna en figurines 3D de SkopoRhogo, tirés au hasard à chaque session, animés, bioluminescents.
+- Pistes 01 à 18 : les Masks de la Fauna en figurines 3D de SkopoRhogo, tirés au hasard à chaque session, animés, bioluminescents. Ses figurines restent telles quelles : la règle du réalisme photographique s'applique au reste. Question close, ne plus la poser.
 - Pistes 19 à 32 : vidéos et sons de KamOrhogo.
 - Couleurs des clips : les couleurs canoniques des Masks (FAUNA, insertkoin/kg-core.js).
 - Séquenceur : chaque rangée est une piste et joue la coupe de son Mask, comme dans Musik ; mesures impaires par défaut (15, 17, 19, 21).
