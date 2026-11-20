@@ -42,6 +42,7 @@ Critères de qualité appliqués à chaque lot : direction artistique, réalisme
 - Notes de terrain : un double appui sur la règle pose, modifie ou efface un repère avec son texte (traduction, accordage, lieu).
 - Console dub : touche D sur chaque tranche (envoi momentané vers un bus écho à bande + ressort), réinjection du ressort dans l'écho dosée par un seul réglage sur la tranche Master, limiteur de sécurité ; coupures sans clic.
 - Packs : filtres au tempo du projet et par tonalité (24 tonalités).
+- Poste de mix de Musik : deux platines (sons du studio et vidéos de KamOrhogo), disque saisi pour scratcher, image comprise (un tour = 1,8 s, comme Musik), hauteur, volume, fondu croisé à puissance constante, oscilloscope à phosphore, enregistrement du mix sur une piste.
 - Collection « Huit univers sonores » : 133 entrées tirées des annexes.
 - DA de la kave Korhogo, photographique : acier bruni du flanc de borne, jonc chromé, plaque MAUK TENIEB, étiquettes Dymo, écrans à phosphore photographiés, disque photographié pour le Scratch, capuchons rétroéclairés, cave voûtée, étagères de bandes, deux photographies de groupe de la Fauna à l'ouverture.
 - Proportions continues : chaque aire (pistes, bibliothèque, tiroir du bas) suit le format de l'écran ; poignée de partage entre pistes et tiroir ; téléphone couché avec bibliothèque à droite.
@@ -54,7 +55,6 @@ Critères de qualité appliqués à chaque lot : direction artistique, réalisme
 
 ## À faire
 
-- Poste de mix de Musik : deux platines son et vidéo, fondu croisé.
 - Annexes du 20 nov. 2026, 5 h 08 (outils natifs souhaités par genre, lus avec esprit critique) :
   - Espaces de travail par étape (composition, mixage, mastering), vue des circuits en nœuds, données spectrales sur les formes d'onde, spatialisation 3D avec Doppler, détection des coupes vidéo, micro-accordage (maqâm, raga, gamelan) et mesure de hauteur au cent près.
   - Banques des huit univers (power electronics, dark ambient, hip-hop et IDM, sound design, dub, orchestre, monde et micro-intervalles, ethnographie de terrain) en recherche directe dans Freesound et Wikimedia Commons.

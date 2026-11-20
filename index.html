@@ -281,7 +281,7 @@ aside{background:linear-gradient(rgba(14,12,10,.8),rgba(9,8,7,.92)),var(--shelve
 .track{height:var(--th,calc(var(--u)*2.45))}
 aside{width:var(--side-w,clamp(250px,26vw,350px))}
 aside:not(.min){height:var(--side-h,auto)}
-#console,#perform,#mastr,#seq,#scene{height:var(--drawer,42vh)!important;flex:none;min-height:0}
+#console,#perform,#mastr,#seq,#scene,#decks{height:var(--drawer,42vh)!important;flex:none;min-height:0}
 #perform{flex-direction:column}#perform.on{display:flex}
 #perform .pads{flex:1;min-height:0;flex-direction:row!important}
 .padbox{min-height:0}
@@ -361,6 +361,16 @@ footer:has(#abar.on) #abar{flex:1 1 auto;min-width:0}
 .dubb{flex:1;width:100%;height:calc(var(--u)*.72)!important;font-weight:700;letter-spacing:.1em}
 .dubb.on{background:radial-gradient(circle,#ffe3a0,#ffa726 60%,#7a3c0a)!important;color:#1a1006!important;box-shadow:0 0 10px #ffa726}
 .dubl{display:flex;flex-direction:column;align-items:center;gap:2px;font-size:.8em;color:var(--legend-dim)}.dubl input{width:calc(var(--u)*1.6)}
+/* poste de mix (Musik) : deux platines, son et vidéo, un fondu croisé */
+#decks{display:none;gap:10px;padding:10px;background:linear-gradient(rgba(11,9,8,.55),rgba(11,9,8,.82)),url(img/metal.webp) 0 0/768px}
+#decks.on{display:grid;grid-template-columns:minmax(0,1fr) minmax(90px,.32fr) minmax(0,1fr)}
+.dk{display:flex;flex-direction:column;gap:6px;min-width:0;min-height:0}
+.dk .tv{flex:0 0 32%;min-height:0;border-radius:8px/10px;overflow:hidden;background:#050806 var(--crt) center/cover;box-shadow:inset 0 0 18px #000;position:relative}
+.dk .tv video,.dk .tv canvas{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.dk .rec{flex:1;min-height:0;aspect-ratio:1;max-width:100%;align-self:center;background:url(img/record.webp) center/contain no-repeat;cursor:grab;touch-action:none;filter:drop-shadow(0 6px 10px #000)}
+.dk .row{display:flex;gap:6px;align-items:center}.dk .row select{flex:1;min-width:0}
+.dx{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px}
+.dx input[type=range]{width:100%}
 </style>
 </head>
 <body>
@@ -408,7 +418,7 @@ footer:has(#abar.on) #abar{flex:1 1 auto;min-width:0}
   <symbol id="i-tune" viewBox="0 0 24 24"><path d="M9 18V5l11-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="17" cy="16" r="3"/></symbol>
   <symbol id="i-stretch" viewBox="0 0 24 24"><path d="M3 12h18M7 8l-4 4 4 4M17 8l4 4-4 4M12 5v14"/></symbol>
   <symbol id="i-denoise" viewBox="0 0 24 24"><path d="M3 12h3l2-5 3 10 2-6 2 3h6"/><path d="M4 4l16 16"/></symbol>
-  <symbol id="i-master" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="2.4" fill="currentColor"/><path d="M6.6 9.2a6.2 6.2 0 0 1 3.4-3.1M17.4 14.8a6.2 6.2 0 0 1-3.4 3.1"/></symbol><symbol id="i-drift" viewBox="0 0 24 24"><path d="M12 12c0-1.7 1.3-3 3-3s3 1.3 3 3-1.8 5-6 5-7-3-7-7 3.5-8 8-8 9 3.6 9 9"/><circle cx="12" cy="12" r="1.3" fill="currentColor"/></symbol><symbol id="i-keep" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></symbol><symbol id="i-steps" viewBox="0 0 24 24"><rect x="3" y="5" width="4" height="4" fill="currentColor"/><rect x="10" y="5" width="4" height="4"/><rect x="17" y="5" width="4" height="4" fill="currentColor"/><rect x="3" y="14" width="4" height="4"/><rect x="10" y="14" width="4" height="4" fill="currentColor"/><rect x="17" y="14" width="4" height="4"/></symbol><symbol id="i-dice" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="3"/><circle cx="9" cy="9" r="1.4" fill="currentColor"/><circle cx="15" cy="15" r="1.4" fill="currentColor"/><circle cx="15" cy="9" r="1.4" fill="currentColor"/><circle cx="9" cy="15" r="1.4" fill="currentColor"/></symbol><symbol id="i-cmd" viewBox="0 0 24 24"><path d="M9 6a3 3 0 1 0-3 3h12a3 3 0 1 0-3-3v12a3 3 0 1 0 3-3H6a3 3 0 1 0 3 3z"/></symbol><symbol id="i-stage" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="1.5"/><circle cx="7.5" cy="16.5" r="2.4" fill="currentColor"/><circle cx="15.5" cy="12" r="1.7" fill="currentColor"/><circle cx="11" cy="7" r="1.1" fill="currentColor"/></symbol><symbol id="i-secs" viewBox="0 0 24 24"><circle cx="12" cy="13" r="8"/><path d="M12 13V8M9.5 2.5h5M12 2.5V5"/></symbol><symbol id="i-xy" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 12h18M12 3v18" stroke-dasharray="2 2"/><circle cx="16" cy="8" r="2.5" fill="currentColor"/></symbol>
+  <symbol id="i-master" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="2.4" fill="currentColor"/><path d="M6.6 9.2a6.2 6.2 0 0 1 3.4-3.1M17.4 14.8a6.2 6.2 0 0 1-3.4 3.1"/></symbol><symbol id="i-drift" viewBox="0 0 24 24"><path d="M12 12c0-1.7 1.3-3 3-3s3 1.3 3 3-1.8 5-6 5-7-3-7-7 3.5-8 8-8 9 3.6 9 9"/><circle cx="12" cy="12" r="1.3" fill="currentColor"/></symbol><symbol id="i-keep" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></symbol><symbol id="i-steps" viewBox="0 0 24 24"><rect x="3" y="5" width="4" height="4" fill="currentColor"/><rect x="10" y="5" width="4" height="4"/><rect x="17" y="5" width="4" height="4" fill="currentColor"/><rect x="3" y="14" width="4" height="4"/><rect x="10" y="14" width="4" height="4" fill="currentColor"/><rect x="17" y="14" width="4" height="4"/></symbol><symbol id="i-dice" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="3"/><circle cx="9" cy="9" r="1.4" fill="currentColor"/><circle cx="15" cy="15" r="1.4" fill="currentColor"/><circle cx="15" cy="9" r="1.4" fill="currentColor"/><circle cx="9" cy="15" r="1.4" fill="currentColor"/></symbol><symbol id="i-cmd" viewBox="0 0 24 24"><path d="M9 6a3 3 0 1 0-3 3h12a3 3 0 1 0-3-3v12a3 3 0 1 0 3-3H6a3 3 0 1 0 3 3z"/></symbol><symbol id="i-stage" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="1.5"/><circle cx="7.5" cy="16.5" r="2.4" fill="currentColor"/><circle cx="15.5" cy="12" r="1.7" fill="currentColor"/><circle cx="11" cy="7" r="1.1" fill="currentColor"/></symbol><symbol id="i-secs" viewBox="0 0 24 24"><circle cx="12" cy="13" r="8"/><path d="M12 13V8M9.5 2.5h5M12 2.5V5"/></symbol><symbol id="i-decks" viewBox="0 0 24 24"><circle cx="7" cy="12" r="5"/><circle cx="17" cy="12" r="5"/><circle cx="7" cy="12" r="1" fill="currentColor"/><circle cx="17" cy="12" r="1" fill="currentColor"/><path d="M10 20h4"/></symbol><symbol id="i-xy" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 12h18M12 3v18" stroke-dasharray="2 2"/><circle cx="16" cy="8" r="2.5" fill="currentColor"/></symbol>
   <symbol id="i-undo" viewBox="0 0 24 24"><path d="M9 14L4 9l5-5"/><path d="M4 9h11a5 5 0 0 1 0 10h-3"/></symbol>
 </svg>
 <div id="app">
@@ -455,6 +465,7 @@ footer:has(#abar.on) #abar{flex:1 1 auto;min-width:0}
   <div id="mastr"></div>
   <div id="seq"></div>
   <div id="scene"></div>
+  <div id="decks"></div>
   <div id="fx"></div>
 </main>
 <footer>
@@ -462,6 +473,7 @@ footer:has(#abar.on) #abar{flex:1 1 auto;min-width:0}
   <button id="bPerf" title="Perform"><svg><use href="#i-xy"/></svg></button>
   <button id="bSeq" title="Steps"><svg><use href="#i-steps"/></svg></button>
   <button id="bScene" title="Stage"><svg><use href="#i-stage"/></svg></button>
+  <button id="bDecks" title="Decks"><svg><use href="#i-decks"/></svg></button>
   <span class="drift"><button id="bDrift" title="Drift"><svg><use href="#i-drift"/></svg></button><button id="bKeep" title="Keep"><svg><use href="#i-keep"/></svg></button><button id="bBack" title="Back"><svg><use href="#i-undo"/></svg></button></span>
   <div id="abar"></div>
   <span id="status" class="note"></span>
@@ -576,6 +588,9 @@ constructor(){super();this.N=sampleRate*8;this.b=[new Float32Array(this.N),new F
 process(i,o,p){const x=i[0],y=o[0];if(!x||!x.length)return true;if(this.r<0)this.r=this.w-1;const dv=1/(p.time[0]*sampleRate);
 for(let n=0;n<y[0].length;n++){for(let c=0;c<2;c++)this.b[c][this.w%this.N]=(x[c]||x[0])[n];this.w++;this.v=Math.max(0,this.v-dv);this.r+=this.v;const k=Math.floor(this.r),f=this.r-k;
 for(let c=0;c<y.length;c++){const B=this.b[c];y[c][n]=(B[((k%this.N)+this.N)%this.N]*(1-f)+B[(((k+1)%this.N)+this.N)%this.N]*f)*Math.min(1,this.v*3)}}return true}});
+registerProcessor("deck",class extends AudioWorkletProcessor{constructor(){super();this.L=null;this.R=null;this.p=0;this.r=0;this.k=1;this.n=0;this.port.onmessage=e=>{const d=e.data;if(d.buf){this.L=d.buf[0];this.R=d.buf[1]||d.buf[0];this.k=d.sr/sampleRate;this.p=0}if(d.rate!=null)this.r=d.rate;if(d.seek!=null)this.p=d.seek*sampleRate*this.k}}
+process(i,o){const y=o[0];if(!this.L){return true}const N=this.L.length,L=this.L,R=this.R;for(let n=0;n<y[0].length;n++){const p=this.p;if(p>=0&&p<N-1){const k=Math.floor(p),f=p-k;y[0][n]=L[k]*(1-f)+L[k+1]*f;if(y[1])y[1][n]=R[k]*(1-f)+R[k+1]*f}else{y[0][n]=0;if(y[1])y[1][n]=0}this.p=Math.max(0,Math.min(N-1,p+this.r*this.k))}
+if(++this.n%6===0)this.port.postMessage(this.p/this.k/sampleRate);return true}});
 registerProcessor("tap",class extends AudioWorkletProcessor{process(i){const x=i[0];if(x&&x.length)this.port.postMessage([x[0].slice(),(x[1]||x[0]).slice()]);return true}});
 registerProcessor("glitch",class extends AudioWorkletProcessor{static get parameterDescriptors(){return[{name:"prob",defaultValue:.3,minValue:0,maxValue:1},{name:"size",defaultValue:.1,minValue:.005,maxValue:1}]}
 constructor(){super();this.N=sampleRate*2;this.buf=[new Float32Array(this.N),new Float32Array(this.N)];this.w=0;this.rep=0;this.left=0;this.len=1;this.start=0}
@@ -2319,14 +2334,14 @@ function renderMastr(){const box=$("#mastr");box.classList.toggle("on",mastrOn);
 function msExpN(){const b=document.querySelector("#mastr .ms-exn");if(b){b.innerHTML=`<svg><use href="#i-down"/></svg><span>${L("Exporter les cochés","Export ticked")} (${MS.sel.size})</span>`;b.disabled=!MS.sel.size}}
 
 /* tiroirs du bas : console, pads, master ; un seul ouvert, comme les tiroirs de BandLab */
-function drawer(n){const was=n==="console"?consoleOn:n==="perf"?perfOn:n==="seq"?seqOn:n==="scene"?sceneOn:mastrOn;consoleOn=false;perfOn=false;seqOn=false;sceneOn=false;if(mastrOn&&!(n==="mastr"&&!was))closeMastr();
-  if(!was){if(n==="console")consoleOn=true;else if(n==="perf")perfOn=true;else if(n==="seq")seqOn=true;else if(n==="scene")sceneOn=true;else openMastr()}renderConsole();renderPerform();renderSeq();fit();renderScene()}
+function drawer(n){const was=n==="console"?consoleOn:n==="perf"?perfOn:n==="seq"?seqOn:n==="scene"?sceneOn:n==="decks"?decksOn:mastrOn;consoleOn=false;perfOn=false;seqOn=false;sceneOn=false;decksOn=false;if(mastrOn&&!(n==="mastr"&&!was))closeMastr();
+  if(!was){if(n==="console")consoleOn=true;else if(n==="perf")perfOn=true;else if(n==="seq")seqOn=true;else if(n==="scene")sceneOn=true;else if(n==="decks")decksOn=true;else openMastr()}renderConsole();renderPerform();renderSeq();fit();renderScene();renderDecks()}
 $("#bConsole").onclick=()=>drawer("console");$("#bPerf").onclick=()=>drawer("perf");$("#mFx").onclick=()=>drawer("mastr");
 
 /* proportions : chaque aire suit le format de l'écran, en continu */
 function fit(){const vv=window.visualViewport,W=vv?vv.width:innerWidth,H=vv?vv.height:innerHeight,land=W>=H,narrow=W<=760,R=document.documentElement.style;
   R.setProperty("--side-w",narrow?"auto":Math.round(clamp(W*(H<=520?.36:.25),240,400))+"px");R.setProperty("--side-h",narrow?Math.round(H*(land?.4:.3))+"px":"auto");
-  const m=$("main");if(!m)return;const open=consoleOn||perfOn||mastrOn||(typeof seqOn!=="undefined"&&seqOn)||(typeof sceneOn!=="undefined"&&sceneOn);m.classList.toggle("dr",open);
+  const m=$("main");if(!m)return;const open=consoleOn||perfOn||mastrOn||(typeof seqOn!=="undefined"&&seqOn)||(typeof sceneOn!=="undefined"&&sceneOn)||(typeof decksOn!=="undefined"&&decksOn);m.classList.toggle("dr",open);
   const mh=Math.max(120,m.clientHeight-($("#ruler")?.offsetHeight||0)),ratio=clamp(+localStorage.getItem("st.split."+(land?"l":"p"))||(land?.5:.66),.16,.84);
   const dh=Math.round(clamp(mh*ratio,110,mh-56));R.setProperty("--drawer",dh+"px");
   const ctl=document.querySelector(".thead .ctl"),need=ctl?[...ctl.children].reduce((a,c)=>a+c.offsetHeight,0)+3*(ctl.children.length-1)+12:60;
@@ -2486,6 +2501,41 @@ $("#bFree").onclick=freeToggle;setTimeout(()=>{$("#bFree").classList.toggle("on"
 $("#rulerC").addEventListener("dblclick",e=>{const r=$("#rulerC").getBoundingClientRect(),t=Math.max(0,(e.clientX-r.left+$("#scroller").scrollLeft)/state.pps);state.notes=state.notes||[];
   const near=state.notes.find(n=>Math.abs(n.t-t)*state.pps<10);const txt=window.prompt(lang==="fr"?"Note de terrain (texte, traduction, accordage) ; vide pour effacer":"Field note (text, translation, tuning); empty to remove",near?near.x:"");if(txt===null)return;
   if(near){if(txt.trim())near.x=txt;else state.notes=state.notes.filter(n=>n!==near)}else if(txt.trim())state.notes.push({t,x:txt});state.notes.sort((a,b)=>a.t-b.t);drawRuler();save()});
+
+/* ================= poste de mix (Musik) : deux platines, son et vidéo ; le disque se saisit pour scratcher, image comprise ; la tirette passe de l'une à l'autre ================= */
+let decksOn=false;const DK={x:.5,bus:null,rec:null,d:[{},{}],raf:0};const REVS=1.8;
+function dkSources(){const v=(KAM.items||[]).filter(i=>i.kind==="vid").map(i=>({id:i.id,name:"▣ "+i.name,vid:i}));const s=[...lib.values()].filter(x=>x.buffer&&x.buffer.duration>1).map(x=>({id:x.id,name:x.name}));return[...v,...s]}
+function dkBus(){const c=audio();if(DK.bus&&DK.bus.c===c)return DK.bus;const mix=c.createGain();mix.connect(master.input);const g=[c.createGain(),c.createGain()];g.forEach(x=>x.connect(mix));DK.bus={c,mix,g};dkX();return DK.bus}
+function dkX(){if(!DK.bus)return;const a=Math.cos(DK.x*Math.PI/2),b=Math.sin(DK.x*Math.PI/2),T=DK.bus.c.currentTime;DK.bus.g[0].gain.setTargetAtTime(a*(DK.d[0].vol??1),T,.01);DK.bus.g[1].gain.setTargetAtTime(b*(DK.d[1].vol??1),T,.01)}
+async function dkLoad(i,src){const c=audio();await prepCtx(c);const B=dkBus(),d=DK.d[i];if(d.node){try{d.node.disconnect()}catch(e){}}d.vid=null;d.pos=0;d.play=false;let buf=null;
+  if(src.vid){d.vid=src.vid;try{buf=await c.decodeAudioData(await src.vid.blob.arrayBuffer())}catch(e){buf=null}}else{const sd=lib.get(src.id);buf=sd&&sd.buffer}
+  if(!buf){const v=document.createElement("video");v.src=d.vid.url;await new Promise(r=>{v.onloadedmetadata=r;setTimeout(r,1500)});buf=c.createBuffer(2,Math.max(1,Math.floor((v.duration||10)*c.sampleRate)),c.sampleRate)}
+  d.buf=buf;d.name=src.name;const n=new AudioWorkletNode(c,"deck",{outputChannelCount:[2]});n.port.postMessage({buf:[buf.getChannelData(0).slice(),(buf.numberOfChannels>1?buf.getChannelData(1):buf.getChannelData(0)).slice()],sr:buf.sampleRate});
+  n.port.onmessage=e=>{d.pos=e.data};n.connect(B.g[i]);d.node=n;d.pitch=d.pitch||1;renderDecks()}
+function dkRate(i){const d=DK.d[i];if(!d.node)return;d.node.port.postMessage({rate:d.hold?d.hv||0:d.play?d.pitch:0})}
+function dkTick(){cancelAnimationFrame(DK.raf);if(!decksOn)return;DK.d.forEach((d,i)=>{const box=document.querySelector(`#decks .dk[data-i="${i}"]`);if(!box)return;const r=box.querySelector(".rec");if(r)r.style.transform=`rotate(${(d.pos||0)/REVS*360}deg)`;
+    const v=box.querySelector("video");if(v&&d.vid){if(d.hold||!d.play){if(Math.abs(v.currentTime-(d.pos||0))>.04)v.currentTime=d.pos||0;if(!v.paused)v.pause()}else{v.playbackRate=clamp(d.pitch,.25,4);if(v.paused)v.play().catch(()=>{});if(Math.abs(v.currentTime-d.pos)>.25)v.currentTime=d.pos}}
+    const cv=box.querySelector("canvas");if(cv&&!d.vid&&d.buf){const W=cv.width=cv.clientWidth,H=cv.height=cv.clientHeight,g=cv.getContext("2d"),dd=d.buf.getChannelData(0),st=Math.floor((d.pos||0)*d.buf.sampleRate);g.clearRect(0,0,W,H);g.strokeStyle="rgba(140,255,170,.9)";g.shadowColor="rgba(80,255,120,.8)";g.shadowBlur=6;g.beginPath();for(let x=0;x<W;x++){const v=dd[st+x*4]||0;g.lineTo(x,H/2-v*H*.45)}g.stroke()}});
+  DK.raf=requestAnimationFrame(dkTick)}
+function renderDecks(){const box=$("#decks");box.classList.toggle("on",decksOn);$("#bDecks").classList.toggle("on",decksOn);if(!decksOn){box.replaceChildren();cancelAnimationFrame(DK.raf);return}
+  const src=dkSources();const deck=i=>{const d=DK.d[i];const sel=el("select",{},el("option",{value:""},"—"),...src.map(s=>el("option",{value:s.id},s.name)));sel.value=d.srcId||"";sel.onchange=()=>{const s=src.find(x=>x.id===sel.value);if(s){d.srcId=s.id;dkLoad(i,s)}};
+    const pl=el("button",{class:d.play?"on":""});pl.innerHTML=`<svg><use href="#i-${d.play?"stop":"play"}"/></svg>`;pl.onclick=()=>{d.play=!d.play;dkRate(i);pl.classList.toggle("on",d.play);pl.innerHTML=`<svg><use href="#i-${d.play?"stop":"play"}"/></svg>`};
+    const pt=el("input",{type:"range",min:.5,max:1.5,step:.005,value:d.pitch||1,title:"Pitch"});pt.oninput=()=>{d.pitch=+pt.value;dkRate(i)};pt.ondblclick=()=>{pt.value=1;pt.oninput()};
+    const vo=el("input",{type:"range",min:0,max:1.2,step:.01,value:d.vol??1,title:"Volume"});vo.oninput=()=>{d.vol=+vo.value;dkX()};
+    const tv=el("div",{class:"tv",style:`--crt:var(${i?"--crtB":"--crtA"})`},d.vid?el("video",{src:d.vid.url,muted:"",playsinline:""}):el("canvas"));if(d.vid){const v=tv.querySelector("video");v.muted=true}
+    const rec=el("div",{class:"rec"});let la=null,lt=0;
+    rec.addEventListener("pointerdown",e=>{e.preventDefault();rec.setPointerCapture(e.pointerId);const R=rec.getBoundingClientRect(),cx=R.left+R.width/2,cy=R.top+R.height/2;la=Math.atan2(e.clientY-cy,e.clientX-cx);lt=performance.now();d.hold=true;d.hv=0;dkRate(i);
+      const mv=ev=>{const a=Math.atan2(ev.clientY-cy,ev.clientX-cx);let da=a-la;if(da>Math.PI)da-=2*Math.PI;if(da<-Math.PI)da+=2*Math.PI;la=a;const now=performance.now(),dt=Math.max(4,now-lt);lt=now;const sec=da/(2*Math.PI)*REVS;d.hv=clamp(sec/(dt/1000),-6,6);dkRate(i);clearTimeout(d.zt);d.zt=setTimeout(()=>{d.hv=0;dkRate(i)},45)};
+      const up=()=>{rec.removeEventListener("pointermove",mv);rec.removeEventListener("pointerup",up);rec.removeEventListener("pointercancel",up);d.hold=false;dkRate(i)};rec.addEventListener("pointermove",mv);rec.addEventListener("pointerup",up);rec.addEventListener("pointercancel",up)});
+    return el("div",{class:"dk","data-i":String(i)},tv,rec,el("div",{class:"row"},pl,sel),el("div",{class:"row"},el("span",{},"±"),pt,el("span",{},"◢"),vo))};
+  const xf=el("input",{type:"range",min:0,max:1,step:.005,value:DK.x,title:lang==="fr"?"Fondu croisé":"Crossfader"});xf.oninput=()=>{DK.x=+xf.value;dkX()};
+  const rb=el("button",{class:DK.rec?"on":"",title:lang==="fr"?"Enregistrer le mix sur une piste":"Record the mix to a track"});rb.innerHTML='<svg><use href="#i-rec"/></svg>';rb.onclick=()=>dkRecord(rb);
+  const close=el("button",{title:lang==="fr"?"Fermer":"Close"},"✕");close.onclick=()=>drawer("decks");
+  box.replaceChildren(deck(0),el("div",{class:"dx"},el("span",{},"A ◂▸ B"),xf,rb,close),deck(1));dkTick()}
+async function dkRecord(rb){const B=dkBus(),c=B.c;if(DK.rec){DK.rec.stop();return}const dst=c.createMediaStreamDestination();B.mix.connect(dst);const mr=new MediaRecorder(dst.stream),chunks=[];mr.ondataavailable=e=>chunks.push(e.data);
+  mr.onstop=async()=>{B.mix.disconnect(dst);DK.rec=null;rb.classList.remove("on");try{const buf=await c.decodeAudioData(await new Blob(chunks).arrayBuffer());const sd=addSound({id:"mix:"+uid(),name:(lang==="fr"?"Mix platines ":"Decks mix ")+new Date().toLocaleTimeString().slice(0,5),buffer:buf,src:"rec"});storeSound(sd);const t=freeTrack(-1);if(t){snapshot();t.clips.push({id:uid(),snd:sd.id,start:snapT(state.pos||0),off:0,len:buf.duration,gain:1});rebuildChains();render();save()}toast("●→ "+(t?t.name:""))}catch(e){toast("✕")}};
+  mr.start();DK.rec=mr;rb.classList.add("on")}
+$("#bDecks").onclick=()=>drawer("decks");
 </script>
 </body>
 </html>
