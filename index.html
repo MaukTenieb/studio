@@ -295,7 +295,7 @@ dialog .col{display:flex;flex-direction:column;gap:6px}
 <script>
 "use strict";
 /* ================= config & i18n ================= */
-const FS_PROXY = ""; // Cloudflare worker URL, set at deploy time
+const FS_PROXY = "https://studio-relay.mauktenieb.workers.dev"; // Cloudflare worker (MaukTenieb/studio/worker.js)
 /* splicing-tape leader colours */
 const COLORS=["#b5412f","#c8a33b","#5e8240","#3e6f92","#d9d5c6","#8b5a34","#8e5c8a","#3f8a84"];
 const INK=c=>{const n=parseInt(c.slice(1),16),l=.299*(n>>16)+.587*(n>>8&255)+.114*(n&255);return l>140?"#1b1a17":"#f6f3ea"};
@@ -787,10 +787,11 @@ function download(blob,name){const a=el("a",{href:URL.createObjectURL(blob),down
 
 /* ================= Freesound ================= */
 const fsKey=()=>localStorage.getItem("st.fskey")||"";
+let fsDirect=false;
 function fsURL(q,page){
   const fields="id,name,username,license,duration,previews,url";const filter='license:("Creative Commons 0" OR "Attribution")';
   const qs=`query=${encodeURIComponent(q)}&page=${page}&page_size=30&fields=${fields}&filter=${encodeURIComponent(filter)}`;
-  if(FS_PROXY)return `${FS_PROXY}/search?${qs}`;
+  if(FS_PROXY&&!fsDirect)return `${FS_PROXY}/search?${qs}`;
   return `https://freesound.org/apiv2/search/text/?${qs}&token=${encodeURIComponent(fsKey())}`;
 }
 const licName=l=>/publicdomain\/zero|Creative Commons 0/i.test(l)?"CC0":/by-nc/i.test(l)?"CC BY-NC":/by\//i.test(l)||/Attribution/i.test(l)?"CC BY":l;
@@ -798,7 +799,7 @@ let fsPage=1,fsQuery="";
 async function fsSearch(q,more){
   if(!FS_PROXY&&!fsKey()){$("#fsList").replaceChildren(el("div",{class:"note"},t("noKey")));return}
   if(!more){fsPage=1;fsQuery=q;$("#fsList").replaceChildren(el("div",{class:"note"},"…"))}
-  try{const r=await fetch(fsURL(fsQuery,fsPage));if(!r.ok)throw new Error(r.status);const j=await r.json();
+  try{let r=await fetch(fsURL(fsQuery,fsPage)).catch(()=>null);if((!r||!r.ok)&&FS_PROXY&&!fsDirect&&fsKey()){fsDirect=true;r=await fetch(fsURL(fsQuery,fsPage))}if(!r||!r.ok)throw new Error(r?r.status:0);const j=await r.json();
     if(!more)$("#fsList").replaceChildren(el("div",{class:"note"},t("licence")));
     $("#fsList").querySelector(".more")?.remove();
     if(!j.results.length&&!more){$("#fsList").append(el("div",{class:"note"},t("nores")));return}
@@ -812,7 +813,7 @@ async function ensureSound(item){
   const st=await dbGet("snd",item.id).catch(()=>null);
   if(st){const b=newBuf(st.chans.length,st.chans[0].length,st.sr);st.chans.forEach((d,i)=>b.copyToChannel(d,i));return addSound({id:st.id,name:st.name,buffer:b,src:st.src,credit:st.credit})}
   if(!item.remote)return null;
-  const url=FS_PROXY&&item.src==="freesound"?`${FS_PROXY}/preview?u=${encodeURIComponent(item.remote)}`:item.remote;
+  const url=FS_PROXY&&!fsDirect&&item.src==="freesound"?`${FS_PROXY}/preview?u=${encodeURIComponent(item.remote)}`:item.remote;
   const ab=await (await fetch(url,item.range?{headers:{Range:"bytes=0-6999999"}}:{})).arrayBuffer();let b=await audio().decodeAudioData(ab);b=trimBuf(b,240);
   const s=addSound({id:item.id,name:item.name,buffer:b,src:item.src,credit:item.credit});storeSound(s);renderMine();return s;
 }
@@ -1237,7 +1238,7 @@ $("#iaForm").onsubmit=e=>{e.preventDefault();iaSearch($("#iaQ").value.trim())};
 $("#bFsKey").onclick=()=>{$("#keyIn").value=fsKey();$("#dKey").showModal()};
 $("#keyOk").onclick=()=>{localStorage.setItem("st.fskey",$("#keyIn").value.trim());$("#dKey").close();const q=$("#fsQ").value.trim();if(q)fsSearch(q)};
 $("#keyCancel").onclick=()=>$("#dKey").close();
-if(FS_PROXY)$("#bFsKey").style.display="none";
+
 $("#bImport").onclick=()=>$("#fileIn").click();
 $("#fileIn").onchange=e=>importFiles([...e.target.files]);
 async function importFiles(files){for(const f of files){try{const b=await audio().decodeAudioData(await f.arrayBuffer());const s=addSound({id:"file:"+uid(),name:f.name.replace(/\.[^.]+$/,""),buffer:b,src:"file"});await storeSound(s)}catch(e){console.warn(e)}}renderMine();document.querySelector('aside nav button[data-p="mine"]').click();toast(t("drop"))}
