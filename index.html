@@ -1279,7 +1279,7 @@ const COLL=[
 ];
 const SRC_N={fs:"Freesound",wc:"Commons",jm:"Jamendo",ko:"Internet Archive",fsu:"Freesound"};
 const KO_ALIAS=["Mauk Tenieb","C7H5N3O6","dogXim","Ts'ui Pên","Auvergne"];
-let collBpm=false,collOpen=null,collQ=null,collSrc=null,collPage=1,collCont=null;
+let collKey="",collBpm=false,collOpen=null,collQ=null,collSrc=null,collPage=1,collCont=null;
 function renderColl(){
   const box=$("#collNav");box.replaceChildren(...COLL.map(g=>{const d=el("details",{class:"kitg",...(collOpen===g.k?{open:""}:{})},el("summary",{},g[lang]||g.en,el("small",{},g.src.map(s=>SRC_N[s]).join(", "))));
     d.addEventListener("toggle",()=>{if(d.open)collOpen=g.k});
@@ -1291,9 +1291,10 @@ async function collRun(g,v,label,more,elx){
   if(!more){collQ={g,v,label,el:elx||null};collSrc=g.k==="artists"?(KO_ALIAS.includes(v)?"ko":"fsu"):collSrc&&g.src.includes(collSrc)?collSrc:g.src[0];collPage=1;collCont=null}
   const list=$("#collList");if(!more){const srcRow=g.k==="artists"?null:el("div",{class:"cats"},...collQ.g.src.map(s=>{const b=el("button",{class:s===collSrc?"on":""},SRC_N[s]);b.onclick=()=>{collSrc=s;collRun(collQ.g,collQ.v,collQ.label,false,collQ.el)};return b}));
     const tb=el("button",{class:collBpm?"on":"",title:lang==="fr"?"Au tempo du projet":"At project tempo"},"♩ "+state.bpm);tb.onclick=()=>{collBpm=!collBpm;collRun(collQ.g,collQ.v,collQ.label,false,collQ.el)};
-    const elRow=g.pack&&collSrc==="fs"?el("div",{class:"cats els"},tb,...PACK_EL.split("|").map(e=>{const b=el("button",{class:(collQ.el||"loop")===e?"on":""},e);b.onclick=()=>collRun(collQ.g,collQ.v,collQ.label,false,e);return b})):null;
+    const KEYS=["","C","Cm","C#","C#m","D","Dm","Eb","Ebm","E","Em","F","Fm","F#","F#m","G","Gm","Ab","Abm","A","Am","Bb","Bbm","B","Bm"];const ks=el("select",{title:lang==="fr"?"Tonalité":"Key"},...KEYS.map(k=>el("option",{value:k},k||"♮")));ks.value=collKey;ks.onchange=()=>{collKey=ks.value;collRun(collQ.g,collQ.v,collQ.label,false,collQ.el)};
+    const elRow=g.pack&&collSrc==="fs"?el("div",{class:"cats els"},tb,ks,...PACK_EL.split("|").map(e=>{const b=el("button",{class:(collQ.el||"loop")===e?"on":""},e);b.onclick=()=>collRun(collQ.g,collQ.v,collQ.label,false,e);return b})):null;
     list.replaceChildren(...[srcRow,elRow].filter(Boolean),el("div",{class:"note"},collQ.label+" …"));list.scrollIntoView({block:"nearest"})}
-  try{let items=[],next=false;const q=collQ.g.pack&&collSrc==="fs"?collQ.v+" "+(collQ.el||"loop")+(collBpm?" "+state.bpm+" bpm":""):collQ.g.loop&&collSrc==="fs"?collQ.v+" loop":collQ.v;
+  try{let items=[],next=false;const q=collQ.g.pack&&collSrc==="fs"?collQ.v+" "+(collQ.el||"loop")+(collBpm?" "+state.bpm+" bpm":"")+(collKey?" "+collKey.replace(/m$/," minor").replace(/^([A-G][b#]?)$/,"$1 major"):""):collQ.g.loop&&collSrc==="fs"?collQ.v+" loop":collQ.v;
     if(collSrc==="ko"){const r=await fetch(`https://archive.org/advancedsearch.php?q=${encodeURIComponent(`creator:("${collQ.v}") AND mediatype:(audio OR movies)`)}&fl[]=identifier&fl[]=title&fl[]=creator&fl[]=licenseurl&fl[]=date&sort[]=date+desc&rows=60&page=${collPage}&output=json`);const j=await r.json();
       const docs=j.response.docs.filter(d=>[].concat(d.creator||"").some(c=>c===collQ.v));next=j.response.numFound>collPage*60;collPage++;
       list.querySelector(".note")?.remove();list.querySelector(".more")?.remove();if(!docs.length&&!more)list.append(el("div",{class:"note"},t("nores")));
