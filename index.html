@@ -631,7 +631,7 @@ async function ensureSound(item){
   if(st){const b=newBuf(st.chans.length,st.chans[0].length,st.sr);st.chans.forEach((d,i)=>b.copyToChannel(d,i));return addSound({id:st.id,name:st.name,buffer:b,src:st.src,credit:st.credit})}
   if(!item.remote)return null;
   const url=FS_PROXY&&item.src==="freesound"?`${FS_PROXY}/preview?u=${encodeURIComponent(item.remote)}`:item.remote;
-  const ab=await (await fetch(url)).arrayBuffer();let b=await audio().decodeAudioData(ab);b=trimBuf(b,240);
+  const ab=await (await fetch(url,item.range?{headers:{Range:"bytes=0-6999999"}}:{})).arrayBuffer();let b=await audio().decodeAudioData(ab);b=trimBuf(b,240);
   const s=addSound({id:item.id,name:item.name,buffer:b,src:item.src,credit:item.credit});storeSound(s);renderMine();return s;
 }
 
@@ -645,7 +645,7 @@ let iaCat=null,iaPage=1,iaQ="";
 function renderIaCats(){$("#iaCats").replaceChildren(...IA_CATS[lang].map(([n],i)=>{const b=el("button",{class:iaCat===i?"on":""},n);b.onclick=()=>{iaCat=iaCat===i?null:i;renderIaCats();iaSearch($("#iaQ").value.trim())};return b}))}
 async function iaSearch(q,more){
   if(!more){iaPage=1;iaQ=q}
-  const parts=["mediatype:audio","licenseurl:*",IA_SKIP];if(iaQ)parts.push("("+iaQ+")");if(iaCat!==null)parts.push(IA_CATS.en[iaCat][1]);
+  const parts=["mediatype:audio","(licenseurl:*publicdomain* OR licenseurl:*zero* OR licenseurl:*\\/by\\/* OR licenseurl:*\\/by-sa\\/*)",IA_SKIP];if(iaQ)parts.push("("+iaQ+")");if(iaCat!==null)parts.push(IA_CATS.en[iaCat][1]);
   if(!iaQ&&iaCat===null){$("#iaList").replaceChildren();return}
   if(!more)$("#iaList").replaceChildren(el("div",{class:"note"},"…"));
   const url=`https://archive.org/advancedsearch.php?q=${encodeURIComponent(parts.join(" AND "))}&fl[]=identifier&fl[]=title&fl[]=creator&fl[]=licenseurl&fl[]=date&sort[]=downloads+desc&rows=60&page=${iaPage}&output=json`;
@@ -663,8 +663,8 @@ function iaItem(d){
   const files=el("div",{class:"files"});let open=false;
   box.onclick=async()=>{if(open){files.replaceChildren();open=false;return}open=true;files.replaceChildren(el("div",{class:"note"},"…"));
     try{const m=await (await fetch(`https://archive.org/metadata/${d.identifier}`)).json();
-      const fl=(m.files||[]).filter(f=>/\.mp3$/i.test(f.name)&&(+f.size||0)<40e6).slice(0,40);
-      files.replaceChildren(...(fl.length?fl.map(f=>sndRow({id:"ia:"+d.identifier+"/"+f.name,name:(f.title||f.name.replace(/\.mp3$/i,"")),src:"ia",dur:durOf(f.length),
+      const fl=(m.files||[]).filter(f=>/\.mp3$/i.test(f.name)).slice(0,60);
+      files.replaceChildren(...(fl.length?fl.map(f=>sndRow({id:"ia:"+d.identifier+"/"+f.name,name:(f.title||f.name.replace(/\.mp3$/i,"")),src:"ia",dur:Math.min(durOf(f.length),(+f.size||0)>12e6?240:1e9),range:(+f.size||0)>12e6,
         remote:`https://archive.org/download/${d.identifier}/${f.name.split("/").map(encodeURIComponent).join("/")}`,
         credit:{title:f.title||title,author:creator||"Internet Archive",license:iaLic(d.licenseurl),url:`https://archive.org/details/${d.identifier}`}})):[el("div",{class:"note"},t("nores"))]))}
     catch(e){files.replaceChildren(el("div",{class:"note"},"✕"))}};
