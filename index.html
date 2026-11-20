@@ -569,6 +569,7 @@ body.fxopen #abar{display:none!important}
 @media (pointer:fine){#console .strip{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:auto auto auto auto minmax(0,1fr) auto;grid-template-areas:"sn sn" "s1 s1" "s2 s2" "pk fl" "fz fz" "dv dv";justify-items:center;row-gap:3px}
   #console .strip .sn{grid-area:sn;justify-self:stretch}#console .strip>.sb:not(:has(.dubb)){grid-area:s1}#console .strip>.sb:has(.dubb){grid-area:s2}#console .strip .knob.pan{grid-area:pk}#console .strip .knob.flt{grid-area:fl}#console .strip .fz{grid-area:fz;min-height:0;height:100%}#console .strip .dbv{grid-area:dv}
   #console .strip .knob{transform:scale(.82);transform-origin:50% 0;margin-bottom:-10px}}
+.item .mbd{margin-left:6px;color:#ffa726;font-size:12px;letter-spacing:.04em}
 #busy{position:fixed;left:50%;bottom:calc(var(--u)*2.2);transform:translateX(-50%);z-index:60;display:none;align-items:center;gap:10px;padding:6px 8px 6px 14px;border-radius:4px;background:linear-gradient(rgba(11,9,8,.55),rgba(11,9,8,.85)),url(img/metal.webp) center/cover;box-shadow:0 8px 20px rgba(0,0,0,.65);color:#ffe3a0;font-size:max(12px,1em)}
 #busy.on{display:flex}#busy i{display:block;width:clamp(90px,22vw,200px);height:6px;border-radius:3px;background:#0c0a08;box-shadow:inset 0 1px 2px #000;overflow:hidden}#busy b{display:block;height:100%;width:0;background:#ffa726}
 #busy .bl{white-space:nowrap;font-variant-numeric:tabular-nums}
@@ -1626,11 +1627,16 @@ const durOf=x=>String(x||0).includes(":")?String(x).split(":").reduce((a,v)=>a*6
 /* fiche de terrain remplie depuis les métadonnées d'Internet Archive (analyse du 20 nov. 2026, E-51) */
 const iaV=x=>[].concat(x||[]).map(v=>String(v).replace(/<[^>]*>/g,"").trim()).filter(Boolean).join(" ; ").slice(0,300);
 function iaMeta(md,d){const pl=iaV(md.coverage||md.location),nm=/name=([^;]+)/.exec(pl),la=/latitude=(-?[\d.]+)/.exec(pl),lo=/longitude=(-?[\d.]+)/.exec(pl);const o={place:nm?nm[1].split(",")[0].trim()+(la&&lo?" ("+(+la[1]).toFixed(4)+", "+(+lo[1]).toFixed(4)+")":""):pl,date:iaV(md.date||md.year),who:iaV(md.performer||md.artist),collector:iaV(md.collector||md.recordist||md.creator),lang:iaV(md.language),license:iaV(d.licenseurl||md.licenseurl),source:`https://archive.org/details/${d.identifier}`,ref:iaV(md.identifier)};for(const k in o)if(!o[k])delete o[k];return o}
+/* doute de licence (E-25) : un titre d'Internet Archive retrouvé dans MusicBrainz chez un label commercial reçoit le pictogramme ©? ; une requête par seconde au plus */
+let mbLast=0;const mbCache=new Map();
+async function mbDoubt(title,artist){if(!title||!artist)return null;const k=(title+"|"+artist).toLowerCase();if(mbCache.has(k))return mbCache.get(k);const w=Math.max(0,mbLast+1100-Date.now());mbLast=Date.now()+w;await new Promise(r=>setTimeout(r,w));
+  try{const q=`release:"${String(title).replace(/["\\]/g,"")}" AND artist:"${String(artist).replace(/["\\]/g,"")}"`,j=await (await fetch("https://musicbrainz.org/ws/2/release?fmt=json&limit=5&query="+encodeURIComponent(q))).json();
+    const hit=(j.releases||[]).find(r=>r.score>=95&&(r["label-info"]||[]).some(l=>l.label&&l.label.name&&!/no label|self-released|internet archive|netlabel/i.test(l.label.name)));const lb=hit?hit["label-info"].find(l=>l.label&&l.label.name).label.name:null;mbCache.set(k,lb);return lb}catch(e){mbCache.set(k,null);return null}}
 function iaItem(d){
   const title=[].concat(d.title||d.identifier)[0],creator=[].concat(d.creator||"")[0];
   const box=el("div",{class:"item"},el("span",{class:"t",title},title),el("small",{},[iaLic(d.licenseurl),creator,String([].concat(d.date||"")[0]||"").slice(0,4)].filter(Boolean).join(", ")));
   const files=el("div",{class:"files"});let open=false;
-  box.onclick=async()=>{if(open){files.replaceChildren();open=false;return}open=true;files.replaceChildren(el("div",{class:"note"},"…"));
+  box.onclick=async()=>{if(open){files.replaceChildren();open=false;return}open=true;files.replaceChildren(el("div",{class:"note"},"…"));if(!box._mb){box._mb=1;mbDoubt(title,creator).then(lb=>{if(lb)box.append(el("b",{class:"mbd",title:(lang==="fr"?"Titre publié chez ":"Title released on ")+lb+(lang==="fr"?" (MusicBrainz) : licence à vérifier":" (MusicBrainz): check the licence")},"©?"))})}
     try{const m=await (await fetch(`https://archive.org/metadata/${d.identifier}`)).json();
       /* MP3 d'abord ; à défaut FLAC, Ogg, WAV (E-49) ; une archive sans fichier lisible prend le pictogramme d'archive fermée */
       const mp3=(m.files||[]).filter(f=>/\.mp3$/i.test(f.name)),alt=(m.files||[]).filter(f=>/\.(flac|ogg|oga|wav|m4a)$/i.test(f.name)&&!mp3.some(x=>x.name.replace(/\.mp3$/i,"")===f.name.replace(/\.[^.]+$/,""))),all=mp3.length?mp3.concat(alt.filter(f=>!/\.flac$/i.test(f.name)||!mp3.length)):alt,names=new Set(all.map(f=>f.name));const fl=all.filter(f=>!(/_64kb\.mp3$/i.test(f.name)&&names.has(f.name.replace(/_64kb\.mp3$/i,".mp3")))&&!(/_vbr\.mp3$/i.test(f.name)&&names.has(f.name.replace(/_vbr\.mp3$/i,".mp3")))).slice(0,60);
