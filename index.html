@@ -358,6 +358,9 @@ footer:has(#abar.on) #abar{flex:1 1 auto;min-width:0}
   background:radial-gradient(circle at 40% 35%,#fff7dc,var(--c) 45%,color-mix(in srgb,var(--c) 40%,#000) 100%);box-shadow:0 0 calc(var(--s)*.5) var(--c),0 8px 14px rgba(0,0,0,.7)}
 #scene .obj.hit{outline:2px solid #ffe3a0;outline-offset:3px}
 #scene .x{position:absolute;right:8px;top:8px}
+.dubb{flex:1;width:100%;height:calc(var(--u)*.72)!important;font-weight:700;letter-spacing:.1em}
+.dubb.on{background:radial-gradient(circle,#ffe3a0,#ffa726 60%,#7a3c0a)!important;color:#1a1006!important;box-shadow:0 0 10px #ffa726}
+.dubl{display:flex;flex-direction:column;align-items:center;gap:2px;font-size:.8em;color:var(--legend-dim)}.dubl input{width:calc(var(--u)*1.6)}
 </style>
 </head>
 <body>
@@ -827,6 +830,16 @@ async function lufsOf(b){
 function peakDb(b){let m=0;for(let c=0;c<b.numberOfChannels;c++){const d=b.getChannelData(c);for(let i=0;i<d.length;i++){const v=Math.abs(d[i]);if(v>m)m=v}}return 20*Math.log10(m+1e-12)}
 function capPeak(b,ceilDb){const p=peakDb(b);if(p<=ceilDb)return b;const g=Math.pow(10,(ceilDb-p)/20);for(let c=0;c<b.numberOfChannels;c++){const d=b.getChannelData(c);for(let i=0;i<d.length;i++)d[i]*=g}return b}
 function audible(tr){const anySolo=state.tracks.some(x=>x.solo);return !tr.mute&&(!anySolo||tr.solo)}
+/* bus dub (à la manière des consoles de King Tubby) : écho à bande calé sur le tempo, aigus atténués, saturation ; il nourrit un ressort qui se réinjecte dans l'écho, dosé par un seul réglage */
+function springIR(c){const sr=c.sampleRate,n=Math.floor(sr*2.6),b=c.createBuffer(2,n,sr);for(let ch=0;ch<2;ch++){const d=b.getChannelData(ch);for(let k=0;k<6;k++){const t0=k*.031+ch*.007;for(let i=0;i<Math.floor(sr*.06);i++){const t=i/sr,f=4200*Math.exp(-t*60)+180;const j=Math.floor((t0+t)*sr);if(j<n)d[j]+=Math.sin(2*Math.PI*f*t)*.35*Math.exp(-k*.5)}}
+  let l=0;for(let i=0;i<n;i++){l+=.3*((Math.random()*2-1)-l);d[i]+=l*.5*Math.exp(-i/sr*2.1)*(1+.6*Math.sin(i/sr*2*Math.PI*7))}}return b}
+function dubBus(c,dest){c._dub=c._dub||new Map();let B=c._dub.get(dest);if(B)return B.input;
+  const input=c.createGain(),dl=c.createDelay(4),dfb=c.createGain(),lp=c.createBiquadFilter(),hp=c.createBiquadFilter(),sat=c.createWaveShaper(),spring=c.createConvolver(),sfb=c.createGain(),out=c.createGain(),lim=c.createDynamicsCompressor();
+  dl.delayTime.value=spb()*.75;dfb.gain.value=.45;lp.type="lowpass";lp.frequency.value=2600;hp.type="highpass";hp.frequency.value=160;sat.curve=driveCurve(.35);spring.buffer=springIR(c);sfb.gain.value=state.dubFb??.35;out.gain.value=.8;
+  lim.threshold.value=-3;lim.ratio.value=20;lim.attack.value=.002;lim.release.value=.1;
+  input.connect(dl);dl.connect(lp).connect(hp).connect(sat);sat.connect(dfb).connect(dl);sat.connect(spring);spring.connect(sfb).connect(dl);sat.connect(out);spring.connect(out);out.connect(lim).connect(dest);
+  B={input,dl,sfb,dfb};c._dub.set(dest,B);return input}
+function dubSet(){if(!ctx||!ctx._dub)return;ctx._dub.forEach(B=>{B.sfb.gain.setTargetAtTime(state.dubFb??.35,ctx.currentTime,.05);B.dl.delayTime.setTargetAtTime(spb()*.75,ctx.currentTime,.1)})}
 function buildChain(c,tr,dest){
   const input=c.createGain();let node=input;const fxs=[];
   for(const f of tr.rack){if(!f.on||!FX[f.type])continue;const u=FX[f.type].make(c,f.p);node.connect(u.in);node=u.out;fxs.push([f.id,u])}
@@ -843,8 +856,10 @@ function buildChain(c,tr,dest){
   node.connect(vol).connect(hp).connect(heat).connect(hu).connect(auto).connect(pan).connect(dLp).connect(dG).connect(mute).connect(dest);
   if(!c._scene)c._scene=new Map();let bus=c._scene.get(dest);if(!bus){const g=c.createGain(),cv=c.createConvolver();cv.buffer=makeRoomIR(c,ROOMS[13]||ROOMS[ROOMS.length-1],1.2,1);g.connect(cv).connect(dest);bus=g;c._scene.set(dest,bus)}
   mute.connect(dSend).connect(bus);
+  /* envoi dub momentané (console) : la piste part vers le bus écho + ressort tant qu'on appuie */
+  const dub=c.createGain();dub.gain.value=0;mute.connect(dub);if(!(c instanceof OfflineAudioContext))dub.connect(dubBus(c,dest));
   const an=c.createAnalyser?c.createAnalyser():null;if(an&&!(c instanceof OfflineAudioContext)){an.fftSize=512;mute.connect(an)}
-  return{input,vol,auto,pan,mute,an,dLp,dG,dSend,fx:new Map(fxs)};
+  return{input,vol,auto,pan,mute,an,dLp,dG,dSend,dub,fx:new Map(fxs)};
 }
 
 /* ================= state ================= */
@@ -861,7 +876,7 @@ function fixTrack(tr){tr.rack=tr.rack||[];tr.auto=tr.auto||{vol:[],pan:[]};delet
 const spb=()=>60/state.bpm;const bar=()=>spb()*4;
 const snapT=x=>!state.snap?x:state.free?Math.round(x*10)/10:Math.round(x/(spb()/4))*(spb()/4);
 function projEnd(){let e=0;for(const tr of state.tracks)for(const c of tr.clips)e=Math.max(e,c.start+c.len);return e}
-const PROJ_KEYS=["bpm","loop","loopA","loopB","pps","tracks","masterVol","limiter","masterPreset","masterRack","target","lyrics","countIn","monitor","mInt","mEq","branch","free","notes"];
+const PROJ_KEYS=["bpm","loop","loopA","loopB","pps","tracks","masterVol","limiter","masterPreset","masterRack","target","lyrics","countIn","monitor","mInt","mEq","branch","free","notes","dubFb"];
 const projJSON=()=>JSON.stringify(Object.fromEntries(PROJ_KEYS.map(k=>[k,state[k]])));
 
 /* ================= undo ================= */
@@ -1390,9 +1405,11 @@ function renderConsole(){
     const tg=(l,k)=>{const b=el("button",{class:tr[k]?"on":""},l);b.onclick=()=>{tr[k]=!tr[k];updTrack(tr);renderConsole();render();save()};return b};
     const fxb=el("button",{class:fxOpen===tr.id?"on":(tr.rack.length?"has":"")},icon("fx"));fxb.onclick=()=>{fxOpen=fxOpen===tr.id?null:tr.id;renderFx();renderConsole()};
     const nm=el("div",{class:"sn",title:tr.name},tr.name);
-    return el("div",{class:"strip"+(tr.mute?" muted":""),style:`--c:${tr.color}`,"data-tid":tr.id},nm,el("div",{class:"sb"},tg("M","mute"),tg("S","solo"),fxb),pk,el("div",{class:"fz"},meter,f),el("div",{class:"dbv"},dbS(tr.vol)))});
+    const dubb=el("button",{class:"dubb",title:lang==="fr"?"Envoi dub (tant qu'on appuie)":"Dub send (while held)"},"D");const on=v=>{const ch=chains.get(tr.id);if(ch&&ch.dub&&ctx)ch.dub.gain.setTargetAtTime(v,ctx.currentTime,.006);dubb.classList.toggle("on",!!v)};dubb.addEventListener("pointerdown",e=>{e.preventDefault();dubb.setPointerCapture(e.pointerId);audio();on(1)});["pointerup","pointercancel","lostpointercapture"].forEach(k=>dubb.addEventListener(k,()=>on(0)));
+    return el("div",{class:"strip"+(tr.mute?" muted":""),style:`--c:${tr.color}`,"data-tid":tr.id},nm,el("div",{class:"sb"},tg("M","mute"),tg("S","solo"),fxb),el("div",{class:"sb"},dubb),pk,el("div",{class:"fz"},meter,f),el("div",{class:"dbv"},dbS(tr.vol)))});
   const mf=fader(state.masterVol,1.2,v=>{state.masterVol=v;master&&master.set();save();$("#mVol").value=v},.9);
-  const ms=el("div",{class:"strip master-strip"},el("div",{class:"sn"},"Master"),el("div",{class:"sb"},(()=>{const b=el("button",{},"Auto");b.title="AutoMix";b.onclick=autoMix;return b})()),el("div",{class:"fz"},el("div",{class:"meter",id:"mMeter"},el("i")),mf),el("div",{class:"dbv"},dbS(state.masterVol)));
+  const dfb=el("input",{type:"range",min:0,max:1.05,step:.01,value:state.dubFb??.35,title:lang==="fr"?"Réinjection du ressort dans l'écho":"Spring feedback into the echo",class:"dubfb"});dfb.oninput=()=>{state.dubFb=+dfb.value;dubSet();save()};
+  const ms=el("div",{class:"strip master-strip"},el("div",{class:"sn"},"Master"),el("div",{class:"sb"},(()=>{const b=el("button",{},"Auto");b.title="AutoMix";b.onclick=autoMix;return b})()),el("label",{class:"dubl",title:dfb.title},"D ⟲",dfb),el("div",{class:"fz"},el("div",{class:"meter",id:"mMeter"},el("i")),mf),el("div",{class:"dbv"},dbS(state.masterVol)));
   box.replaceChildren(el("div",{class:"strips"},...strips,ms));
 }
 function syncHeads(){document.querySelectorAll(".dbv").forEach((d,i)=>{const tr=state.tracks[i];if(tr)d.textContent=dbS(tr.vol)})}

@@ -40,6 +40,7 @@ Critères de qualité appliqués à chaque lot : direction artistique, réalisme
 - Branches de projet dans la palette de commandes : créer (« branche nom »), ouvrir, fusionner (les pistes vides reçoivent le contenu de l'autre branche).
 - Timeline en secondes, sans tempo ni mesures (touche chronomètre) : règle, grille, compteur et magnétisme en secondes.
 - Notes de terrain : un double appui sur la règle pose, modifie ou efface un repère avec son texte (traduction, accordage, lieu).
+- Console dub : touche D sur chaque tranche (envoi momentané vers un bus écho à bande + ressort), réinjection du ressort dans l'écho dosée par un seul réglage sur la tranche Master, limiteur de sécurité ; coupures sans clic.
 - Collection « Huit univers sonores » : 133 entrées tirées des annexes.
 - DA de la kave Korhogo, photographique : acier bruni du flanc de borne, jonc chromé, plaque MAUK TENIEB, étiquettes Dymo, écrans à phosphore photographiés, disque photographié pour le Scratch, capuchons rétroéclairés, cave voûtée, étagères de bandes, deux photographies de groupe de la Fauna à l'ouverture.
 - Proportions continues : chaque aire (pistes, bibliothèque, tiroir du bas) suit le format de l'écran ; poignée de partage entre pistes et tiroir ; téléphone couché avec bibliothèque à droite.
@@ -55,7 +56,6 @@ Critères de qualité appliqués à chaque lot : direction artistique, réalisme
 - Poste de mix de Musik : deux platines son et vidéo, fondu croisé.
 - Recherche par tonalité dans les packs.
 - Annexes du 20 nov. 2026, 5 h 08 (outils natifs souhaités par genre, lus avec esprit critique) :
-  - Envois dub momentanés vers un bus écho + ressort rebouclés, un seul fader de réinjection.
   - Espaces de travail par étape (composition, mixage, mastering), vue des circuits en nœuds, données spectrales sur les formes d'onde, spatialisation 3D avec Doppler, détection des coupes vidéo, micro-accordage (maqâm, raga, gamelan) et mesure de hauteur au cent près.
   - Banques des huit univers (power electronics, dark ambient, hip-hop et IDM, sound design, dub, orchestre, monde et micro-intervalles, ethnographie de terrain) en recherche directe dans Freesound et Wikimedia Commons.
 - Annexe du 20 nov. 2026, 5 h 14, un brouillon de DAW imaginaire (lu avec esprit critique, sans reprendre aucun de ses noms) :
