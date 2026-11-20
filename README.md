@@ -8,7 +8,7 @@ https://mauktenieb.github.io/studio/
 
 ## What it does
 
-- Thirty-two neutral tracks, numbered 01 to 32, each with volume, pan, mute, solo, colour, order, duplication, and volume and pan automation.
+- Thirty-two tracks, numbered 01 to 32. Tracks 01 to 18 hold the eighteen Masks of the Korhogo Fauna, drawn at random each session from SkopoRhogo (three.js figurines from the Insert Koin repository); each figurine sways, jumps on attacks and gives off a bioluminescent glow that follows its track's level. Tracks 19 to 32 hold the videos and sounds recorded with KamOrhogo and diktaTfaune in the same browser; a double click drops one onto its track at the playhead. Every track has each with volume, pan, mute, solo, colour, order, duplication, and volume and pan automation.
 - An effect rack per track, in any order: EQ, compressor, distortion, bitcrusher, chorus, flanger, phaser, tremolo, auto-pan, wah, filter, delay with ping-pong, reverb, vibrato, gate, ring modulator, frequency shifter (Hilbert), resonator, glitch buffer, vinyl, AM radio, room; ten chain presets (Voice, Radio, Telephone, Lo-fi, Robot, Space, Cathedral, Doubler, Noise wall, Dub).
 - Clips that move, trim from both edges, fade in and out, split, duplicate, copy, paste, repeat, mute, rename and change track.
 - Clip processing: reverse, normalize, gain, transpose with duration kept, speed change with pitch kept (WSOLA), denoise, bounce.
