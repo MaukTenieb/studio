@@ -2426,6 +2426,8 @@ function cmdList(){const F=lang==="fr",tr=curTrack(),tn=tr?tr.name:"";const A=[]
   add(F?"Lecture / arrêt":"Play / stop","play stop lecture espace",clk("bPlay"));add(F?"Enregistrer":"Record","rec micro",clk("bRec"));add(F?"Retour au début":"Back to start","home début",clk("bBack"));
   add(F?"Annuler":"Undo","undo",clk("bUndo"));add(F?"Boucle":"Loop","loop cycle",clk("bLoop"));add(F?"Métronome":"Metronome","click",clk("bMetro"));add(F?"Magnétisme":"Snap","grid grille",clk("bSnap"));add(F?"Accordeur":"Tuner","tune cents hauteur",clk("bTuner"));add(F?"Retour en arrière 60 s":"Flashback 60 s","capture",clk("bFlash"));
   add("Master","mastering lufs bandlab",()=>drawer("mastr"));add("Console","mix mixer faders",()=>drawer("console"));add("Pads XY","perform scratch filter",()=>drawer("perf"));add(F?"Séquenceur à pas":"Step sequencer","steps pattern grille",()=>drawer("seq"));
+  STAGES.forEach((st,i)=>add((F?"Étape ":"Stage ")+(i+1)+" : "+(F?st[0]:st[1]),"étape stage espace workspace alt+"+(i+1),()=>stage(i),"Alt+"+(i+1)));
+  add(F?"Repérer les coupes des vidéos":"Mark video cuts","vidéo video coupes cuts plans scene kamorhogo",markVideoCuts);
   add(F?"Dérive":"Drift","emergence lorenz evolve",driftToggle);add(F?"Garder la dérive":"Keep drift","keep",driftKeep);
   add("Export WAV","exporter mix",()=>doExport("wav"));add("Export MP3","exporter",()=>doExport("mp3"));add(F?"Export des pistes séparées":"Export stems","stems",()=>doExport("stems"));
   add(F?"Nouvelle piste":"New track","add piste",()=>{const t=freeTrack(-1);if(t){rebuildChains();render();save()}});add(F?"Importer un fichier audio":"Import audio file","upload",clk("bImport"));add(F?"Nouveau projet":"New project","new",clk("bNew"));add(F?"Langue FR / EN":"Language FR / EN","lang",clk("bLang"));
@@ -2536,6 +2538,23 @@ async function dkRecord(rb){const B=dkBus(),c=B.c;if(DK.rec){DK.rec.stop();retur
   mr.onstop=async()=>{B.mix.disconnect(dst);DK.rec=null;rb.classList.remove("on");try{const buf=await c.decodeAudioData(await new Blob(chunks).arrayBuffer());const sd=addSound({id:"mix:"+uid(),name:(lang==="fr"?"Mix platines ":"Decks mix ")+new Date().toLocaleTimeString().slice(0,5),buffer:buf,src:"rec"});storeSound(sd);const t=freeTrack(-1);if(t){snapshot();t.clips.push({id:uid(),snd:sd.id,start:snapT(state.pos||0),off:0,len:buf.duration,gain:1});rebuildChains();render();save()}toast("●→ "+(t?t.name:""))}catch(e){toast("✕")}};
   mr.start();DK.rec=mr;rb.classList.add("on")}
 $("#bDecks").onclick=()=>drawer("decks");
+
+/* espaces de travail par étape : chaque étape ouvre son tiroir et son panneau */
+const STAGES=[["Composition","Composition",()=>{if(!seqOn)drawer("seq");$("#side").classList.remove("min")}],["Enregistrement","Recording",()=>{if(consoleOn||perfOn||mastrOn||seqOn||sceneOn||decksOn){const n=consoleOn?"console":perfOn?"perf":mastrOn?"mastr":seqOn?"seq":sceneOn?"scene":"decks";drawer(n)}}],
+  ["Édition","Editing",()=>{if(consoleOn||perfOn||mastrOn||seqOn||sceneOn||decksOn){const n=consoleOn?"console":perfOn?"perf":mastrOn?"mastr":seqOn?"seq":sceneOn?"scene":"decks";drawer(n)}state.pps=clamp(state.pps*2,8,800);render()}],["Mixage","Mixing",()=>{if(!consoleOn)drawer("console")}],["Mastering","Mastering",()=>{if(!mastrOn)drawer("mastr")}]];
+function stage(i){const st=STAGES[i];if(!st)return;st[2]();fit();toast((i+1)+" · "+(lang==="fr"?st[0]:st[1]))}
+addEventListener("keydown",e=>{if(e.altKey&&/^[1-5]$/.test(e.key)){e.preventDefault();stage(+e.key-1)}});
+/* coupes vidéo : chaque changement de plan d'un clip de KamOrhogo devient un repère ✂ sur la règle */
+async function videoCuts(url,step=.2){const v=document.createElement("video");v.muted=true;v.playsInline=true;v.src=url;v.preload="auto";v.style.cssText="position:fixed;left:-200px;top:0;width:32px;height:18px;opacity:0;pointer-events:none";document.body.append(v);await new Promise(r=>{v.onloadeddata=r;v.onerror=r;setTimeout(r,4000)});const D=v.duration||0;if(!D)return[];
+  const cv=document.createElement("canvas");cv.width=32;cv.height=18;const g=cv.getContext("2d",{willReadFrequently:true});let prev=null;const cuts=[];
+  /* lecture accélérée : chaque image décodée est comparée à la précédente (plus sûr qu'un déplacement image par image) */
+  v.playbackRate=clamp(D/12,1,8);const diff=t=>{g.drawImage(v,0,0,32,18);const d=g.getImageData(0,0,32,18).data;if(prev){let m=0;for(let i=0;i<d.length;i+=4)m+=Math.abs(d[i]-prev[i])+Math.abs(d[i+1]-prev[i+1])+Math.abs(d[i+2]-prev[i+2]);m/=(d.length/4)*3*255;if(m>.18&&(!cuts.length||t-cuts[cuts.length-1]>.5))cuts.push(+t.toFixed(2))}prev=d};
+  await new Promise(res=>{const done=()=>res();v.onended=done;setTimeout(done,(D/v.playbackRate+4)*1000);
+    if(v.requestVideoFrameCallback){const cb=(n,meta)=>{diff(meta.mediaTime);if(!v.ended)v.requestVideoFrameCallback(cb)};v.requestVideoFrameCallback(cb)}else v.ontimeupdate=()=>diff(v.currentTime);
+    v.play().catch(done)});v.pause();v.remove();return cuts}
+async function markVideoCuts(){const items=(KAM.items||[]).filter(i=>i.kind==="vid");let n=0;state.notes=state.notes||[];status(t("working"));
+  for(const tr of state.tracks)for(const c of tr.clips){const it=items.find(i=>i.id===c.snd);if(!it)continue;const cuts=await videoCuts(it.url);cuts.forEach(x=>{if(x<c.off||x>c.off+c.len)return;state.notes.push({t:c.start+x-c.off,x:"✂ "+it.name});n++})}
+  state.notes.sort((a,b)=>a.t-b.t);drawRuler();save();status();toast("✂ "+n)}
 </script>
 </body>
 </html>
