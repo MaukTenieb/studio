@@ -92,6 +92,8 @@ Critères de qualité appliqués à chaque lot : direction artistique, réalisme
 - Collaboration en temps réel : le studio tourne sans serveur, sur GitHub Pages ; les branches de projet en tiennent lieu.
 - Noms tirés des annexes (aucun nom inventé).
 
+- Silence au repos (20 nov., 13 h 40 : « l'appli larsenne avant même qu'on lance quoi que ce soit ») : les effets qui produisent du son par eux-mêmes (boucles de larsen de Musik, craquements et souffle du vinyle, parasites de la radio AM) se taisent à l'arrêt et reprennent à la lecture, à l'enregistrement ou sur la piste armée en écoute. Mesure : −34 dB (larsen) et −14 dB (vinyle) à l'arrêt avant, −78 dB après.
+
 ## Jugement par quatre instances séparées (20 nov., 12 h 03)
 
 Juges : son, direction artistique et écrans, fidélité aux demandes, code et sécurité. Rapports : /home/claude/judges/<juge>/RAPPORT.md (hors dépôt). Notes reçues au premier passage : son 4/10, DA 5/10, fidélité 5/10, code 5/10. Second passage : son 7/10, DA 6/10, fidélité 6/10, code 8/10.

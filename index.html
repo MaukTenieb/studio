@@ -715,12 +715,12 @@ const FX={
   make(c,p){const i=c.createGain(),o=c.createGain(),d=c.createDelay(.05),l=c.createOscillator(),lg=c.createGain(),hp=c.createBiquadFilter(),lp=c.createBiquadFilter();d.delayTime.value=.01;l.frequency.value=.55;l.connect(lg).connect(d.delayTime);l.start();hp.type="highpass";lp.type="lowpass";
    i.connect(d).connect(hp).connect(lp).connect(o);
    const n=c.sampleRate*4,cb=c.createBuffer(2,n,c.sampleRate),hb=c.createBuffer(2,n,c.sampleRate);for(let ch=0;ch<2;ch++){const x=cb.getChannelData(ch),y=hb.getChannelData(ch);let lpv=0;for(let k=0;k<n;k++){x[k]=Math.random()<.0009?(Math.random()*2-1)*(Math.random()<.1?1:.4):0;lpv+=.15*((Math.random()*2-1)-lpv);y[k]=lpv}}
-   const cs=c.createBufferSource(),hs=c.createBufferSource();cs.buffer=cb;hs.buffer=hb;cs.loop=hs.loop=true;const cg=c.createGain(),hg=c.createGain(),cf=c.createBiquadFilter();cf.type="highpass";cf.frequency.value=900;cs.connect(cf).connect(cg).connect(o);hs.connect(hg).connect(o);cs.start();hs.start();
+   const cs=c.createBufferSource(),hs=c.createBufferSource();cs.buffer=cb;hs.buffer=hb;cs.loop=hs.loop=true;const cg=c.createGain(),hg=c.createGain(),cf=c.createBiquadFilter();cf.type="highpass";cf.frequency.value=900;const rz=restNode(c);cs.connect(cf).connect(cg).connect(rz);hs.connect(hg).connect(rz);rz.connect(o);cs.start();hs.start();
    const set=p=>{cg.gain.value=p.crackle*.5;hg.gain.value=p.hiss*.05;lg.gain.value=.0012*p.wow;hp.frequency.value=20+p.age*180;lp.frequency.value=18000-p.age*14000};set(p);return{in:i,out:o,set}}},
  am:{n:"AM radio",p:{band:.6,noise:.25,drift:.3,drive:.3},r:{band:[0,1,.01],noise:[0,1,.01],drift:[0,1,.01],drive:[0,1,.01]},
   make(c,p){const i=c.createGain(),o=c.createGain(),bp=c.createBiquadFilter(),w=c.createWaveShaper(),am=c.createGain(),l=c.createOscillator(),lg=c.createGain();bp.type="bandpass";w.curve=driveCurve(.3);o.gain.value=1/curveGain(w.curve);
    l.frequency.value=.23;l.connect(lg).connect(am.gain);l.start();i.connect(bp).connect(w).connect(am).connect(o);
-   const n=c.sampleRate*3,nb=c.createBuffer(1,n,c.sampleRate),x=nb.getChannelData(0);for(let k=0;k<n;k++)x[k]=(Math.random()*2-1)*(1+.5*Math.sin(k/c.sampleRate*2*Math.PI*50));const ns=c.createBufferSource();ns.buffer=nb;ns.loop=true;const nf=c.createBiquadFilter();nf.type="bandpass";nf.frequency.value=2500;nf.Q.value=.6;const ng=c.createGain();ns.connect(nf).connect(ng).connect(o);ns.start();
+   const n=c.sampleRate*3,nb=c.createBuffer(1,n,c.sampleRate),x=nb.getChannelData(0);for(let k=0;k<n;k++)x[k]=(Math.random()*2-1)*(1+.5*Math.sin(k/c.sampleRate*2*Math.PI*50));const ns=c.createBufferSource();ns.buffer=nb;ns.loop=true;const nf=c.createBiquadFilter();nf.type="bandpass";nf.frequency.value=2500;nf.Q.value=.6;const ng=c.createGain(),rz=restNode(c);ns.connect(nf).connect(ng).connect(rz).connect(o);ns.start();
    const set=p=>{bp.frequency.value=1200;bp.Q.value=.5+p.band*2.5;w.curve=driveCurve(p.drive);ng.gain.value=p.noise*.12;lg.gain.value=p.drift*.45;am.gain.value=1-p.drift*.45};set(p);return{in:i,out:o,set}}},
  ring:{n:"Ring mod",p:{freq:220,mix:.6},r:{freq:[1,4000,1,1],mix:[0,1,.01]},
   make(c,p){const i=c.createGain(),o=c.createGain(),rg=c.createGain(),wet=c.createGain(),dry=c.createGain(),osc=c.createOscillator();rg.gain.value=0;osc.connect(rg.gain);osc.start();i.connect(rg).connect(wet).connect(o);i.connect(dry).connect(o);
@@ -896,6 +896,11 @@ function mchain(c,m,trimDb,dest){
 function mkFX(type,c,p){const made=[],o=c.createOscillator,cs=c.createConstantSource,bs=c.createBufferSource,AW=window.AudioWorkletNode;if(AW)window.AudioWorkletNode=class extends AW{constructor(...a){super(...a);made.push(this)}};c.createOscillator=function(){const n=o.call(c);made.push(n);return n};c.createConstantSource=function(){const n=cs.call(c);made.push(n);return n};c.createBufferSource=function(){const n=bs.call(c);made.push(n);return n};
   let u;try{u=FX[type].make(c,p)}finally{delete c.createOscillator;delete c.createConstantSource;delete c.createBufferSource;if(AW)window.AudioWorkletNode=AW}u._made=made;return u}
 function disposeFX(u){if(!u||u._dead)return;u._dead=true;if(u.out&&u.out._t)clearTimeout(u.out._t);if(u.dispose)try{u.dispose()}catch(e){}(u._made||[]).forEach(n=>{try{n.port&&n.port.postMessage({__stop:1})}catch(e){}try{n.stop&&n.stop()}catch(e){}try{n.disconnect()}catch(e){}});try{u.out.disconnect()}catch(e){}try{u.in.disconnect()}catch(e){}}
+/* repos : à l'arrêt, les effets qui produisent du son par eux-mêmes (larsen, craquements, souffle, parasites) se taisent ; ils reprennent à la lecture, à l'enregistrement ou au retour d'une piste armée */
+const REST=new Set();
+function restNode(c){const g=c.createGain();if(c instanceof OfflineAudioContext){g.gain.value=1;return g}g.gain.value=isLive()?1:0;REST.add(g);return g}
+function isLive(){return !!(typeof playing!=="undefined"&&playing)||!!(typeof recording!=="undefined"&&recording)}
+function restGate(){if(!ctx)return;const on=isLive(),T=ctx.currentTime;for(const g of REST){if(!g.context||g.context!==ctx){REST.delete(g);continue}g.gain.cancelScheduledValues(T);g.gain.setTargetAtTime(on?1:0,T,on?.005:.35)}}
 function buildMaster(c,dest,tap,trimDb=0){
   const m=scaledM(state.masterPreset,state.mInt,state.mEq);
   const input=c.createGain();let node=input;const fx=new Map();
@@ -964,7 +969,7 @@ function buildChain(c,tr,dest){
   /* chaleur : saturation douce après le fader ; transparente à faible niveau, elle chauffe quand on pousse */
   if(!c._heat){const n=2048,cv=new Float32Array(n);for(let i=0;i<n;i++){const x=(i/(n-1)*2-1)*2;cv[i]=Math.tanh(x)/2}c._heat=cv}
   const heat=c.createWaveShaper(),hp=c.createGain(),hu=c.createGain();heat.curve=c._heat;heat.oversample="2x";hp.gain.value=.5;hu.gain.value=2;
-  node.connect(vol).connect(hp).connect(heat).connect(hu).connect(auto).connect(pan).connect(dLp).connect(air).connect(dG).connect(mute).connect(dest);
+  const rest=restNode(c);if(state.monitor&&state.armed===tr.id)rest.gain.value=1,REST.delete(rest);node.connect(rest).connect(vol).connect(hp).connect(heat).connect(hu).connect(auto).connect(pan).connect(dLp).connect(air).connect(dG).connect(mute).connect(dest);
   if(!c._scene)c._scene=new Map();let bus=c._scene.get(dest);if(!bus){const g=c.createGain(),cv=c.createConvolver();cv.buffer=makeRoomIR(c,ROOMS[13]||ROOMS[ROOMS.length-1],1.2,1);g.connect(cv).connect(dest);bus=g;c._scene.set(dest,bus)}
   mute.connect(dSend).connect(bus);
   /* envoi dub momentané (console) : la piste part vers le bus écho + ressort tant qu'on appuie */
@@ -1172,7 +1177,7 @@ function play(from){
     scheduleSeg(p0,state.loopB,t0);segEnd=t0+(state.loopB-p0);
     schedH=setInterval(()=>{if(segEnd-ctx.currentTime<1){scheduleSeg(state.loopA,state.loopB,segEnd);segEnd+=state.loopB-state.loopA}},100);
   }else{scheduleSeg(p0,end,t0);segEnd=t0+(end-p0)}
-  setPlayBtn(true);
+  setPlayBtn(true);restGate();
 }
 function setPlayBtn(on){$("#bPlay").classList.toggle("on",on);$("#bPlay").replaceChildren(icon(on?"stop":"play"))}
 function stop(){
@@ -1181,7 +1186,7 @@ function stop(){
   for(const ch of chains.values()){try{ch.auto.gain.cancelScheduledValues(0);ch.auto.gain.value=1;ch.pan.pan.cancelScheduledValues(0)}catch(e){}}
   playing=false;state.pos=Math.max(0,pos);
   if(recording)stopRec();
-  setPlayBtn(false);placeHead();
+  setPlayBtn(false);placeHead();restGate();
 }
 function displayPos(){
   if(!playing)return state.pos;let p=p0+(ctx.currentTime-t0);
