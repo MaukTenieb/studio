@@ -16,9 +16,9 @@ Critères de qualité appliqués à chaque lot : direction artistique, réalisme
 - Découpe qui coupe le son à l'endroit indiqué.
 - Fusion et séparation de clips : attaques, silences, harmonique / percussif, bandes, milieu / côtés.
 - Masterings, sonie (LUFS), réverbérations de pièces naturelles.
-- Bouton Master à la manière de BandLab Mastering : Universal, Fire, Clarity, Tape, Natural, Cinematic, Spatial, Punch et 22 masterings du studio ; écoute A/B à sonie égale ; intensité sur 11 niveaux ; égaliseur 3 bandes ; cible de sonie ; mastering de référence ; export d'une sortie ou de toutes les sorties cochées.
+- Bouton Master à la manière de BandLab Mastering : Universal, Fire, Clarity, Tape, Natural, Cinematic, Spatial, Punch et 18 autres masterings du studio (26 en tout) ; écoute A/B à sonie égale ; intensité sur 11 niveaux ; égaliseur 3 bandes ; cible de sonie ; mastering de référence ; export d'une sortie ou de toutes les sorties cochées.
 - Bibliothèques libres : Freesound, Internet Archive, Wikimedia Commons, Jamendo.
-- Collections : 926 entrées (packs par genre avec leurs éléments, instruments, kits d'artistes, objets, machines, armes, médias, humeurs, animaux, voix, langues, chants, lieux, matériel d'enregistrement, infrasons, synthèse).
+- Collections : 1 171 entrées (packs par genre avec leurs éléments, instruments, kits d'artistes, objets, machines, armes, médias, humeurs, animaux, voix, langues, chants, lieux, matériel d'enregistrement, infrasons, synthèse).
 - Kits : sons synthétisés, 26 kits par style, Fauna Korhogo (coupes des sorties de chaque Mask), la Borne (88 objets réels).
 - Kits d'artistes : catalogue Korhogo sur Internet Archive (Mauk Tenieb, C7H5N3O6, dogXim, Ts'ui Pên, Auvergne) et trente preneurs de son de Freesound.
 - Barre de recherche sur tous les kits, collections et sons.
@@ -30,7 +30,7 @@ Critères de qualité appliqués à chaque lot : direction artistique, réalisme
 - Séquenceur à pas de Musik : mesures de 15, 16, 17, 19 ou 21 pas (tirage impair à l'ouverture), dé de motifs, écoute en boucle, écriture en clips audio sur les pistes.
 - Intensité et égaliseur du Master enregistrés avec le projet.
 - Palette de commandes (Ctrl+K, « / » ou la touche dédiée) : transport, tiroirs, export, masterings, sonie, effets et chaînes sur la piste choisie, boîtes à bruit, recherche de sons.
-- Pompage en un clic (grave seul, calé sur le temps, limiteur de sécurité) ; repliement d'onde ; chaînes « brise-voix » et « scie suédoise ».
+- Pompage en un clic (grave seul, calé sur le temps, limiteur de sécurité) ; repliement d'onde ; chaînes « Voice breaker » et « Swedish chainsaw » (noms des kits de Musik).
 - Générateurs de bruits : blanc, rose, brun, interférences radio, oscillateurs qui dérivent.
 - Séquenceur génératif : longueur propre à chaque rangée (polymétrie), probabilité de déclenchement, décalage en millisecondes, remplissage euclidien, swing général ; l'écriture en clips réalise une variation.
 - Export par lots : tranches d'un clip détectées entre les silences, normalisées à −1 dB de crête, nommées selon UCS (CatID_Nom_Créateur_Source).
@@ -45,7 +45,7 @@ Critères de qualité appliqués à chaque lot : direction artistique, réalisme
 - Poste de mix de Musik : deux platines (sons du studio et vidéos de KamOrhogo), disque saisi pour scratcher, image comprise (un tour = 1,8 s, comme Musik), hauteur, volume, fondu croisé à puissance constante, oscilloscope à phosphore, enregistrement du mix sur une piste.
 - Espaces de travail par étape (Alt+1 à Alt+5 et palette) : composition, enregistrement, édition, mixage, mastering.
 - Coupes vidéo : lecture accélérée des vidéos de KamOrhogo posées sur les pistes, comparaison image par image, repère ✂ sur la règle à chaque changement de plan.
-- Collection « Huit univers sonores » : 133 entrées tirées des annexes.
+- Collection « Huit univers sonores » : 153 entrées en 9 familles, tirées des annexes.
 - DA de la kave Korhogo, photographique : acier bruni du flanc de borne, jonc chromé, plaque MAUK TENIEB, étiquettes Dymo, écrans à phosphore photographiés, disque photographié pour le Scratch, capuchons rétroéclairés, cave voûtée, étagères de bandes, deux photographies de groupe de la Fauna à l'ouverture.
 - Proportions continues : chaque aire (pistes, bibliothèque, tiroir du bas) suit le format de l'écran ; poignée de partage entre pistes et tiroir ; téléphone couché avec bibliothèque à droite.
 
@@ -66,7 +66,7 @@ Critères de qualité appliqués à chaque lot : direction artistique, réalisme
 
 - Boîtes d'artistes (bibliothèque, onglet Kit) : 26 boîtes sous lettres grecques, chacune « tribute to » un artiste cité par les annexes ou par Musik : power electronics (Whitehouse, Sutcliffe Jügend, Merzbow, Atrax Morgue, Prurient, Pharmakon), dark ambient (Lustmord, Tim Hecker, Roly Porter), hip-hop (J Dilla, Flying Lotus), IDM (Aphex Twin, Autechre), sound design (Ben Burtt, Richard Devine), dub (King Tubby, Lee « Scratch » Perry, Adrian Sherwood), musique à l'image (Hans Zimmer, John Williams, Hildur Guðnadóttir), instruments du monde (Gustavo Santaolalla, Heitor Pereira, Lisa Gerrard), ethnomusicologie (Alan Lomax, Simha Arom). Une touche prépare le studio : rack des pistes, chaîne du master, tempo ou secondes, swing, séquenceur (décalages en ms, longueurs de rangées, cycles euclidiens), retour du dub ; puis les sons à chercher et les gestes à faire sur le clip choisi. Aucun son d'artiste n'est copié.
 - Taxonomie officielle de Freesound (5 catégories, 23 sous-catégories, d'après le dépôt MTG/BroadSoundTaxonomy) dans les collections.
-- Grandes collections d'Internet Archive sous licence libre : 78 tours (70 000 disques, dont 40 000 de jazz), 78 · blues, 78 · monde, radio ancienne, émissions, livres lus, rites et cultes, NASA, Free Music Archive.
+- Grandes collections d'Internet Archive sous licence libre : radio ancienne, émissions, livres lus, rites et cultes, NASA, Free Music Archive.
 
 - Fiche de terrain d'un clip (menu du clip) : lieu, date, musiciens, fonction, saison, lutherie, accordage mesuré en cents, texte chanté, traduction. Un point lumineux marque le clip ; la fiche part dans le fichier des crédits.
 
@@ -79,7 +79,7 @@ Critères de qualité appliqués à chaque lot : direction artistique, réalisme
   - noms des effets en français quand le studio parle français.
 - Sauvegardes datées et jouables : https://mauktenieb.github.io/studio/versions/
 
-- Musique de film (20 nov., 6 h 29 : « OST ») : on importe une vidéo (bouton d'import ou glisser-déposer). Elle passe sur un écran au-dessus des pistes, qu'on déplace ou agrandit, calée sur la tête de lecture. Son son va sur la première piste libre à partir de 19, ses coupes deviennent des repères « plan n » sur la règle, réglés sur l'image exacte. Le tempo se cale ensuite sur ces coupes. Le film revient à la réouverture du studio.
+- Musique de film (20 nov., 6 h 29 : « OST ») : on importe une vidéo (bouton d'import ou glisser-déposer). Elle passe sur un écran au-dessus des pistes, qu'on déplace ou agrandit, calée sur la tête de lecture. Son son va sur la première piste libre à partir de 19, ses coupes deviennent des repères « plan n » sur la règle, à une ou deux images près. Le tempo se cale ensuite sur ces coupes. Le film revient à la réouverture du studio.
 - Chants de Papouasie et ethnographie par région ; sous-grave dosé (les sessions façon Lustmord et Roly Porter ne saturent plus).
 
 ## À faire
@@ -91,3 +91,22 @@ Critères de qualité appliqués à chaque lot : direction artistique, réalisme
 - Abandon du skeuomorphisme : la DA photographique de la kave prime.
 - Collaboration en temps réel : le studio tourne sans serveur, sur GitHub Pages ; les branches de projet en tiennent lieu.
 - Noms tirés des annexes (aucun nom inventé).
+
+## Jugement par quatre instances séparées (20 nov., 12 h 03)
+
+Juges : son, direction artistique et écrans, fidélité aux demandes, code et sécurité. Rapports : /home/claude/judges/<juge>/RAPPORT.md (hors dépôt). Notes reçues : DA 5/10, fidélité 5/10, code 5/10.
+
+Corrigé après jugement :
+- bouton Début et touche Origine (id en double avec le retour de la dérive) ;
+- infobulles et libellés en français (Limiteur, Étirement, Pano, Hachoir, Bégaiement, Écrasement, masterings) ;
+- tiroirs pleine largeur sur écran bas, part du tiroir agrandie, en-tête resserré ; boutons de piste qui passent à la ligne à côté de la figurine sur téléphone ; pied de page allégé sur téléphone ;
+- téléprompteur étendu aux tiroirs, à la loupe et aux boîtes ouvertes ;
+- loupe : barres de titre empilées, onglet inconnu ;
+- fuite audio : oscillateurs et minuteries des effets arrêtés au démontage des chaînes (30 reconstructions : 1 oscillateur actif au lieu de 31) ;
+- Rétablir (Ctrl+Maj+Z ou Ctrl+Y, palette) ;
+- Nouveau projet retire le film ;
+- pistes séparées : pistes vides sautées, un seul fichier ZIP ;
+- polices et encodeur MP3 hébergés dans le dépôt (zéro requête vers Google Fonts et jsDelivr) ;
+- sauvegardes datées : chacune a sa propre base, reçoit une copie du projet courant à sa première ouverture et ne touche plus jamais au projet en ligne ;
+- catégories 78 tours retirées : leur mention « domaine public » repose sur des déclarations contestées en justice ;
+- chiffres du registre et du README alignés sur le code.

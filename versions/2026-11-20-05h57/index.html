@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
-<head><base href="../../">
+<head><base href="../../"><script>(function(){var V="studio-v-2026-11-20-05h57",K="st.vcopied."+V;if(localStorage.getItem(K))return;document.documentElement.style.visibility="hidden";
+function op(n,up){return new Promise(function(ok,ko){var r=indexedDB.open(n,1);r.onupgradeneeded=function(){if(up){r.result.createObjectStore("snd");r.result.createObjectStore("proj")}else{r.transaction.abort()}};r.onsuccess=function(){ok(r.result)};r.onerror=function(){ok(null)}})}
+function all(d,s){return new Promise(function(ok){var out=[],q=d.transaction(s).objectStore(s).openCursor();q.onsuccess=function(){var c=q.result;if(c){out.push([c.key,c.value]);c.continue()}else ok(out)};q.onerror=function(){ok(out)}})}
+(async function(){try{var a=await op("studio",false),b=await op(V,true);if(a&&b&&a.objectStoreNames.contains("proj")){for(var s of ["snd","proj"]){if(!a.objectStoreNames.contains(s))continue;var rows=await all(a,s);await new Promise(function(ok){var tx=b.transaction(s,"readwrite"),st=tx.objectStore(s);rows.forEach(function(r){st.put(r[1],r[0])});tx.oncomplete=ok;tx.onerror=ok})}}a&&a.close();b&&b.close()}catch(e){}localStorage.setItem(K,"1");location.reload()})()})();</script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Studio</title>
@@ -11,8 +14,7 @@
 <meta property="og:image" content="https://mauktenieb.github.io/studio/img/social.jpg">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="theme-color" content="#6b7567">
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@400;500;600&family=Courier+Prime&display=swap" rel="stylesheet">
+<style>@font-face{font-family:"Barlow Semi Condensed";font-weight:400;src:url(fonts/barlow-semi-condensed-latin-400-normal.woff2)}@font-face{font-family:"Barlow Semi Condensed";font-weight:500;src:url(fonts/barlow-semi-condensed-latin-500-normal.woff2)}@font-face{font-family:"Barlow Semi Condensed";font-weight:600 700;src:url(fonts/barlow-semi-condensed-latin-600-normal.woff2)}@font-face{font-family:"Courier Prime";src:url(fonts/courier-prime-latin-400-normal.woff2)}</style>
 <meta name="description" content="Multitrack audio studio in the browser: tracks, clips, effects, microphone recording, live search in Freesound, WAV export with credits.">
 <style>
 :root{
@@ -954,7 +956,7 @@ function undo(){const s=hist.pop();if(!s)return;Object.assign(state,JSON.parse(s
 
 /* ================= storage ================= */
 let dbp=null;
-function db(){return dbp||(dbp=new Promise((res,rej)=>{const r=indexedDB.open("studio",1);r.onupgradeneeded=()=>{r.result.createObjectStore("snd");r.result.createObjectStore("proj")};r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error)}))}
+function db(){return dbp||(dbp=new Promise((res,rej)=>{const r=indexedDB.open("studio-v-2026-11-20-05h57",1);r.onupgradeneeded=()=>{r.result.createObjectStore("snd");r.result.createObjectStore("proj")};r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error)}))}
 async function dbPut(store,key,val){const d=await db();return new Promise((res,rej)=>{const tx=d.transaction(store,"readwrite");tx.objectStore(store).put(val,key);tx.oncomplete=res;tx.onerror=()=>rej(tx.error)})}
 async function dbGet(store,key){const d=await db();return new Promise((res,rej)=>{const r=d.transaction(store).objectStore(store).get(key);r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error)})}
 async function dbAll(store){const d=await db();return new Promise((res,rej)=>{const out=[];const r=d.transaction(store).objectStore(store).openCursor();r.onsuccess=()=>{const c=r.result;if(c){out.push(c.value);c.continue()}else res(out)};r.onerror=()=>rej(r.error)})}
@@ -1209,7 +1211,7 @@ function wavBlob(b){const nc=b.numberOfChannels,n=b.length,ab=new ArrayBuffer(44
   return new Blob([ab],{type:"audio/wav"})}
 function loadScript(src){return new Promise((res,rej)=>{const s=document.createElement("script");s.src=src;s.onload=res;s.onerror=rej;document.head.append(s)})}
 async function mp3Blob(b){
-  if(!window.lamejs)await loadScript("https://cdn.jsdelivr.net/npm/lamejs@1.2.1/lame.min.js");
+  if(!window.lamejs)await loadScript("lib/lame.min.js");
   const enc=new lamejs.Mp3Encoder(2,b.sampleRate,192),L=b.getChannelData(0),R=b.numberOfChannels>1?b.getChannelData(1):L,out=[],blk=1152;
   const toI=d=>{const r=new Int16Array(d.length);for(let i=0;i<d.length;i++){const s=clamp(d[i],-1,1);r[i]=s<0?s*0x8000:s*0x7fff}return r};
   const li=toI(L),ri=toI(R);for(let i=0;i<li.length;i+=blk){const m=enc.encodeBuffer(li.subarray(i,i+blk),ri.subarray(i,i+blk));if(m.length)out.push(new Uint8Array(m))}
