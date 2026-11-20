@@ -281,7 +281,8 @@ Les dix rapports citent 138 captures distinctes ; les 138 fichiers existent dans
 
 Mauk Tenieb valide l'analyse et retire l'enregistrement au micro. Les corrections passent en ligne lot par lot, chacune avec une sauvegarde datée dans versions/ et une mesure avant et après, notée dans la section « Fait » de [ECARTS.md](ECARTS.md).
 
-- Écarts corrigés : 26 sur 93, dont les 12 bloquants.
-- Écarts restants : 67 (39 importants, 28 détails), dans la section « À faire » de ECARTS.md.
-- Mesures de contrôle, iPhone 13 debout et couché, neuf écrans : 0 % de cibles sous 44 px (contre 96 à 100 %), 0 à 3 % de textes sous 11 px (contre 21 à 76 %).
-- Les durées des calculs et des exports sont mesurées sur la machine au calme, une mesure à la fois.
+- Écarts corrigés : 93 sur 93.
+- Écarts restants dans « À faire » : 0.
+- Points gardés en partie, avec leur raison dans la ligne « Fait » : carte de tempo par section (un seul tempo par projet), vérification des titres dans MusicBrainz (hors d'atteinte de la session), chœur du kit Orchestre (absent de VSCO 2 CE), bande magnétique photographiée sous les clips (image à produire), loi de panoramique −3 dB gardée pour les sources mono, largeur de tête de piste en pixels.
+- Demande ajoutée en cours de route (21 h 24) : le séquenceur s'ouvre sur la Console de Musik, figurines posées et déplacées dans le banc à œillets ; la grille devient l'écran Page R à phosphore vert.
+- Contrôle final, iPhone 13 debout et couché : 0 % de cibles sous 44 px, 0 à 3,8 % de textes sous 11 px, zéro erreur de page sur les quatre formats.

@@ -6,6 +6,18 @@ Gravité choisie : la plus haute des gravités d'origine, baissée d'un cran qua
 
 ## Fait
 
+- 20 nov. 21 h 40 : E-63 ; E-66. Proportions : bibliothèque à 30 % du côté long sur les quatre formats (29,2 à 30,1 %, contre 20,8 à 36,1), tiroir à la moitié de la zone de travail (47,6 à 48,2 % ; 60,7 % au téléphone couché, où 170 px restent le minimum d'une tranche de console), touche Lecture carrée (rapport 1 à 1,09). La tête de piste garde sa largeur en pixels (12,5 à 36 % de l'écran) : ses touches de 44 px fixent ce minimum. Surfaces : bouton + en capuchon lumineux photographié, règle sur le jonc gradué photographié, commutateur rotatif photographié (bouton de la kave de Musik) pour les huit premiers masterings, étiquettes Dymo pour les autres. La bande magnétique photographiée sous les clips attend son image : invite Midjourney dans le compte rendu.
+
+- 20 nov. 21 h 38 : E-55. Loupe, onglet ∿ Partiels : pics de chaque trame (FFT 2048, pas 512, interpolation parabolique), suivi McAulay-Quatieri à 3 % près, partiels dessinés et gradués ; toucher choisit un partiel, ✕ le retire, ▲ ▼ le transposent d'un demi-ton, ✓ resynthétise par banc d'oscillateurs (son de 220, 660 et 1 100 Hz : 3 partiels trouvés aux fréquences exactes, resynthèse à 0,08 dB du niveau d'origine).
+
+- 20 nov. 21 h 37 : E-97. Effet de piste « Gel / flou spectral (direct) » en AudioWorklet : FFT de 1024 points, recouvrement de 4, fenêtres racine de Hann ; passage transparent (−13,47 dB pour −13,47 dB attendus), gel qui tient le son après l'arrêt de l'entrée (−13,6 dB à 2 s, −13,8 dB à 3,4 s), flou par lissage des amplitudes ; réglages au doigt dans le rack.
+
+- 20 nov. 21 h 36 : E-25 ; E-72. Internet Archive : fonds à droits connus écartés de toute recherche (Lomax, Smithsonian Folkways, Ocora, UNESCO, Harmonia Mundi, Chant du Monde, par créateur, éditeur et sujet ; une recherche « lomax OR folkways » ne rend plus aucune de leurs prises) ; licences distinguées (CC0, Marque du domaine public, CC BY et CC BY-SA avec leur version) et adresse complète de la licence dans les crédits. Exports : deux rendus au plus, projet sauvegardé avant tout export de plus de 5 min. La vérification des titres dans MusicBrainz reste hors de ce lot : MusicBrainz est hors d'atteinte depuis cette session.
+
+- 20 nov. 21 h 35 : E-50. Kit Orchestre dans la bibliothèque : une note longue par pupitre (violons, altos, violoncelles, contrebasse, cor, tuba, flûte, hautbois, clarinette, basson), tirée de VSCO 2 Community Edition (Versilian Studios, CC0), 8 s chacune, 1,6 Mo en tout dans snd/orchestre/ ; réglage « Demi-tons » (−24 à +24) par rangée du séquenceur, en direct et à l'écriture (cor +7 : son transposé de 8 s à 5,34 s, audio, zéro MIDI). Le chœur reste absent : la bibliothèque VSCO 2 CE n'en contient pas.
+
+- 20 nov. 21 h 34 : E-23 ; E-49 ; E-56. Effet de piste Convolution : la réponse est le clip copié au moment de la pose (cave, silo, citerne, salle enregistrée), avec dosage, pré-délai et longueur, queue comptée à l'export. Internet Archive : FLAC, Ogg, WAV et M4A lus quand l'item n'a pas de MP3 ; pictogramme d'archive fermée pour un item sans fichier lisible. Espace binaural ◎ sur la scène (PannerNode HRTF ; bruit à gauche : 10,8 dB d'écart entre oreilles, ombre de la tête comprise), hauteur réglée à la molette sur l'objet (−3 à +3 m), export ambisonique d'ordre 1 AmbiX (4 canaux, 48 kHz, 24 bits).
+
 - 20 nov. 21 h 32 : E-52 ; E-53 ; E-54 ; E-57 ; E-58 ; E-84 ; E-91 ; E-92 ; E-93 ; E-94 ; E-95 ; E-96. Échelle réelle : médiane de 140 ms puis moyenne en cents sur 180 ms (trois notes avec vibrato de ±30 cents à 6 Hz : 3 pics au lieu de 17), pics fusionnés sous 50 cents, tonique au choix (pic le plus fort par défaut), La de 415 à 466 Hz, intervalles successifs, écart de chaque pic à la gamme, signal « plusieurs voix probables », courbe de hauteur dans le temps, export texte (temps, Hz, cents), gamme mesurée gardée comme référence, gammes ajoutées (24 tons égaux, 53 commas, thaïe à 7 pas, hijaz, saba) ; 1200 ramené à 0. Morphing par interpolation linéaire des amplitudes. Wavesets : passages par zéro et plan par canal (0 saut sur le canal droit, contre 852). Gel spectral : recouvrement de 4 et fréquence vraie de chaque case (écart de niveau 0 dB, contre 6,97). Synthèse croisée : phases de la porteuse gardées. WSOLA : une attaque déjà jouée cède la place à la suite naturelle. Doppler : retard lissé par une constante unique de 30 ms. Loupe : graduations 50 Hz à 10 kHz et secondes, lecture temps, Hz, dB sous le pointeur. Atelier : touche ▶ qui traite et joue en boucle les 4 premières secondes.
 
 - 20 nov. 21 h 24 : E-27 ; E-28 ; E-34 ; E-36 ; E-37 ; E-38 ; E-39 ; E-40 ; E-73 ; E-81 ; E-82 ; E-89. Pistes séparées : 16 bits avec dither TPDF, 24 bits ou 32 bits flottants, 44,1 ou 48 kHz, en-tête BWF avec TimeReference, toutes de même longueur, 2-pop 1 kHz d'une image à −2 s au choix (fichiers relus par libsndfile : PCM_16, PCM_24, FLOAT, time_reference lue) ; sonomètre du pied : LUFS intégré, LRA (EBU Tech 3342), vraie crête en dBTP, pastille rouge quand le continu dépasse −60 dBFS ; temps de l'écho dub de 1/16 à 1 mesure sur la tranche Master ; sirène jouée en direct sur un pad (X 300-1 200 Hz, Y vibrato 1-12 Hz) envoyée au bus dub, sirène et laser posés à −18 LUFS ; boîtes dub : passe-haut sur deux pistes, sirène et ressort posés, console ouverte ; filtre ◖ ◗ par tranche (passe-bas à gauche, passe-haut à droite) ; larsen (insertkoin/musik-fx.js) : silence à 0,4, accrochage à 0,5 (−28,6 dB), −7,4 dB à 1 ; rattrapage de niveau de 20 chaînes sur 33 (écart ramené à ±3 dB sur bruit rose) ; rendu calé sur la grille (premier échantillon à 0 au lieu de 128) ; ressort du bus dub à graine fixe ; pads Écho et Réverb : seule l'entrée se ferme au relâchement, la queue reste ; SP-1200 sans filtre de sortie ajouté. Loi de panoramique −3 dB gardée pour les sources mono : c'est la loi des consoles et des stations de travail.
@@ -34,67 +46,7 @@ Gravité choisie : la plus haute des gravités d'origine, baissée d'un cran qua
 
 ### Important
 
-- E-23 · important · Zéro réponse impulsionnelle enregistrée, zéro position de micro.
-  - Experts : 2 (04-06, 06-09). Gravités d'origine : 04-06 important, 06-09 détail.
-  - Preuve : Grotte, silo, cathédrale et 20 pièces = bruit filtré et réflexions posées (lignes 718, 829-836) ; `convx` (ligne 2099) destructif, sans mix, pré-délai ni écoute (04, 06).
-  - Correction : Effet de piste « Convolution » dont la réponse est un son de la bibliothèque (cave, silo, citerne, salle), avec mix, pré-délai, longueur ; `ConvolverNode` direct ; réglage de distance (proche, salle, ambiance) sur Room ; réponses de salles réelles sous licence libre.
-  - Charge de la machine : existe quelle que soit la charge.
-
-- E-25 · important · Licences déclarées par les déposants et abrégées dans les crédits.
-  - Experts : 2 (07-09, 09-10). Gravités d'origine : 07-09 important, 09-10 important (partie licence).
-  - Preuve : `negroprisonsongs` (Alan Lomax, 1947) passe le filtre en « publicdomain » (07) ; « Come Away with Me » de Norah Jones (2002) affiché CC0 (09) ; crédits en « PD » ou « CC BY » sans version ni lien (07, `creditsTxt` ligne 1312).
-  - Correction : Étendre `IA_SKIP` aux fonds à droits connus (prises Lomax, Folkways, Ocora rediffusés) ; pictogramme de doute sur un titre présent dans MusicBrainz avec un label commercial ; URL complète `licenseurl` dans les crédits ; distinguer Marque du domaine public et CC0.
-  - Charge de la machine : existe quelle que soit la charge.
-
-- E-49 · important · Les enregistrements Musopen restent illisibles (FLAC, Ogg, ZIP).
-  - Experts : 1 (06-05). Gravités d'origine : 06-05 important.
-  - Preuve : `iaItem` garde `/\.mp3$/` (ligne 1426) ; musopen-dvd : 1 ZIP, 0 MP3 (06, S3).
-  - Correction : Accepter .flac et .ogg ; pictogramme d'archive fermée pour un item sans fichier lisible.
-  - Charge de la machine : existe quelle que soit la charge.
-
-- E-50 · important · Zéro banque de notes d'orchestre.
-  - Experts : 1 (06-07). Gravités d'origine : 06-07 important.
-  - Preuve : 0 son du kit pour « violin », « cello », « strings », « orchestra » ; une ligne de 8 notes demande 24 gestes ou plus (06, S1, S10).
-  - Correction : Kit Orchestre de notes longues par pupitre (violons, altos, violoncelles, contrebasses, cors, bois, chœur) depuis des sources libres vérifiées ; une note par pad, transposition par demi-ton depuis le séquenceur (audio, zéro MIDI).
-  - Charge de la machine : existe quelle que soit la charge.
-
-- E-55 · important · Analyse-resynthèse par partiels absente.
-  - Experts : 1 (08-05). Gravités d'origine : 08-05 important.
-  - Preuve : 0 occurrence de « partial », « resynth », « additive » hors du nom « Additive choir » (08, S11).
-  - Correction : Onglet « Partiels » dans la loupe : détection de pics, suivi McAulay-Quatieri, partiels dessinés, suppression ou transposition au toucher, resynthèse par banc d'oscillateurs.
-  - Charge de la machine : existe quelle que soit la charge.
-
-- E-56 · important · Spatialisation stéréo seule.
-  - Experts : 1 (08-06). Gravités d'origine : 08-06 important.
-  - Preuve : `createStereoPanner` (ligne 1026) : écart de temps entre les oreilles de 0 échantillon, ni hauteur, ni arrière, ni HRTF (08, S10). Capture : [08-pc1366-scene](captures/08-pc1366-scene.webp).
-  - Correction : `PannerNode` en `panningModel:"HRTF"` (x = pan × 3 m, z = −profondeur × 14 m), axe de hauteur, export ambisonique d'ordre 1 (4 canaux).
-  - Charge de la machine : existe quelle que soit la charge.
-
-- E-63 · important · Proportions différentes d'un format à l'autre.
-  - Experts : 1 (10-09). Gravités d'origine : 10-09 important.
-  - Preuve : Tête de piste à 36 %, 27 %, 18 %, 13 % de la largeur ; pistes à 49 %, 25 %, 83 %, 87 % de la hauteur ; bouton Lecture 40 × 42, 30 × 42, 37 × 34, 42 × 42 (10, S9).
-  - Correction : Tête de piste `clamp(120px,22vw,240px)` ; bibliothèque sur le côté long, 30 % de celui-ci ; tiroir ouvert à 50 % de la zone de travail ; bouton Lecture carré à l'unité `--u`. Contrôle : écart des rapports sous 5 points.
-  - Charge de la machine : existe quelle que soit la charge.
-
-- E-66 · important · Surfaces encore dessinées : pistes vides, bouton +, grille Master.
-  - Experts : 1 (10-13). Gravités d'origine : 10-13 important.
-  - Preuve : Aplat sombre et grille vectorielle des pistes vides ; disque + en dégradé CSS (lignes 296-297) ; Master en cartes à cases (10, S10). Capture : [10-pc1366-simple-master](captures/10-pc1366-simple-master.webp).
-  - Correction : Bande magnétique photographiée sous les clips, règle en réglet photographié ; + en bouton lumineux photographié d'une console de 1980 ; huit premiers masterings sur un commutateur rotatif photographié, les autres en étiquettes Dymo.
-  - Charge de la machine : existe quelle que soit la charge.
-
 ### Détail
-
-- E-72 · détail · Pages fermées pendant les exports en série.
-  - Experts : 3 (03-06, 04-05, 06-06). Gravités d'origine : 03-06, 04-05, 06-06 (partie plantages) : important → détail (charge).
-  - Preuve : Trois rendus d'affilée : « Target closed » (03) ; page fermée pendant l'export de 644 s à charge 41-50 (04) ; 2 plantages au 3ᵉ export de 70 s (06) ; navigateur fermé deux fois (05) ; OOM de Chromium dans `dmesg` (04).
-  - Correction : Libérer les tampons entre deux exports ; sauvegarde du projet avant tout export de plus de 5 min ; rendu par segments (écart des 5 rendus).
-  - Charge de la machine : dépend de la charge. Tous les plantages se produisent à charge 41 à 108 sur 2 cœurs et 8 Go partagés par dix navigateurs : gravité baissée d'un cran (important → détail).
-
-- E-97 · détail · Zéro traitement spectral en temps réel dans le rack.
-  - Experts : 1 (08-16). Gravités d'origine : 08-16 détail.
-  - Preuve : Tout traitement spectral remplace le clip hors ligne (08, S6).
-  - Correction : AudioWorklet de gel et de flou spectral par piste, commande au doigt.
-  - Charge de la machine : existe quelle que soit la charge.
 
 ## Écarté, avec raison
 
