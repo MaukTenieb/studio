@@ -1266,13 +1266,22 @@ function clipDown(ev,tr,c,mode){
   if(ev.shiftKey||ev.ctrlKey||ev.metaKey){if(state.sel&&state.sel!==c.id)multi.add(state.sel);multi.has(c.id)?multi.delete(c.id):multi.add(c.id);state.sel=null;render();return}
   if(!multi.has(c.id))multi.clear();state.sel=c.id;const group=mode==="m"&&multi.size>1?selClips().filter(([,x])=>x!==c).map(([t2,x])=>[x,x.start]):[];
   const s=lib.get(c.snd);const x0=ev.clientX,y0=ev.clientY;const o={start:c.start,off:c.off,len:c.len,fi:c.fadeIn||0,fo:c.fadeOut||0};let moved=false,tgt=tr;
-  const dom=ev.currentTarget;if(!multi.size)document.querySelectorAll(".clip.sel").forEach(n=>n.classList.remove("sel"));dom.classList.add("sel");
+  const dom=ev.currentTarget;const cvs=dom.querySelector("canvas"),fsv=dom.querySelector("svg.fades"),w0=o.len*state.pps;
+  /* trimming crops the drawn wave in place: the audio stays where it sits in time */
+  const pin=x=>{if(cvs){cvs.style.width=w0+"px";cvs.style.left=x+"px";cvs.style.right="auto"}if(fsv)fsv.style.display="none"};
+  if(!multi.size)document.querySelectorAll(".clip.sel").forEach(n=>n.classList.remove("sel"));dom.classList.add("sel");
   if(ev.pointerType!=="mouse"){clearTimeout(lpTimer);lpTimer=setTimeout(()=>{if(!moved){cleanup();clipMenu(x0,y0,tr,c)}},520)}
   const mv=e=>{const dx=(e.clientX-x0)/state.pps;if(!moved&&Math.abs(e.clientX-x0)+Math.abs(e.clientY-y0)<5)return;if(!moved){snapshot();moved=true;clearTimeout(lpTimer)}
     if(mode==="m"){c.start=Math.max(0,snapT(o.start+dx));dom.style.left=c.start*state.pps+"px";const dd=c.start-o.start;for(const [x,st] of group){x.start=Math.max(0,st+dd);const nd=document.querySelector(`.clip[data-id="${x.id}"]`);if(nd)nd.style.left=x.start*state.pps+"px"}if(group.length)return;
       const lane=laneAt(e.clientX,e.clientY);if(lane&&lane.dataset.id!==tgt.id){const nt=state.tracks.find(x=>x.id===lane.dataset.id);if(nt){tgt.clips=tgt.clips.filter(x=>x!==c);nt.clips.push(c);tgt=nt;lane.append(dom)}}}
-    else if(mode==="r"){const max=s?s.buffer.duration-c.off:o.len;c.len=Math.min(max,Math.max(.02,snapT(o.start+o.len+dx)-c.start));dom.style.width=c.len*state.pps+"px"}
-    else if(mode==="l"){let ns=snapT(o.start+dx);ns=Math.min(o.start+o.len-.02,Math.max(ns,o.start-o.off,0));c.off=o.off+(ns-o.start);c.len=o.len-(ns-o.start);c.start=ns;dom.style.left=c.start*state.pps+"px";dom.style.width=c.len*state.pps+"px"}
+    else if(mode==="r"){const dur=s?s.buffer.duration:o.off+o.len;
+      if(c.rev){c.len=Math.min(o.len+o.off,Math.max(.02,snapT(o.start+o.len+dx)-c.start));c.off=o.off+(o.len-c.len)}
+      else{c.len=Math.min(dur-c.off,Math.max(.02,snapT(o.start+o.len+dx)-c.start))}
+      dom.style.width=c.len*state.pps+"px";pin(0)}
+    else if(mode==="l"){const dur=s?s.buffer.duration:o.off+o.len;const room=c.rev?dur-(o.off+o.len):o.off;
+      let ns=snapT(o.start+dx);ns=Math.min(o.start+o.len-.02,Math.max(ns,o.start-room,0));const d=ns-o.start;
+      c.len=o.len-d;c.start=ns;if(!c.rev)c.off=o.off+d;
+      dom.style.left=c.start*state.pps+"px";dom.style.width=c.len*state.pps+"px";pin(-d*state.pps)}
     else if(mode==="fi"){c.fadeIn=clamp(o.fi+dx,0,c.len-(c.fadeOut||0));dom.querySelector(".fl").style.left=c.fadeIn*state.pps+"px"}
     else if(mode==="fo"){c.fadeOut=clamp(o.fo-dx,0,c.len-(c.fadeIn||0));dom.querySelector(".fr").style.right=c.fadeOut*state.pps+"px"}};
   const cleanup=()=>{removeEventListener("pointermove",mv);removeEventListener("pointerup",up);removeEventListener("pointercancel",up)};
