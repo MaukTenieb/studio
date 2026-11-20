@@ -62,7 +62,7 @@ main{grid-row:2;grid-column:1;position:relative;overflow:hidden;display:flex;fle
 #scroller{flex:1;overflow:auto;position:relative;touch-action:pan-x pan-y}
 #tracks{position:relative;min-height:100%}
 #scroller{background:linear-gradient(180deg,var(--bed) 0,rgba(43,48,44,.82) 40%,rgba(43,48,44,.9)),url(img/reel.jpg) right bottom/min(900px,80%) auto no-repeat,var(--bed)}
-.track{display:flex;height:calc(var(--u)*2.75);border-bottom:1px solid #20251f}
+.track{display:flex;height:calc(var(--u)*2.45);border-bottom:1px solid #20251f}
 .thead{width:var(--head);flex:none;position:sticky;left:0;z-index:3;background:linear-gradient(90deg,var(--panel-lo),var(--panel) 12%,var(--panel));border-right:2px solid #3b4237;padding:5px 6px 4px 8px;display:flex;flex-direction:column;gap:3px;box-shadow:inset 5px 0 0 var(--c)}
 .thead .r1{display:flex;gap:3px;align-items:center}
 .thead .name{flex:1;min-width:0;background:none;border:0;box-shadow:none;height:auto;padding:0;color:var(--legend);font-weight:600;overflow:hidden;text-overflow:ellipsis}
@@ -209,6 +209,7 @@ dialog .col{display:flex;flex-direction:column;gap:6px}
   <symbol id="i-pen" viewBox="0 0 24 24"><path d="M4 20l4-1 11-11-3-3L5 16z"/></symbol>
   <symbol id="i-flash" viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/><path d="M12 7v5l3 2"/></symbol>
   <symbol id="i-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></symbol>
+  <symbol id="i-drawers" viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="18" rx="1"/><path d="M4 9h16M4 15h16M10 6h4M10 12h4M10 18h4"/></symbol>
   <symbol id="i-undo" viewBox="0 0 24 24"><path d="M9 14L4 9l5-5"/><path d="M4 9h11a5 5 0 0 1 0 10h-3"/></symbol>
 </svg>
 <div id="app">
@@ -258,6 +259,7 @@ dialog .col{display:flex;flex-direction:column;gap:6px}
 <aside id="side">
   <nav>
     <button data-p="kit" class="on" title="Kit">Kit</button>
+    <button data-p="coll" title="Collections"><svg><use href="#i-drawers"/></svg></button>
     <button data-p="fs" title="Freesound"><svg><use href="#i-search"/></svg></button>
     <button data-p="ia" title="Internet Archive">Archive</button>
     <button data-p="world" title="Wikimedia Commons, Jamendo"><svg><use href="#i-globe"/></svg></button>
@@ -276,6 +278,7 @@ dialog .col{display:flex;flex-direction:column;gap:6px}
     <div id="iaCats" class="cats"></div>
     <div id="iaList"></div>
   </div>
+  <div class="pane" id="p-coll"><div id="collNav"></div><div id="collList"></div></div>
   <div class="pane" id="p-world"><div id="wSrc" class="cats"></div><form class="search" id="wForm"><input id="wQ" placeholder="harmonium, Bamako, sirène…" enterkeyhint="search"><button><svg><use href="#i-search"/></svg></button></form><div id="wList"></div></div>
   <div class="pane" id="p-txt"><textarea id="lyrics" data-tp="lyrics" placeholder="Lyrics, notes…"></textarea></div>
   <div class="pane" id="p-mine">
@@ -308,10 +311,10 @@ const COLORS=["#b5412f","#c8a33b","#5e8240","#3e6f92","#d9d5c6","#8b5a34","#8e5c
 const INK=c=>{const n=parseInt(c.slice(1),16),l=.299*(n>>16)+.587*(n>>8&255)+.114*(n&255);return l>140?"#1b1a17":"#f6f3ea"};
 const T={
  en:{track:"Track",import:"Import audio",keyHelp:"Personal Freesound API key. It stays in this browser.",nores:"Nothing found.",exported:"Exported",mic:"Microphone refused.",confirmNew:"Erase the current project?",arm:"Arm a track (mic button) first.",fsErr:"Freesound unreachable.",drop:"Drag the sounds onto a track.",licence:"Licences shown: CC0 and CC BY. Credits go into the export.",
-  reverse:"Reverse",normalize:"Normalize",gainUp:"Gain +3 dB",gainDown:"Gain −3 dB",transpose:"Transpose…",stretch:"Speed (keeps pitch)…",loop:"Repeat ×…",mute:"Mute clip",denoise:"Denoise",copy:"Copy",paste:"Paste",dup:"Duplicate",split:"Split",del:"Delete",rename:"Rename…",fadeReset:"Remove fades",toSounds:"Bounce to my sounds",loopSel:"Loop this clip",atelier:"Workshop ▸",separate:"Separate ▸",fuse:"Fuse selection (Ctrl+J)",fused:"Fused",needTwo:"Select two clips or more (Shift+click or drag a box).",bounce:"Bounce with effects",sepOnsets:"Slice at attacks",sepSilence:"Remove silences",sepHpss:"Harmonic / percussive",sepBands:"Low / mid / high",sepMS:"Mid / side",splitDone:"Sliced",harm:"Harmonic",perc:"Percussive",low:"Low",mid:"Mid",high:"High",fbOn:"Flashback listens: the last 60 s stay in memory. F captures them.",fbGot:"Flashback captured",flash:"Flashback",
+  reverse:"Reverse",normalize:"Normalize",gainUp:"Gain +3 dB",gainDown:"Gain −3 dB",transpose:"Transpose…",stretch:"Speed (keeps pitch)…",loop:"Repeat ×…",mute:"Mute clip",denoise:"Denoise",copy:"Copy",paste:"Paste",dup:"Duplicate",split:"Split",del:"Delete",rename:"Rename…",fadeReset:"Remove fades",toSounds:"Bounce to my sounds",loopSel:"Loop this clip",atelier:"Workshop ▸",separate:"Separate ▸",fuse:"Fuse selection (Ctrl+J)",fused:"Fused",needTwo:"Select two clips or more (Shift+click or drag a box).",bounce:"Bounce with effects",sepOnsets:"Slice at attacks",sepSilence:"Remove silences",sepHpss:"Harmonic / percussive",sepBands:"Low / mid / high",sepMS:"Mid / side",splitDone:"Sliced",harm:"Harmonic",perc:"Percussive",low:"Low",mid:"Mid",high:"High",fbOn:"Flashback listens: the last 60 s stay in memory. F captures them.",fbGot:"Flashback captured",full:"32 tracks in use.",flash:"Flashback",
   semis:"Semitones (−12 … +12)",speed:"Speed in % (50 … 200)",times:"How many repeats?",working:"Processing…",addFx:"+ effect",presets:"Chain preset",none:"—",lyrics:"Lyrics, notes…",tuner:"Tuner",exportT:"Export",wav:"WAV mix",mp3:"MP3 mix",stems:"WAV stems (one file per track)",countIn:"Count-in",monitor:"Monitoring (headphones)",master:"Master",autoV:"Volume automation",autoP:"Pan automation",autoHelp:"Click: add a point. Drag: move. Double-click: remove."},
  fr:{track:"Piste",import:"Importer de l'audio",keyHelp:"Clé personnelle de l'API Freesound. Elle reste dans ce navigateur.",noKey:"Freesound demande une clé : bouton engrenage.",nores:"Rien trouvé.",exported:"Exporté",mic:"Micro refusé.",confirmNew:"Effacer le projet en cours ?",arm:"Arme d'abord une piste (bouton micro).",fsErr:"Freesound injoignable.",drop:"Glisse les sons sur une piste.",licence:"Licences affichées : CC0 et CC BY. Les crédits partent avec l'export.",
-  reverse:"Inverser",normalize:"Normaliser",gainUp:"Gain +3 dB",gainDown:"Gain −3 dB",transpose:"Transposer…",stretch:"Vitesse (hauteur gardée)…",loop:"Répéter ×…",mute:"Couper le clip",denoise:"Débruiter",copy:"Copier",paste:"Coller",dup:"Dupliquer",split:"Couper en deux",del:"Supprimer",rename:"Renommer…",fadeReset:"Retirer les fondus",toSounds:"Figer dans mes sons",loopSel:"Boucler ce clip",atelier:"Atelier ▸",separate:"Séparer ▸",fuse:"Fusionner la sélection (Ctrl+J)",fused:"Fusion",needTwo:"Sélectionne au moins deux clips (Maj+clic ou cadre à la souris).",bounce:"Figer avec les effets",sepOnsets:"Découper aux attaques",sepSilence:"Retirer les silences",sepHpss:"Harmonique / percussif",sepBands:"Graves / médiums / aigus",sepMS:"Centre / côtés",splitDone:"Découpé",harm:"Harmonique",perc:"Percussif",low:"Graves",mid:"Médiums",high:"Aigus",fbOn:"Flashback écoute : les 60 dernières secondes restent en mémoire. F les capture.",fbGot:"Flashback capturé",flash:"Flashback",
+  reverse:"Inverser",normalize:"Normaliser",gainUp:"Gain +3 dB",gainDown:"Gain −3 dB",transpose:"Transposer…",stretch:"Vitesse (hauteur gardée)…",loop:"Répéter ×…",mute:"Couper le clip",denoise:"Débruiter",copy:"Copier",paste:"Coller",dup:"Dupliquer",split:"Couper en deux",del:"Supprimer",rename:"Renommer…",fadeReset:"Retirer les fondus",toSounds:"Figer dans mes sons",loopSel:"Boucler ce clip",atelier:"Atelier ▸",separate:"Séparer ▸",fuse:"Fusionner la sélection (Ctrl+J)",fused:"Fusion",needTwo:"Sélectionne au moins deux clips (Maj+clic ou cadre à la souris).",bounce:"Figer avec les effets",sepOnsets:"Découper aux attaques",sepSilence:"Retirer les silences",sepHpss:"Harmonique / percussif",sepBands:"Graves / médiums / aigus",sepMS:"Centre / côtés",splitDone:"Découpé",harm:"Harmonique",perc:"Percussif",low:"Graves",mid:"Médiums",high:"Aigus",fbOn:"Flashback écoute : les 60 dernières secondes restent en mémoire. F les capture.",fbGot:"Flashback capturé",full:"Les 32 pistes sont occupées.",flash:"Flashback",
   semis:"Demi-tons (−12 … +12)",speed:"Vitesse en % (50 … 200)",times:"Combien de répétitions ?",working:"Calcul…",addFx:"+ effet",presets:"Preset de chaîne",none:"—",lyrics:"Paroles, notes…",tuner:"Accordeur",exportT:"Export",wav:"Mix WAV",mp3:"Mix MP3",stems:"Pistes séparées WAV (un fichier par piste)",countIn:"Décompte",monitor:"Écoute de contrôle (casque)",master:"Master",autoV:"Automation du volume",autoP:"Automation du panoramique",autoHelp:"Clic : ajoute un point. Glisser : déplace. Double-clic : retire."}
 };
 let lang=(localStorage.getItem("st.lang")||((navigator.language||"en").startsWith("fr")?"fr":"en"));
@@ -550,7 +553,12 @@ function buildChain(c,tr,dest){
 const lib=new Map();
 let state=newState();
 function newState(){return{bpm:120,loop:false,loopA:0,loopB:8,metro:false,snap:true,pps:80,pos:0,tracks:[],sel:null,armed:null,masterVol:.9,limiter:true,masterPreset:"Universal",masterRack:[],target:-14,lyrics:"",countIn:false,monitor:false}}
-function newTrack(name){const n=state.tracks.length;return{id:uid(),name:name||t("track")+" "+(n+1),color:COLORS[n%COLORS.length],vol:.8,pan:0,mute:false,solo:false,rack:[],auto:{vol:[],pan:[]},showAuto:null,clips:[]}}
+const MAXT=32;const num=n=>String(n).padStart(2,"0");
+function renumber(){state.tracks.forEach((tr,i)=>{if(/^\d\d$/.test(tr.name)||!tr.name)tr.name=num(i+1)})}
+function fillTracks(){while(state.tracks.length<MAXT)state.tracks.push(newTrack());renumber()}
+/* first empty track after index i, or a new one while under 32 */
+function freeTrack(i){for(let k=i+1;k<state.tracks.length;k++)if(!state.tracks[k].clips.length)return state.tracks[k];if(state.tracks.length<MAXT){const n=newTrack();state.tracks.push(n);renumber();return n}return null}
+function newTrack(name){const n=state.tracks.length;return{id:uid(),name:name||num(n+1),color:COLORS[n%COLORS.length],vol:.8,pan:0,mute:false,solo:false,rack:[],auto:{vol:[],pan:[]},showAuto:null,clips:[]}}
 function fixTrack(tr){tr.rack=tr.rack||[];tr.auto=tr.auto||{vol:[],pan:[]};delete tr.fx;return tr}
 const spb=()=>60/state.bpm;const bar=()=>spb()*4;
 const snapT=x=>state.snap?Math.round(x/(spb()/4))*(spb()/4):x;
@@ -630,6 +638,14 @@ async function renderKit(){
    ["Gong",6,c=>{[[1,1],[1.48,.7],[2.09,.5],[2.56,.4],[3.31,.3],[4.12,.2]].forEach(([r,a])=>{const o=c.createOscillator(),g=c.createGain();o.frequency.value=92*r;o.detune.value=(Math.random()-.5)*20;g.gain.setValueAtTime(0,0);g.gain.linearRampToValueAtTime(a*.3,.02);g.gain.exponentialRampToValueAtTime(.0001,5.8-r*.6);o.connect(g).connect(c.destination);o.start()})}],
    ["Bonang",2,c=>{[[1,1],[2.4,.4],[3.9,.2]].forEach(([r,a])=>{const o=c.createOscillator(),g=c.createGain();o.frequency.value=523*r;g.gain.setValueAtTime(a*.4,0);g.gain.exponentialRampToValueAtTime(.0001,1.8/r);o.connect(g).connect(c.destination);o.start()})}],
    ["Bell FM",4,c=>{const car=c.createOscillator(),mod=c.createOscillator(),mg=c.createGain(),g=c.createGain();car.frequency.value=440;mod.frequency.value=440*1.4;mg.gain.setValueAtTime(1200,0);mg.gain.exponentialRampToValueAtTime(10,3.5);mod.connect(mg).connect(car.frequency);g.gain.setValueAtTime(.4,0);g.gain.exponentialRampToValueAtTime(.0001,3.9);car.connect(g).connect(c.destination);car.start();mod.start()}],
+   ["Infra 7 Hz",8,c=>{const o=c.createOscillator(),g=c.createGain();o.frequency.value=7;g.gain.setValueAtTime(0,0);g.gain.linearRampToValueAtTime(.9,1);g.gain.setValueAtTime(.9,7);g.gain.linearRampToValueAtTime(0,8);o.connect(g).connect(c.destination);o.start()}],
+   ["Infra beat 7 Hz on 40 Hz",8,c=>{const g=c.createGain();g.gain.setValueAtTime(0,0);g.gain.linearRampToValueAtTime(.5,1);g.gain.setValueAtTime(.5,7);g.gain.linearRampToValueAtTime(0,8);g.connect(c.destination);[40,47].forEach(f=>{const o=c.createOscillator();o.frequency.value=f;o.connect(g);o.start()})}],
+   ["Sub 30 Hz",4,c=>{const o=c.createOscillator(),g=c.createGain();o.frequency.value=30;g.gain.setValueAtTime(0,0);g.gain.linearRampToValueAtTime(.9,.05);g.gain.setValueAtTime(.9,3.5);g.gain.linearRampToValueAtTime(0,4);o.connect(g).connect(c.destination);o.start()}],
+   ["Sub drop 60-18 Hz",4,c=>{const o=c.createOscillator(),g=c.createGain();o.frequency.setValueAtTime(60,0);o.frequency.exponentialRampToValueAtTime(18,3.8);g.gain.setValueAtTime(.9,0);g.gain.linearRampToValueAtTime(0,4);o.connect(g).connect(c.destination);o.start()}],
+   ["Earth rumble",8,c=>{const b=c.createBuffer(1,c.sampleRate*8,c.sampleRate),d=b.getChannelData(0);let l=0;for(let i=0;i<d.length;i++){l+=.02*((Math.random()*2-1)-l);d[i]=l*6}const s=c.createBufferSource();s.buffer=b;const f=c.createBiquadFilter();f.type="lowpass";f.frequency.value=45;f.Q.value=2;const g=c.createGain();g.gain.setValueAtTime(0,0);g.gain.linearRampToValueAtTime(1.6,2);g.gain.setValueAtTime(1.6,6);g.gain.linearRampToValueAtTime(0,8);s.connect(f).connect(g).connect(c.destination);s.start()}],
+   ["FM drone",8,c=>{const car=c.createOscillator(),mod=c.createOscillator(),mg=c.createGain(),l=c.createOscillator(),lg=c.createGain(),g=c.createGain();car.frequency.value=73.4;mod.frequency.value=73.4*1.007*2;mg.gain.value=180;l.frequency.value=.07;lg.gain.value=160;l.connect(lg).connect(mg.gain);mod.connect(mg).connect(car.frequency);g.gain.setValueAtTime(0,0);g.gain.linearRampToValueAtTime(.35,2);g.gain.setValueAtTime(.35,6.5);g.gain.linearRampToValueAtTime(0,8);car.connect(g).connect(c.destination);[car,mod,l].forEach(o=>o.start())},2],
+   ["Additive choir",6,c=>{const g=c.createGain();g.gain.setValueAtTime(0,0);g.gain.linearRampToValueAtTime(.25,1.5);g.gain.setValueAtTime(.25,4.8);g.gain.linearRampToValueAtTime(0,6);g.connect(c.destination);[[700,1],[1220,.5],[2600,.3]].forEach(([fq,a])=>{const f=c.createBiquadFilter();f.type="bandpass";f.frequency.value=fq;f.Q.value=8;const fg=c.createGain();fg.gain.value=a*4;f.connect(fg).connect(g);[110,165,220.5,330].forEach(fr=>{const o=c.createOscillator();o.type="sawtooth";o.frequency.value=fr;o.detune.value=(Math.random()-.5)*14;o.connect(f);o.start()})})},2],
+   ["Plucked string",3,c=>{const b=c.createBuffer(1,c.sampleRate*3,c.sampleRate),d=b.getChannelData(0),P=Math.floor(c.sampleRate/110);for(let i=0;i<P;i++)d[i]=Math.random()*2-1;for(let i=P;i<d.length;i++)d[i]=.996*.5*(d[i-P]+d[i-P+1]);const s=c.createBufferSource();s.buffer=b;s.connect(c.destination);s.start()}],
    ["Crackle",3,c=>{const b=c.createBuffer(1,c.sampleRate*3,c.sampleRate),d=b.getChannelData(0);for(let i=0;i<d.length;i++)d[i]=Math.random()<.0015?(Math.random()*2-1):0;const s=c.createBufferSource();s.buffer=b;const f=c.createBiquadFilter();f.type="highpass";f.frequency.value=800;s.connect(f).connect(c.destination);s.start()}],
   ];
   for(const [n,sec,fn,ch] of list)await mk(n,sec,fn,ch||1);
@@ -916,6 +932,48 @@ async function worldSearch(q,more){
 }
 function renderWorldSrc(){$("#wSrc").replaceChildren(...[["commons","Wikimedia Commons"],["jamendo","Jamendo"]].map(([k,n])=>{const b=el("button",{class:wSrc===k?"on":""},n);b.onclick=()=>{wSrc=k;renderWorldSrc();worldSearch($("#wQ").value.trim())};return b}))}
 
+
+/* ================= Collections: themed doors into Freesound, Wikimedia Commons, Jamendo ================= */
+const LANGS=[["Français","fra"],["English","eng"],["Español","spa"],["Deutsch","deu"],["Italiano","ita"],["Português","por"],["Русский","rus"],["Polski","pol"],["Magyar","hun"],["Euskara","eus"],["Brezhoneg","bre"],["Occitan","oci"],["Català","cat"],["Ελληνικά","ell"],["Türkçe","tur"],["العربية","ara"],["فارسی","fas"],["עברית","heb"],["हिन्दी","hin"],["বাংলা","ben"],["தமிழ்","tam"],["中文","cmn"],["日本語","jpn"],["한국어","kor"],["Tiếng Việt","vie"],["Bahasa Indonesia","ind"],["Kiswahili","swa"],["Wolof","wol"],["Bambara","bam"],["Yorùbá","yor"],["Igbo","ibo"],["Lingala","lin"],["Kabyle","kab"],["Esperanto","epo"],["Latina","lat"],["Quechua","que"],["Ukrainska","ukr"],["Svenska","swe"],["Nederlands","nld"],["Čeština","ces"]];
+const COLL=[
+ {k:"styles",en:"Music styles",fr:"Styles musicaux",src:["fs","jm"],loop:true,items:"techno|house|acid|dub|dubstep|drum and bass|jungle|breakbeat|hip hop|trap|lo-fi|ambient|drone|noise|power electronics|industrial|ebm|synthwave|disco|funk|soul|reggae|afrobeat|highlife|cumbia|salsa|bossa nova|samba|flamenco|rai|gnawa|gamelan|raga|qawwali|tango|klezmer|balkan|polka|jazz|blues|gospel|rock|punk|metal|grunge|shoegaze|baroque|minimal|musique concrete|chiptune|8-bit|glitch"},
+ {k:"animals",en:"Animals",fr:"Animaux",src:["fs","wc"],items:"birds|nightingale|crow|owl|seagull|parrot|rooster|chicken|duck|goose|dog|wolf|fox|cat|lion|tiger|horse|donkey|cow|sheep|goat|pig|elephant|monkey|gibbon|whale|dolphin|seal|frog|toad|cricket|cicada|bees|mosquito|fly|bat|camel|bear|deer|elk"},
+ {k:"voices",en:"Voices",fr:"Voix",src:["fs","wc"],items:"male voice|female voice|child voice|old man voice|crowd|whisper|scream|shout|laugh|cry|breath|cough|sigh|moan|humming|beatbox|counting|reading aloud|radio announcer|speech|preacher|auctioneer|vocoder voice|robot voice|telephone voice"},
+ {k:"langs",en:"Languages",fr:"Langues",src:["wc"],lang:true},
+ {k:"chants",en:"Chants and songs",fr:"Chants",src:["wc","fs"],items:"gregorian chant|throat singing|tuvan|yodel|lullaby|work song|sea shanty|polyphony|corsican polyphony|georgian polyphony|call to prayer|adhan|tibetan chant|buddhist chant|choir|griot|kora song|lament|keening|mantra|hymn|anthem|folk song|nursery rhyme|chant protest|football chant"},
+ {k:"places",en:"Places and environments",fr:"Lieux et environnements",src:["fs","wc"],items:"forest|jungle|desert|beach|ocean waves|river|waterfall|lake|mountain wind|cave|storm|rain|thunder|night|city street|market|bazaar|souk|metro|train station|airport|harbor|church|mosque|cathedral|factory|construction site|highway|tunnel|stadium|hospital|school yard|playground|restaurant|cafe|kitchen|bar|office|parking garage|elevator|laundromat|farm|village"},
+ {k:"gear",en:"Recording gear",fr:"Matériel d'enregistrement",src:["fs","wc"],items:"binaural|ambisonic|hydrophone|contact microphone|geophone|electromagnetic|induction coil|VLF|whistler|shortwave|cassette|reel to reel|wax cylinder|phonograph|dictaphone|answering machine|telephone|walkie talkie|CB radio|zoom h4n|sony walkman|lavalier|shotgun microphone|parabolic microphone|piezo|stethoscope"},
+ {k:"infra",en:"Infrasound and sub-bass",fr:"Infrasons et infrabasses",src:["fs","wc"],items:"infrasound|sub bass|rumble|low frequency|earthquake|seismic|volcano|thunder rumble|808 bass|reese bass|wobble bass|engine idle|ship horn|foghorn|organ pedal|subway rumble|wind turbine"},
+ {k:"synth",en:"Synthesised and reworked",fr:"Synthétisés et retravaillés",src:["fs","jm"],items:"synthesizer|modular synth|analog synth|FM synthesis|granular|glitch|drone|noise|feedback|circuit bending|tape loop|reversed|time stretched|pitch shifted|resampled|bitcrushed|vocoder|ring modulator|sine wave|white noise|pink noise|sweep|arpeggio|pad|texture|soundscape design"},
+];
+const SRC_N={fs:"Freesound",wc:"Commons",jm:"Jamendo"};
+let collOpen=null,collQ=null,collSrc=null,collPage=1,collCont=null;
+function renderColl(){
+  const box=$("#collNav");box.replaceChildren(...COLL.map(g=>{const d=el("details",{class:"kitg",...(collOpen===g.k?{open:""}:{})},el("summary",{},g[lang]||g.en,el("small",{},g.src.map(s=>SRC_N[s]).join(", "))));
+    d.addEventListener("toggle",()=>{if(d.open)collOpen=g.k});
+    const chips=g.lang?LANGS.map(([n,code])=>[n,code]):g.items.split("|").map(x=>[x,x]);
+    d.append(el("div",{class:"cats"},...chips.map(([n,v])=>{const b=el("button",{},n);b.onclick=()=>collRun(g,v,n);return b})));return d}));
+}
+async function collRun(g,v,label,more){
+  if(!more){collQ={g,v,label};collSrc=collSrc&&g.src.includes(collSrc)?collSrc:g.src[0];collPage=1;collCont=null}
+  const list=$("#collList");if(!more){list.replaceChildren(el("div",{class:"cats"},...collQ.g.src.map(s=>{const b=el("button",{class:s===collSrc?"on":""},SRC_N[s]);b.onclick=()=>{collSrc=s;collRun(collQ.g,collQ.v,collQ.label)};return b})),el("div",{class:"note"},collQ.label+" …"));list.scrollIntoView({block:"nearest"})}
+  try{let items=[],next=false;const q=collQ.g.loop&&collSrc==="fs"?collQ.v+" loop":collQ.v;
+    if(collSrc==="fs"){const r=await fetch(`https://api.openverse.org/v1/audio/?q=${encodeURIComponent(q)}&source=freesound&license=cc0,by&page_size=20&page=${collPage}`);const j=await r.json();next=collPage<Math.min(j.page_count||0,12);collPage++;
+      items=(j.results||[]).filter(x=>x.url).map(x=>{const id=(x.foreign_landing_url||"").match(/sounds\/(\d+)/);return{id:"fs:"+(id?id[1]:x.id),name:x.title,src:"freesound",remote:x.url,dur:(x.duration||0)/1000,credit:{title:x.title,author:x.creator,license:x.license==="cc0"?"CC0":"CC BY",url:x.foreign_landing_url}}})}
+    else if(collSrc==="jm"){const r=await fetch(`https://api.openverse.org/v1/audio/?q=${encodeURIComponent(q)}&source=jamendo&license=cc0,by,by-sa&page_size=20&page=${collPage}`);const j=await r.json();next=collPage<Math.min(j.page_count||0,12);collPage++;
+      items=(j.results||[]).filter(x=>x.url).map(x=>({id:"jm:"+x.id,name:x.title,src:"jamendo",remote:x.url,dur:(x.duration||0)/1000,range:true,credit:{title:x.title,author:x.creator,license:"CC "+(x.license||"").toUpperCase(),url:x.foreign_landing_url}}))}
+    else{const search=collQ.g.lang?`filetype:audio incategory:"Lingua_Libre_pronunciation-${collQ.v}"`:`filetype:audio ${q}`;
+      const r=await fetch("https://commons.wikimedia.org/w/api.php?action=query&format=json&origin=*&generator=search&gsrnamespace=6&gsrlimit=30&gsrsearch="+encodeURIComponent(search)+(collCont?"&gsroffset="+collCont:"")+"&prop=imageinfo|videoinfo&iiprop=url|extmetadata|size&viprop=derivatives");
+      const j=await r.json();collCont=j.continue?j.continue.gsroffset:null;next=!!collCont;
+      items=Object.values(j.query?.pages||{}).sort((a,b)=>a.index-b.index).map(p=>{const ii=p.imageinfo?.[0]||{},m=ii.extmetadata||{},mp3=(p.videoinfo?.[0]?.derivatives||[]).find(d=>/mpeg/.test(d.type));
+        return{id:"wc:"+p.pageid,name:p.title.replace(/^File:/,"").replace(/\.[a-z0-9]+$/i,""),src:"commons",remote:mp3?mp3.src:ii.url,dur:0,range:(ii.size||0)>12e6&&!!mp3,credit:{title:p.title.replace(/^File:/,""),author:stripTags(m.Artist?.value)||"Wikimedia Commons",license:stripTags(m.LicenseShortName?.value)||"see page",url:ii.descriptionurl||""}}})}
+    list.querySelector(".note")?.remove();list.querySelector(".more")?.remove();
+    if(!items.length&&!more)list.append(el("div",{class:"note"},t("nores")));
+    for(const it of items)list.append(sndRow(it));
+    if(next)list.append(el("button",{class:"more",onclick:()=>collRun(collQ.g,collQ.v,collQ.label,true)},"+"));
+  }catch(e){list.append(el("div",{class:"note"},"✕"))}
+}
+
 /* ================= preview & drag from panel ================= */
 let prevSrc=null;
 async function preview(item,row){
@@ -944,14 +1002,14 @@ function startDrag(e,item,row){
     else{const sc=$("#scroller").getBoundingClientRect();if(ev.clientX<sc.left||ev.clientX>sc.right||ev.clientY<sc.top||ev.clientY>sc.bottom)return;
       at=snapT(Math.max(0,(ev.clientX-sc.left-headW()+$("#scroller").scrollLeft)/state.pps))}
     row.classList.add("loading");let s;try{s=await ensureSound(item)}catch(e){toast("✕")}row.classList.remove("loading");if(!s)return;
-    snapshot();if(!tr){tr=newTrack(s.name.slice(0,18));state.tracks.push(tr);rebuildChains()}
+    snapshot();if(!tr){tr=freeTrack(-1);if(!tr)return;rebuildChains()}
     const c={id:uid(),snd:s.id,start:at,off:0,len:s.buffer.duration,gain:1};tr.clips.push(c);state.sel=c.id;
     render();save();restartIfPlaying()};
   addEventListener("pointermove",mv);addEventListener("pointerup",up);addEventListener("pointercancel",up);
 }
-const KIT_GROUPS=[["Drums",/^(Kick|Hard kick|Snare|Clap|Hat|Open hat|Rim|Tom)$/],["808",/^808/],["909",/^909/],["Bass & synth",/^(Sub A1|Acid bass|Pluck|Pad|Drone|Noise riser|Feedback)$/],["Polivoks",/^Polivoks/],["Chaos",/Lorenz|Logistic|Henon|Chua/],["Industrial",/Anvil|Sheet metal|Piston|Steam|Chain|Machine/],["Metal & bells",/Gong|Bonang|Bell/],["Vinyl & radio",/Vinyl|Needle|Record|Tape hiss|Radio|Shortwave|Crackle/]];
+const KIT_GROUPS=[["Drums",/^(Kick|Hard kick|Snare|Clap|Hat|Open hat|Rim|Tom)$/],["808",/^808/],["909",/^909/],["Bass & synth",/^(Sub A1|Acid bass|Pluck|Pad|Drone|Noise riser|Feedback)$/],["Polivoks",/^Polivoks/],["Chaos",/Lorenz|Logistic|Henon|Chua/],["Industrial",/Anvil|Sheet metal|Piston|Steam|Chain|Machine/],["Metal & bells",/Gong|Bonang|Bell/],["Vinyl & radio",/Vinyl|Needle|Record|Tape hiss|Radio|Shortwave|Crackle/],["Infra & sub",/^Infra|^Sub (30|drop)|Earth rumble/],["Synthesis",/FM drone|Additive choir|Plucked string/]];
 function KIT_GROUP(n){const g=KIT_GROUPS.find(([,re])=>re.test(n));return g?g[0]:"Other"}
-const KIT_FR={Drums:"Batterie","Bass & synth":"Basses & synthés",Chaos:"Chaos",Industrial:"Industriel","Metal & bells":"Métal & cloches","Vinyl & radio":"Vinyle & radio",Other:"Autres"};
+const KIT_FR={Drums:"Batterie","Bass & synth":"Basses & synthés",Chaos:"Chaos",Industrial:"Industriel","Metal & bells":"Métal & cloches","Vinyl & radio":"Vinyle & radio","Infra & sub":"Infrasons & infrabasses",Synthesis:"Synthèse",Other:"Autres"};
 function renderKitList(){const all=[...lib.values()].filter(s=>s.src==="kit");$("#p-kit").replaceChildren(...[...KIT_GROUPS.map(g=>g[0]),"Other"].map(g=>{const items=all.filter(s=>s.group===g);if(!items.length)return null;const d=el("details",{class:"kitg",open:""},el("summary",{},(lang==="fr"&&KIT_FR[g])||g,el("small",{},String(items.length))),...items.map(sndRow));return d}).filter(Boolean))}
 async function renderMine(){const st=await dbAll("snd").catch(()=>[]);$("#mineList").replaceChildren(...st.map(x=>sndRow({id:x.id,name:x.name,src:x.src,credit:x.credit,dur:x.chans[0].length/x.sr})))}
 
@@ -1152,7 +1210,7 @@ async function fuse(){
 }
 async function bounceTrack(tr){
   status(t("working"));try{const r=await renderOffline(tr);if(!r)return;const b=r.b;const s=addSound({id:"bounce:"+uid(),name:tr.name+" ⏺",buffer:b,src:"proc"});storeSound(s);
-    edit(()=>{const n=newTrack(tr.name+" ⏺");n.clips=[{id:uid(),snd:s.id,start:0,off:0,len:b.duration,gain:1}];state.tracks.splice(state.tracks.indexOf(tr)+1,0,n);tr.mute=true;rebuildChains()});renderMine()}finally{status()}
+    edit(()=>{const n=freeTrack(state.tracks.indexOf(tr));if(!n){toast(t("full"));return}n.clips=[{id:uid(),snd:s.id,start:0,off:0,len:b.duration,gain:1}];tr.mute=true;rebuildChains()});renderMine()}finally{status()}
 }
 function stft(x,N,H){const w=hann(N),F=Math.ceil(x.length/H)+1,re=[],im=[];for(let f=0;f<F;f++){const r=new Float64Array(N),i=new Float64Array(N),o=f*H-N/2;for(let k=0;k<N;k++){const q=o+k;r[k]=(q>=0&&q<x.length?x[q]:0)*w[k]}fft(r,i);re.push(r);im.push(i)}return{re,im,F,w}}
 function istft(re,im,N,H,len,w){const out=new Float64Array(len+N),nrm=new Float64Array(len+N);for(let f=0;f<re.length;f++){const r=re[f].slice(),i=im[f].slice();fft(r,i,true);const o=f*H-N/2;for(let k=0;k<N;k++){const q=o+k;if(q>=0&&q<len){out[q]+=r[k]*w[k];nrm[q]+=w[k]*w[k]}}}const y=new Float32Array(len);for(let k=0;k<len;k++)y[k]=nrm[k]>1e-6?out[k]/nrm[k]:0;return y}
@@ -1197,7 +1255,7 @@ async function separate(tr,c,kind){
     else{parts=midSide(b);names=["Mid","Side"]}
     snapshot();const at=state.tracks.indexOf(tr);
     parts.forEach((pb,i)=>{const ns=addSound({id:"sep:"+uid(),name:(c.name||s.name)+" "+names[i],buffer:pb,src:"proc",credit:s.credit});storeSound(ns);
-      const n=newTrack(names[i]);n.color=COLORS[(COLORS.indexOf(tr.color)+i+1)%COLORS.length];n.clips=[{id:uid(),snd:ns.id,start:c.start,off:0,len:pb.duration,gain:c.gain??1}];state.tracks.splice(at+1+i,0,n)});
+      const n=freeTrack(at);if(!n){toast(t("full"));return}n.clips=[{id:uid(),snd:ns.id,start:c.start,off:0,len:pb.duration,gain:c.gain??1,name:(c.name||s.name)+" "+names[i]}]});
     c.mute=true;rebuildChains();render();save();restartIfPlaying();renderMine()}
   catch(e){console.warn(e);toast("✕")}finally{status()}
 }
@@ -1267,11 +1325,11 @@ function clipMenu(x,y,tr,c){
 function paste(tr,at){if(!clipboard)return;edit(()=>{const n={...clipboard,id:uid(),start:at};tr.clips.push(n);state.sel=n.id})}
 function trackMenu(e,tr){const r=e.currentTarget.getBoundingClientRect();openMenu(r.left,r.bottom,[
   [t("bounce"),()=>bounceTrack(tr)],
-  [t("dup"),()=>edit(()=>{const n=JSON.parse(JSON.stringify(tr));n.id=uid();n.name=tr.name+" 2";n.clips.forEach(c=>c.id=uid());n.rack.forEach(f=>f.id=uid());state.tracks.splice(state.tracks.indexOf(tr)+1,0,n);rebuildChains()})],
-  ["▲",()=>edit(()=>{const i=state.tracks.indexOf(tr);if(i>0){state.tracks.splice(i,1);state.tracks.splice(i-1,0,tr)}})],
-  ["▼",()=>edit(()=>{const i=state.tracks.indexOf(tr);if(i<state.tracks.length-1){state.tracks.splice(i,1);state.tracks.splice(i+1,0,tr)}})],
+  [t("dup"),()=>edit(()=>{const n=JSON.parse(JSON.stringify(tr));n.id=uid();n.name="";n.clips.forEach(c=>c.id=uid());n.rack.forEach(f=>f.id=uid());state.tracks.splice(state.tracks.indexOf(tr)+1,0,n);if(state.tracks.length>MAXT){const k=state.tracks.findLastIndex(x=>!x.clips.length);if(k>=0)state.tracks.splice(k,1)}renumber();rebuildChains()})],
+  ["▲",()=>edit(()=>{const i=state.tracks.indexOf(tr);if(i>0){state.tracks.splice(i,1);state.tracks.splice(i-1,0,tr)}renumber()})],
+  ["▼",()=>edit(()=>{const i=state.tracks.indexOf(tr);if(i<state.tracks.length-1){state.tracks.splice(i,1);state.tracks.splice(i+1,0,tr)}renumber()})],
   ["●",()=>edit(()=>{tr.color=COLORS[(COLORS.indexOf(tr.color)+1)%COLORS.length]})],
-  [t("del"),()=>edit(()=>{state.tracks=state.tracks.filter(x=>x!==tr);if(fxOpen===tr.id){fxOpen=null;renderFx()}rebuildChains()})]])}
+  [t("del"),()=>edit(()=>{state.tracks=state.tracks.filter(x=>x!==tr);renumber();if(fxOpen===tr.id){fxOpen=null;renderFx()}rebuildChains()})]])}
 function findSel(){for(const tr of state.tracks)for(const c of tr.clips)if(c.id===state.sel)return[tr,c];return[]}
 function delSel(){const sel=selClips();if(!sel.length)return;edit(()=>{for(const[tr,c]of sel)tr.clips=tr.clips.filter(x=>x!==c);state.sel=null;multi.clear()})}
 function dupSel(){const sel=selClips();if(!sel.length)return;const a=Math.min(...sel.map(([,c])=>c.start)),z=Math.max(...sel.map(([,c])=>c.start+c.len));edit(()=>{multi.clear();for(const[tr,c]of sel){const n={...c,id:uid(),start:c.start+(z-a)};tr.clips.push(n);multi.add(n.id)}state.sel=null})}
@@ -1382,7 +1440,7 @@ $("#bCount").onclick=()=>{state.countIn=!state.countIn;$("#bCount").classList.to
 $("#bMon").onclick=()=>{state.monitor=!state.monitor;$("#bMon").classList.toggle("on",state.monitor);save()};
 $("#bTuner").onclick=openTuner;$("#bFlash").onclick=()=>fbOn?captureFlashback():toggleFlashback();$("#bFlash").oncontextmenu=e=>{e.preventDefault();if(fbOn)toggleFlashback()};$("#tClose").onclick=()=>{tunerRun=false;$("#dTuner").close()};
 $("#bpm").onchange=()=>{const v=clamp(+$("#bpm").value||120,30,300);snapshot();state.bpm=v;$("#bpm").value=v;render();save();restartIfPlaying()};
-$("#addTrack").onclick=()=>edit(()=>{state.tracks.push(newTrack());rebuildChains()});
+$("#addTrack").onclick=()=>{if(state.tracks.length>=MAXT){toast(t("full"));return}edit(()=>{state.tracks.push(newTrack());renumber();rebuildChains()})};
 $("#bDel").onclick=delSel;$("#bDup").onclick=dupSel;$("#bSplit").onclick=splitSel;$("#bUndo").onclick=undo;
 $("#bExport").onclick=()=>$("#dExport").showModal();
 document.querySelectorAll("#dExport [data-x]").forEach(b=>b.onclick=()=>doExport(b.dataset.x));
@@ -1394,7 +1452,7 @@ $("#mTgt").onchange=()=>{const v=$("#mTgt").value;state.target=v==="off"?"off":+
 $("#mFx").onclick=()=>{fxOpen=fxOpen==="master"?null:"master";$("#mFx").classList.toggle("on",fxOpen==="master");renderFx();render()};
 $("#mMeas").onclick=async()=>{status(t("working"));try{const r=await masteredRender();}finally{status()}};
 $("#lyrics").oninput=()=>{state.lyrics=$("#lyrics").value;save()};
-$("#bNew").onclick=()=>{if(!confirm(t("confirmNew")))return;stop();snapshot();const pps=state.pps;state=newState();state.pps=pps;for(let i=0;i<4;i++)state.tracks.push(newTrack());syncUI();rebuildChains();render();renderFx();save()};
+$("#bNew").onclick=()=>{if(!confirm(t("confirmNew")))return;stop();snapshot();const pps=state.pps;state=newState();state.pps=pps;fillTracks();syncUI();rebuildChains();render();renderFx();save()};
 const zoom=f=>{const sc=$("#scroller");const center=(sc.scrollLeft+sc.clientWidth/2-headW())/state.pps;state.pps=clamp(state.pps*f,8,800);render();sc.scrollLeft=Math.max(0,center*state.pps-sc.clientWidth/2+headW());save()};
 $("#bZin").onclick=()=>zoom(1.4);$("#bZout").onclick=()=>zoom(1/1.4);
 $("#scroller").addEventListener("wheel",e=>{if(e.ctrlKey||e.metaKey){e.preventDefault();zoom(e.deltaY<0?1.15:1/1.15)}},{passive:false});
@@ -1434,7 +1492,7 @@ addEventListener("keydown",e=>{const tg=e.target.tagName;if((tg==="INPUT"&&e.tar
   else if(k==="home")$("#bBack").click()
   else if(k==="+"||k==="=")zoom(1.25)
   else if(k==="-")zoom(.8)});
-function applyLang(){document.documentElement.lang=lang;$("#bLang").textContent=lang==="fr"?"EN":"FR";document.querySelectorAll("[data-t]").forEach(n=>n.textContent=t(n.dataset.t));document.querySelectorAll("[data-tp]").forEach(n=>n.placeholder=t(n.dataset.tp));document.querySelectorAll("[data-tt]").forEach(n=>n.title=t(n.dataset.tt));renderIaCats()}
+function applyLang(){document.documentElement.lang=lang;if(typeof renderColl==="function")renderColl();$("#bLang").textContent=lang==="fr"?"EN":"FR";document.querySelectorAll("[data-t]").forEach(n=>n.textContent=t(n.dataset.t));document.querySelectorAll("[data-tp]").forEach(n=>n.placeholder=t(n.dataset.tp));document.querySelectorAll("[data-tt]").forEach(n=>n.title=t(n.dataset.tt));renderIaCats()}
 $("#bLang").onclick=()=>{lang=lang==="fr"?"en":"fr";localStorage.setItem("st.lang",lang);applyLang();renderKitList()};
 function syncUI(){$("#bpm").value=state.bpm;$("#bLoop").classList.toggle("on",!!state.loop);$("#bMetro").classList.toggle("on",!!state.metro);$("#bSnap").classList.toggle("on",!!state.snap);$("#bCount").classList.toggle("on",!!state.countIn);$("#bMon").classList.toggle("on",!!state.monitor);
   $("#mVol").value=state.masterVol;$("#mLim").classList.toggle("on",!!state.limiter);$("#mPre").value=state.masterPreset;$("#mTgt").value=String(state.target);$("#lyrics").value=state.lyrics||""}
@@ -1449,12 +1507,12 @@ addEventListener("pointerdown",()=>audio(),{once:true,capture:true});
   const saved=await dbGet("proj","cur").catch(()=>null);
   if(saved){try{Object.assign(state,JSON.parse(saved));state.tracks.forEach(fixTrack);state.masterRack=state.masterRack||[];if(!MASTERS[state.masterPreset])state.masterPreset="Universal";
     const ids=new Set(state.tracks.flatMap(tr=>tr.clips.map(c=>c.snd)));for(const id of ids)if(!lib.has(id))await ensureSound({id}).catch(()=>null)}catch(e){console.warn(e)}}
-  if(!state.tracks.length){for(let i=0;i<4;i++)state.tracks.push(newTrack());
+  if(!state.tracks.length){fillTracks();
     const put=(i,id,beats)=>{const s=lib.get("kit:"+id);for(const b of beats)state.tracks[i].clips.push({id:uid(),snd:s.id,start:b*spb(),off:0,len:Math.min(s.buffer.duration,spb()*2),gain:1})};
-    ["Kick","Snare","Hat","Drone"].forEach((n,i)=>state.tracks[i].name=n);
     put(0,"Kick",[0,4,8,12]);put(1,"Snare",[2,6,10,14]);put(2,"Hat",[...Array(16).keys()].map(x=>x+.5));
     const d=lib.get("kit:Drone");state.tracks[3].clips.push({id:uid(),snd:d.id,start:0,off:0,len:d.buffer.duration,gain:.8,fadeIn:1,fadeOut:1.5});
     state.tracks[3].rack=[{id:uid(),type:"reverb",on:true,p:{...FX.reverb.p,mix:.5}}];state.loop=true;state.loopA=0;state.loopB=bar()*4}
+  state.tracks.forEach(tr=>{if(/^(Kick|Snare|Hat|Drone|Track \d+|Piste \d+|Harmonic|Percussive|Harmonique|Percussif|Low|Mid|High|Graves|Médiums|Aigus|Side)$/.test(tr.name))tr.name=""});fillTracks();
   syncUI();render();requestAnimationFrame(frame);
   if(navigator.storage&&navigator.storage.persist)navigator.storage.persist().catch(()=>{});
 })();

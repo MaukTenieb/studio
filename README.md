@@ -8,7 +8,7 @@ https://mauktenieb.github.io/studio/
 
 ## What it does
 
-- Tracks with volume, pan, mute, solo, colour, order, duplication, and volume and pan automation.
+- Thirty-two neutral tracks, numbered 01 to 32, each with volume, pan, mute, solo, colour, order, duplication, and volume and pan automation.
 - An effect rack per track, in any order: EQ, compressor, distortion, bitcrusher, chorus, flanger, phaser, tremolo, auto-pan, wah, filter, delay with ping-pong, reverb, vibrato, gate, ring modulator, frequency shifter (Hilbert), resonator, glitch buffer, vinyl, AM radio, room; ten chain presets (Voice, Radio, Telephone, Lo-fi, Robot, Space, Cathedral, Doubler, Noise wall, Dub).
 - Clips that move, trim from both edges, fade in and out, split, duplicate, copy, paste, repeat, mute, rename and change track.
 - Clip processing: reverse, normalize, gain, transpose with duration kept, speed change with pitch kept (WSOLA), denoise, bounce.
@@ -22,8 +22,9 @@ https://mauktenieb.github.io/studio/
 - Tempo, metronome, count-in, snap to the sixteenth, loop region drawn on the ruler, chromatic tuner, lyrics pad.
 - Microphone recording onto the armed track, with optional input monitoring.
 - Live search in Internet Archive, restricted to public domain, CC0, CC BY and CC BY-SA items, with seventeen listening categories: field recordings, city, forest, animals, factory, vehicles, firearms, voices, languages, ethnography, traditional music, chants, jazz, classical, concerts, oral history, sound effects. Freesound gets sixteen quick searches on the same themes.
-- A built-in kit in nine drawers (drums, 808, 909, basses and synths, Polivoks, chaos, industrial, metal and bells, vinyl and radio), synthesized by the browser at load time: drums, basses, pads, drones, vinyl and radio noises, chaotic oscillators (Lorenz, logistic map, Hénon, Chua) and Polivoks-style voices.
+- A built-in kit in eleven drawers (drums, 808, 909, basses and synths, Polivoks, chaos, industrial, metal and bells, vinyl and radio, infrasound and sub-bass, synthesis), synthesized by the browser at load time: drums, basses, pads, drones, vinyl and radio noises, chaotic oscillators (Lorenz, logistic map, Hénon, Chua) and Polivoks-style voices.
 - Live search in Freesound, restricted to CC0 and CC BY sounds.
+- Collections: themed doors into Freesound, Wikimedia Commons and Jamendo — music styles (loops and samples), animals, voices, forty languages (Lingua Libre recordings), chants and songs, places and environments, recording gear (hydrophone, contact microphone, geophone, VLF, cassette, wax cylinder…), infrasound and sub-bass, synthesised and reworked sounds.
 - Live search in Wikimedia Commons (about four million audio files) and Jamendo (CC0, CC BY and CC BY-SA music) through the Openverse and MediaWiki APIs, without a key.
 - Import of any audio file the browser decodes.
 - Export as WAV mix, MP3 mix or WAV stems, with a credits file listing every borrowed sound.
