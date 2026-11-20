@@ -6,6 +6,8 @@ Gravité choisie : la plus haute des gravités d'origine, baissée d'un cran qua
 
 ## Fait
 
+- 20 nov. 19 h 41 : E-11 ; E-12 ; E-21. Console au téléphone : touche D de 44 px, tranche Master épinglée au bord droit, réglage de réinjection visible. Coupes de film : seuil adaptatif (4 fois la médiane des 2 s précédentes, 0,04 au moins) et lecture deux fois moins rapide ; film gris à 5 % d'écart : 4 coupes trouvées sur 4, à 6 ms près (contre 0). Mastering : Neutral devient le réglage d'origine des projets neufs, Neutral et Classical en tête du tiroir Master, relèvement de sonie borné à +6 dB (la compensation du gain de rattrapage des compresseurs reste à faire).
+
 - 20 nov. 19 h 40 : E-17 ; E-19 ; E-51 ; E-90 ; E-71. Internet Archive : tri par pertinence dès qu'un mot est saisi ; entrée d'une collection en expression exacte, avec sujet ethnographique pour les familles de terrain (« berber » : chants d'anachid et récitation du Coran sortis de la tête de liste ; « gamelan » : 3 enregistrements de gamelan sur 5) ; Jazz sans country, chants de prison ni gospel ; Classique sans radio ancienne. Quinze boîtes « tribute to » sous les minuscules ι à ψ : Ennio Morricone, Bernard Herrmann, Jóhann Jóhannsson, Mica Levi, Trent Reznor & Atticus Ross, Angelo Badalamenti, Thomas Köner, Raison d'être, Atrium Carceri, Duke Ellington, Ornette Coleman, Sun Ra, Scientist, Mad Professor, Basic Channel ; chaque chaîne mesurée (crête −3,2 à −11 dBFS, continu ≤ −65 dBFS, zéro NaN). Fiche de terrain remplie à la pose depuis les métadonnées d'Internet Archive (lieu avec coordonnées, date, collecteur, langue, cote, licence, source), écrite dans les crédits avec l'adresse complète de la licence. Noms anglais des sons de kit sans kick, snare ni hat (bass drum, side drum, cymbals) ; réglages de l'Atelier en français ; « 1 bar ».
 
 - 20 nov. 19 h 34 : E-03 ; E-05 ; E-04 ; E-24. Paulstretch, gel, flou, grain, wavesets, séparation harmonique / percussive, WSOLA et analyse de hauteur tournent dans un Web Worker, avec barre d'avancement et touche d'arrêt (les traitements qui demandent l'audio du navigateur retombent sur le fil principal). Paulstretch ×64 de 8 s : 8,9 s au téléphone, image suivante en 80 ms pendant le calcul (contre 66 à 437 s de page figée) ; séparation de 8 s : 245 ms de blocage au plus, contre 4 763 ms. Plafonds : étirement ×256 et 1 200 s (20 min stéréo en 38,8 s), gel et grain 600 s. Sons distants entiers jusqu'à 15 min, au-delà coupe annoncée. Pistes affichées 0,25 s après l'ouverture, avant la synthèse du kit (contre 0,78 s sur la même machine au calme).
@@ -18,30 +20,12 @@ Gravité choisie : la plus haute des gravités d'origine, baissée d'un cran qua
 
 ### Bloquant
 
-- E-11 · bloquant · Console au téléphone debout : touche D de 48 × 22 px, réglage « D ⟲ » hors de l'écran.
-  - Experts : 1 (02-04). Gravités d'origine : 02-04 bloquant (partie debout).
-  - Preuve : Touche D de 48 × 22 px ; « D ⟲ » à x = 1 920 px pour un écran de 390 px ; libellé à 9,6 px ; faders coupés (02). Capture : [02-console-iphone](captures/02-console-iphone.webp).
-  - Correction : Touche D de 44 px de haut au moins ; tranche Master épinglée au bord droit de la console (`position:sticky;right:0`) ; libellés à 11 px au moins ou pictogramme seul.
-  - Charge de la machine : existe quelle que soit la charge.
-
-- E-12 · bloquant · Coupes peu contrastées ignorées : seuil fixe.
-  - Experts : 1 (01-02). Gravités d'origine : 01-02 bloquant.
-  - Preuve : Seuil fixe 0,18 (ligne 2795) sur l'écart moyen des couleurs. Film C (gris à 10 % d'écart, 7 coupes) : 0 coupe trouvée, trois essais (01). Capture : [01-filmC-iphone-paysage](captures/01-filmC-iphone-paysage.webp).
-  - Correction : Seuil adaptatif : écart de l'image courante rapporté à la médiane des écarts des 2 s précédentes (coupe au-delà de 4 fois la médiane et de 0,04) ; curseur de sensibilité à pictogramme ciseaux.
-  - Charge de la machine : existe quelle que soit la charge.
-
 ### Important
 
 - E-20 · important · Le gros bouton + du projet vide passe par-dessus les tiroirs et la ligne de temps.
   - Experts : 3 (10-10, 09-14, 06-08). Gravités d'origine : 10-10 important, 09-14 détail, 06-08 important (partie bouton +).
   - Preuve : `#emptyGo{z-index:6}` (ligne 295) : disque de 96 px sur le tiroir Master (10, 06) et sur la ligne de temps pendant une prise (09). Captures : [10-pc1366-simple-master](captures/10-pc1366-simple-master.webp), [09-voix-en-cours-iphone-paysage](captures/09-voix-en-cours-iphone-paysage.webp).
   - Correction : `body.drawer-open #emptyGo, body.rec #emptyGo{display:none}`, classes posées par `drawer()` (ligne 2558) et au départ de l'enregistrement.
-  - Charge de la machine : existe quelle que soit la charge.
-
-- E-21 · important · Le réglage d'export par défaut (Universal, cible −14 LUFS) écrase la dynamique.
-  - Experts : 2 (06-02, 02-05, 06-10). Gravités d'origine : 06-02 important, 02-05 important, 06-10 détail.
-  - Preuve : Universal −14 réduit l'écart doux / fort de 34,4 à 29,1 dB ; Loud −9 à 11,5 dB ; Neutral et Classical gardent 34,3-34,4 dB (06). Clap et chaîne Dub : les 15 premières répétitions sortent à −1,9 dBFS, comme le coup sec (02). Rattrapage automatique des DynamicsCompressor (lignes 945-951). Neutral absent du tiroir Master (06). Capture : [06-master-pc1920](captures/06-master-pc1920.webp).
-  - Correction : 1. Compenser le gain de rattrapage des DynamicsCompressor dans `mchain` et `buildMaster` (gain mesuré sur un sinus de −50 dBFS à la construction, inverse appliqué en aval). 2. Borner le relèvement de `masteredRender` à +6 dB et la réduction du limiteur à 3 dB ; au-delà, garder le niveau et afficher l'écart à la cible dans le pied. 3. Neutral et Classical en tête de la première rangée du tiroir Master. 4. Pictogramme de nuance barré quand l'export perd plus de 3 LU de LRA face au rendu Neutral.
   - Charge de la machine : existe quelle que soit la charge.
 
 - E-22 · important · Le swing suit la parité du compteur général : sur 15, 17, 19 ou 21 pas, le même pas alterne swing et grille droite.

@@ -495,6 +495,7 @@ footer .lbl{font-size:max(12px,.8em)!important}
   #sgrip{display:none!important}
   .dk .tv{display:none}
 }
+#console .master-strip{position:sticky;right:0;z-index:3;box-shadow:-8px 0 14px rgba(0,0,0,.6)}
 #busy{position:fixed;left:50%;bottom:calc(var(--u)*2.2);transform:translateX(-50%);z-index:60;display:none;align-items:center;gap:10px;padding:6px 8px 6px 14px;border-radius:4px;background:linear-gradient(rgba(11,9,8,.55),rgba(11,9,8,.85)),url(img/metal.webp) center/cover;box-shadow:0 8px 20px rgba(0,0,0,.65);color:#ffe3a0;font-size:max(12px,1em)}
 #busy.on{display:flex}#busy i{display:block;width:clamp(90px,22vw,200px);height:6px;border-radius:3px;background:#0c0a08;box-shadow:inset 0 1px 2px #000;overflow:hidden}#busy b{display:block;height:100%;width:0;background:#ffa726}
 #busy .bl{white-space:nowrap;font-variant-numeric:tabular-nums}
@@ -1086,7 +1087,7 @@ function buildChain(c,tr,dest){
 /* ================= state ================= */
 const lib=new Map();
 let state=newState();
-function newState(){return{bpm:120,loop:false,loopA:0,loopB:8,metro:false,snap:true,pps:80,pos:0,tracks:[],sel:null,armed:null,masterVol:.9,limiter:true,masterPreset:"Universal",masterRack:[],target:-14,lyrics:"",countIn:false,monitor:false}}
+function newState(){return{bpm:120,loop:false,loopA:0,loopB:8,metro:false,snap:true,pps:80,pos:0,tracks:[],sel:null,armed:null,masterVol:.9,limiter:true,masterPreset:"Neutral",masterRack:[],target:-14,lyrics:"",countIn:false,monitor:false}}
 const MAXT=32;const num=n=>String(n).padStart(2,"0");
 function renumber(){state.tracks.forEach((tr,i)=>{if(/^\d\d$/.test(tr.name)||!tr.name)tr.name=num(i+1);tr.color=trackColor(i)})}
 function fillTracks(){while(state.tracks.length<MAXT)state.tracks.push(newTrack());renumber()}
@@ -2564,7 +2565,7 @@ addEventListener("pointerdown",()=>audio(),{once:true,capture:true});
 
 /* ================= Master : panneau de mastering (à la manière de BandLab Mastering) ================= */
 const L=(fr,en)=>lang==="fr"?fr:en;
-const MS_MAIN=["Universal","Fire","Clarity","Tape","Natural","Cinematic","Spatial","Punch"];
+const MS_MAIN=["Neutral","Classical","Universal","Fire","Clarity","Tape","Natural","Cinematic"];
 let mastrOn=false;
 const MS={B:null,used:null,ex:null,exL:null,src:null,out:null,chain:null,t0:0,off:0,play:false,ab:"m",eq:true,sel:new Set(),meas:new Map(),gen:0,raf:0};
 const msTgt=()=>state.target==="off"||state.target==null?null:+state.target;
@@ -2886,7 +2887,8 @@ addEventListener("keydown",e=>{if(e.altKey&&/^[1-5]$/.test(e.key)){e.preventDefa
 async function videoCuts(url,step=.2){const v=document.createElement("video");v.muted=true;v.playsInline=true;v.src=url;v.preload="auto";v.style.cssText="position:fixed;left:-200px;top:0;width:32px;height:18px;opacity:0;pointer-events:none";document.body.append(v);await new Promise(r=>{v.onloadeddata=r;v.onerror=r;setTimeout(r,4000)});const D=isFinite(v.duration)?v.duration:0;if(!D){v.remove();return[]}
   const cv=document.createElement("canvas");cv.width=32;cv.height=18;const g=cv.getContext("2d",{willReadFrequently:true});let prev=null;const cuts=[];
   /* lecture accélérée : chaque image décodée est comparée à la précédente (plus sûr qu'un déplacement image par image) */
-  v.playbackRate=clamp(D/4,2,16);const diff=t=>{g.drawImage(v,0,0,32,18);const d=g.getImageData(0,0,32,18).data;if(prev){let m=0;for(let i=0;i<d.length;i+=4)m+=Math.abs(d[i]-prev[i])+Math.abs(d[i+1]-prev[i+1])+Math.abs(d[i+2]-prev[i+2]);m/=(d.length/4)*3*255;if(m>.18&&(!cuts.length||t-cuts[cuts.length-1]>.5))cuts.push(+t.toFixed(2))}prev=d};
+  /* seuil adaptatif (analyse du 20 nov. 2026, E-12) : coupe quand l'écart dépasse 4 fois la médiane des 2 s précédentes et 0,04 */
+  v.playbackRate=clamp(D/8,1,8);const hist=[];const diff=t=>{g.drawImage(v,0,0,32,18);const d=g.getImageData(0,0,32,18).data;if(prev){let m=0;for(let i=0;i<d.length;i+=4)m+=Math.abs(d[i]-prev[i])+Math.abs(d[i+1]-prev[i+1])+Math.abs(d[i+2]-prev[i+2]);m/=(d.length/4)*3*255;const rec=hist.filter(h=>h[0]>t-2&&h[0]<t).map(h=>h[1]).sort((a,b)=>a-b),med=rec.length>=3?rec[rec.length>>1]:.03;if(m>Math.max(.04,4*med)&&(!cuts.length||t-cuts[cuts.length-1]>.5))cuts.push(+t.toFixed(2));hist.push([t,m]);if(hist.length>400)hist.shift()}prev=d};
   await new Promise(res=>{const done=()=>res();v.onended=done;setTimeout(done,(D/v.playbackRate+4)*1000);
     if(v.requestVideoFrameCallback){const cb=(n,meta)=>{diff(meta.mediaTime);if(!v.ended)v.requestVideoFrameCallback(cb)};v.requestVideoFrameCallback(cb)}else v.ontimeupdate=()=>diff(v.currentTime);
     v.play().catch(done)});v.pause();
@@ -2894,7 +2896,7 @@ async function videoCuts(url,step=.2){const v=document.createElement("video");v.
   const fine=[];v.pause();
   const grab=t=>new Promise(res=>{let done=false;const fin=()=>{if(done)return;done=true;g.drawImage(v,0,0,32,18);res(g.getImageData(0,0,32,18).data)};v.onseeked=()=>{v.onseeked=null;if(v.requestVideoFrameCallback){v.requestVideoFrameCallback(()=>fin());setTimeout(fin,250)}else fin()};v.currentTime=t});
   const dif=(a,b)=>{let m=0;for(let i=0;i<a.length;i+=4)m+=Math.abs(a[i]-b[i])+Math.abs(a[i+1]-b[i+1])+Math.abs(a[i+2]-b[i+2]);return m/((a.length/4)*3*255)};
-  for(const c of cuts){let lo=Math.max(0,c-.8),hi=Math.min(D-.01,c+.12);const A=await grab(lo),B=await grab(hi);if(dif(A,B)<.18){fine.push(c);continue}
+  for(const c of cuts){let lo=Math.max(0,c-.8),hi=Math.min(D-.01,c+.12);const A=await grab(lo),B=await grab(hi);if(dif(A,B)<.04){fine.push(c);continue}
     while(hi-lo>.01){const mid=(lo+hi)/2,M=await grab(mid);if(dif(A,M)<dif(M,B))lo=mid;else hi=mid}fine.push(+hi.toFixed(3))}
   v.remove();return fine.length?fine:cuts}
 async function markVideoCuts(){const items=(KAM.items||[]).filter(i=>i.kind==="vid");let n=0;state.notes=state.notes||[];status(t("working"));
