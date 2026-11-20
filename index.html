@@ -117,6 +117,7 @@ dialog .row{display:flex;gap:6px;justify-content:flex-end;margin-top:10px}
 .master b{font-weight:normal;color:var(--dim)}
 .master input{width:clamp(60px,9vw,120px)}
 #lyrics{flex:1;width:100%;resize:none;background:#0f0e0d;color:var(--text);border:1px solid var(--line);border-radius:3px;padding:8px;font:inherit;line-height:1.5;-webkit-user-select:text;user-select:text}
+.atd label{display:flex;flex-direction:column;gap:2px;margin:6px 0;color:var(--dim)}.atd label span{display:flex;justify-content:space-between}.atd label i{font-style:normal;color:var(--text)}
 dialog .col{display:flex;flex-direction:column;gap:6px}
 #tNote{font-size:calc(var(--fs)*4);text-align:center;color:var(--amber)}
 .tbar{position:relative;height:14px;background:#0c0b0a;border:1px solid var(--line);margin:8px 0}
@@ -238,6 +239,7 @@ dialog .col{display:flex;flex-direction:column;gap:6px}
 <dialog id="dExport"><h3 data-t="exportT">Export</h3>
   <div class="col"><button data-x="wav" data-t="wav">WAV mix</button><button data-x="mp3" data-t="mp3">MP3 mix</button><button data-x="stems" data-t="stems">WAV stems</button></div>
   <div class="row"><button id="xClose">×</button></div></dialog>
+<dialog id="dAt" class="atd"></dialog>
 <dialog id="dTuner"><h3 data-t="tuner">Tuner</h3><div id="tNote">–</div><div class="tbar"><i id="tNeedle"></i></div><p><span id="tHz"></span> <span id="tCents"></span></p><div class="row"><button id="tClose">×</button></div></dialog>
 <div id="ghost"></div><div id="toast"></div><div id="drop"></div>
 <dialog id="dKey">
@@ -254,10 +256,10 @@ const FS_PROXY = ""; // Cloudflare worker URL, set at deploy time
 const COLORS=["#e8a33d","#5b8fb3","#8fb35a","#c46fa0","#d9553b","#57b3a6","#b39a5b","#8a7cc4"];
 const T={
  en:{track:"Track",import:"Import audio",keyHelp:"Personal Freesound API key. It stays in this browser.",noKey:"Freesound needs a key: gear button.",nores:"Nothing found.",exported:"Exported",mic:"Microphone refused.",confirmNew:"Erase the current project?",arm:"Arm a track (mic button) first.",fsErr:"Freesound unreachable.",drop:"Drag the sounds onto a track.",licence:"Licences shown: CC0 and CC BY. Credits go into the export.",
-  reverse:"Reverse",normalize:"Normalize",gainUp:"Gain +3 dB",gainDown:"Gain −3 dB",transpose:"Transpose…",stretch:"Speed (keeps pitch)…",loop:"Repeat ×…",mute:"Mute clip",denoise:"Denoise",copy:"Copy",paste:"Paste",dup:"Duplicate",split:"Split",del:"Delete",rename:"Rename…",fadeReset:"Remove fades",toSounds:"Bounce to my sounds",loopSel:"Loop this clip",
+  reverse:"Reverse",normalize:"Normalize",gainUp:"Gain +3 dB",gainDown:"Gain −3 dB",transpose:"Transpose…",stretch:"Speed (keeps pitch)…",loop:"Repeat ×…",mute:"Mute clip",denoise:"Denoise",copy:"Copy",paste:"Paste",dup:"Duplicate",split:"Split",del:"Delete",rename:"Rename…",fadeReset:"Remove fades",toSounds:"Bounce to my sounds",loopSel:"Loop this clip",atelier:"Workshop ▸",
   semis:"Semitones (−12 … +12)",speed:"Speed in % (50 … 200)",times:"How many repeats?",working:"Processing…",addFx:"+ effect",presets:"Chain preset",none:"—",lyrics:"Lyrics, notes…",tuner:"Tuner",exportT:"Export",wav:"WAV mix",mp3:"MP3 mix",stems:"WAV stems (one file per track)",countIn:"Count-in",monitor:"Monitoring (headphones)",master:"Master",autoV:"Volume automation",autoP:"Pan automation",autoHelp:"Click: add a point. Drag: move. Double-click: remove."},
  fr:{track:"Piste",import:"Importer de l'audio",keyHelp:"Clé personnelle de l'API Freesound. Elle reste dans ce navigateur.",noKey:"Freesound demande une clé : bouton engrenage.",nores:"Rien trouvé.",exported:"Exporté",mic:"Micro refusé.",confirmNew:"Effacer le projet en cours ?",arm:"Arme d'abord une piste (bouton micro).",fsErr:"Freesound injoignable.",drop:"Glisse les sons sur une piste.",licence:"Licences affichées : CC0 et CC BY. Les crédits partent avec l'export.",
-  reverse:"Inverser",normalize:"Normaliser",gainUp:"Gain +3 dB",gainDown:"Gain −3 dB",transpose:"Transposer…",stretch:"Vitesse (hauteur gardée)…",loop:"Répéter ×…",mute:"Couper le clip",denoise:"Débruiter",copy:"Copier",paste:"Coller",dup:"Dupliquer",split:"Couper en deux",del:"Supprimer",rename:"Renommer…",fadeReset:"Retirer les fondus",toSounds:"Figer dans mes sons",loopSel:"Boucler ce clip",
+  reverse:"Inverser",normalize:"Normaliser",gainUp:"Gain +3 dB",gainDown:"Gain −3 dB",transpose:"Transposer…",stretch:"Vitesse (hauteur gardée)…",loop:"Répéter ×…",mute:"Couper le clip",denoise:"Débruiter",copy:"Copier",paste:"Coller",dup:"Dupliquer",split:"Couper en deux",del:"Supprimer",rename:"Renommer…",fadeReset:"Retirer les fondus",toSounds:"Figer dans mes sons",loopSel:"Boucler ce clip",atelier:"Atelier ▸",
   semis:"Demi-tons (−12 … +12)",speed:"Vitesse en % (50 … 200)",times:"Combien de répétitions ?",working:"Calcul…",addFx:"+ effet",presets:"Preset de chaîne",none:"—",lyrics:"Paroles, notes…",tuner:"Accordeur",exportT:"Export",wav:"Mix WAV",mp3:"Mix MP3",stems:"Pistes séparées WAV (un fichier par piste)",countIn:"Décompte",monitor:"Écoute de contrôle (casque)",master:"Master",autoV:"Automation du volume",autoP:"Automation du panoramique",autoHelp:"Clic : ajoute un point. Glisser : déplace. Double-clic : retire."}
 };
 let lang=(localStorage.getItem("st.lang")||((navigator.language||"en").startsWith("fr")?"fr":"en"));
@@ -273,7 +275,16 @@ const status=m=>{$("#status").textContent=m||""};
 /* ================= effects ================= */
 const CRUSH_SRC=`registerProcessor("crusher",class extends AudioWorkletProcessor{static get parameterDescriptors(){return[{name:"bits",defaultValue:8,minValue:1,maxValue:16},{name:"down",defaultValue:4,minValue:1,maxValue:64}]}
 constructor(){super();this.h=[0,0];this.c=0}process(i,o,p){const inp=i[0],out=o[0];if(!inp||!inp.length)return true;const st=Math.pow(2,p.bits[0]-1),d=Math.max(1,Math.round(p.down[0]));
-for(let ch=0;ch<out.length;ch++){const x=inp[ch]||inp[0],y=out[ch];let c=this.c;for(let n=0;n<y.length;n++){if(c%d===0)this.h[ch]=Math.round(x[n]*st)/st;y[n]=this.h[ch];c++}if(ch===out.length-1)this.c=c}return true}})`;
+for(let ch=0;ch<out.length;ch++){const x=inp[ch]||inp[0],y=out[ch];let c=this.c;for(let n=0;n<y.length;n++){if(c%d===0)this.h[ch]=Math.round(x[n]*st)/st;y[n]=this.h[ch];c++}if(ch===out.length-1)this.c=c}return true}})
+registerProcessor("fshift",class extends AudioWorkletProcessor{static get parameterDescriptors(){return[{name:"shift",defaultValue:50,minValue:-5000,maxValue:5000}]}
+constructor(){super();this.ph=0;const A=[.6923878,.9360654322959,.9882295226860,.9987488452737],B=[.4021921162426,.8561710882420,.9722909545651,.9952884791278];this.c=[A,B].map(k=>k.map(v=>v*v));this.st=[0,1].map(()=>[0,1].map(()=>k4()));function k4(){return[0,1,2,3].map(()=>({x1:0,x2:0,y1:0,y2:0}))}this.d=[0,0]}
+ap(ch,path,x){const c=this.c[path],s=this.st[ch][path];for(let i=0;i<4;i++){const q=s[i],y=c[i]*(x+q.y2)-q.x2;q.x2=q.x1;q.x1=x;q.y2=q.y1;q.y1=y;x=y}return x}
+process(i,o,p){const inp=i[0],out=o[0];if(!inp||!inp.length)return true;const f=p.shift[0],w=2*Math.PI*f/sampleRate;for(let n=0;n<out[0].length;n++){const ph=this.ph+n*w,cs=Math.cos(ph),sn=Math.sin(ph);for(let ch=0;ch<out.length;ch++){const x=(inp[ch]||inp[0])[n];const re=this.ap(ch,0,x),im0=this.ap(ch,1,x);const im=this.d[ch];this.d[ch]=im0;out[ch][n]=re*cs-im*sn}}this.ph=(this.ph+out[0].length*w)%(2*Math.PI);return true}});
+registerProcessor("glitch",class extends AudioWorkletProcessor{static get parameterDescriptors(){return[{name:"prob",defaultValue:.3,minValue:0,maxValue:1},{name:"size",defaultValue:.1,minValue:.005,maxValue:1}]}
+constructor(){super();this.N=sampleRate*2;this.buf=[new Float32Array(this.N),new Float32Array(this.N)];this.w=0;this.rep=0;this.left=0;this.len=1;this.start=0}
+process(i,o,p){const inp=i[0],out=o[0];if(!inp||!inp.length)return true;for(let n=0;n<out[0].length;n++){for(let ch=0;ch<2;ch++)this.buf[ch][this.w]=(inp[ch]||inp[0])[n];
+ if(this.left<=0&&Math.random()<p.prob[0]/sampleRate*8){this.len=Math.max(32,Math.floor(p.size[0]*sampleRate*(.25+Math.random())));this.start=(this.w-this.len+this.N)%this.N;this.left=this.len*(2+Math.floor(Math.random()*6));this.rep=0}
+ for(let ch=0;ch<out.length;ch++){out[ch][n]=this.left>0?this.buf[ch][(this.start+(this.rep%this.len))%this.N]:(inp[ch]||inp[0])[n]}if(this.left>0){this.left--;this.rep++}this.w=(this.w+1)%this.N}return true}});`;
 const crushURL=URL.createObjectURL(new Blob([CRUSH_SRC],{type:"application/javascript"}));
 async function prepCtx(c){if(c._ready)return;try{await c.audioWorklet.addModule(crushURL);c._crush=true}catch(e){c._crush=false}c._ready=true}
 function driveCurve(amt){const n=2048,c=new Float32Array(n),k=amt*80;for(let i=0;i<n;i++){const x=i/n*2-1;c[i]=k?((1+k)*x)/(1+k*Math.abs(x)):x}return c}
@@ -348,6 +359,18 @@ const FX={
    l.frequency.value=.23;l.connect(lg).connect(am.gain);l.start();i.connect(bp).connect(w).connect(am).connect(o);
    const n=c.sampleRate*3,nb=c.createBuffer(1,n,c.sampleRate),x=nb.getChannelData(0);for(let k=0;k<n;k++)x[k]=(Math.random()*2-1)*(1+.5*Math.sin(k/c.sampleRate*2*Math.PI*50));const ns=c.createBufferSource();ns.buffer=nb;ns.loop=true;const nf=c.createBiquadFilter();nf.type="bandpass";nf.frequency.value=2500;nf.Q.value=.6;const ng=c.createGain();ns.connect(nf).connect(ng).connect(o);ns.start();
    const set=p=>{bp.frequency.value=1200;bp.Q.value=.5+p.band*2.5;w.curve=driveCurve(p.drive);ng.gain.value=p.noise*.12;lg.gain.value=p.drift*.45;am.gain.value=1-p.drift*.45};set(p);return{in:i,out:o,set}}},
+ ring:{n:"Ring mod",p:{freq:220,mix:.6},r:{freq:[1,4000,1,1],mix:[0,1,.01]},
+  make(c,p){const i=c.createGain(),o=c.createGain(),rg=c.createGain(),wet=c.createGain(),dry=c.createGain(),osc=c.createOscillator();rg.gain.value=0;osc.connect(rg.gain);osc.start();i.connect(rg).connect(wet).connect(o);i.connect(dry).connect(o);
+   const set=p=>{osc.frequency.value=p.freq;wet.gain.value=p.mix;dry.gain.value=1-p.mix};set(p);return{in:i,out:o,set}}},
+ fshift:{n:"Freq shifter",p:{shift:40,mix:1},r:{shift:[-2000,2000,1],mix:[0,1,.01]},
+  make(c,p){const i=c.createGain(),o=c.createGain(),wet=c.createGain(),dry=c.createGain();let w=null;if(c._crush){w=new AudioWorkletNode(c,"fshift",{outputChannelCount:[2]});i.connect(w).connect(wet).connect(o)}i.connect(dry).connect(o);
+   const set=p=>{if(w)w.parameters.get("shift").value=p.shift;wet.gain.value=p.mix;dry.gain.value=1-p.mix};set(p);return{in:i,out:o,set}}},
+ comb:{n:"Resonator",p:{freq:110,fb:.9,damp:5000,mix:.5},r:{freq:[20,2000,1,1],fb:[0,.995,.001],damp:[300,16000,10,1],mix:[0,1,.01]},
+  make(c,p){const i=c.createGain(),o=c.createGain(),d=c.createDelay(.1),fb=c.createGain(),lp=c.createBiquadFilter(),wet=c.createGain(),dry=c.createGain();lp.type="lowpass";i.connect(d);d.connect(lp).connect(fb).connect(d);d.connect(wet).connect(o);i.connect(dry).connect(o);
+   const set=p=>{d.delayTime.value=1/p.freq;fb.gain.value=p.fb;lp.frequency.value=p.damp;wet.gain.value=p.mix*(1-p.fb*.5);dry.gain.value=1-p.mix};set(p);return{in:i,out:o,set}}},
+ glitch:{n:"Glitch",p:{prob:.4,size:.08,mix:1},r:{prob:[0,1,.01],size:[.005,.6,.005],mix:[0,1,.01]},
+  make(c,p){const i=c.createGain(),o=c.createGain(),wet=c.createGain(),dry=c.createGain();let w=null;if(c._crush){w=new AudioWorkletNode(c,"glitch",{outputChannelCount:[2]});i.connect(w).connect(wet).connect(o)}i.connect(dry).connect(o);
+   const set=p=>{if(w){w.parameters.get("prob").value=p.prob;w.parameters.get("size").value=p.size}wet.gain.value=p.mix;dry.gain.value=1-p.mix};set(p);return{in:i,out:o,set}}},
  room:{n:"Room",p:{room:6,mix:.3,size:1,damp:1,pre:0},r:{room:[0,ROOMS.length-1,1],mix:[0,1,.01],size:[.3,2.5,.05],damp:[.3,2,.05],pre:[0,.15,.005]},
   make(c,p){const i=c.createGain(),o=c.createGain(),wet=c.createGain(),dry=c.createGain(),pd=c.createDelay(1),cv=c.createConvolver();i.connect(dry).connect(o);i.connect(pd).connect(cv).connect(wet).connect(o);let key="";
    const set=p=>{const k=[p.room|0,p.size,p.damp].join();if(k!==key){key=k;cv.buffer=makeRoomIR(c,ROOMS[p.room|0],p.size,p.damp)}pd.delayTime.value=p.pre;wet.gain.value=p.mix*1.4;dry.gain.value=1-p.mix*.5};set(p);return{in:i,out:o,set}}},
@@ -358,7 +381,7 @@ const FX={
    const an=c.createAnalyser();an.fftSize=256;k.connect(an);const buf=new Float32Array(256);if(!(c instanceof OfflineAudioContext)){const tick=()=>{an.getFloatTimeDomainData(buf);let m=0;for(const v of buf)m=Math.max(m,Math.abs(v));const db=20*Math.log10(m+1e-9);g.gain.setTargetAtTime(db<p.thr?0:1,c.currentTime,.02);g._t=setTimeout(tick,20)};tick()}
    return{in:k,out:g,set:q=>{p=q;set(q)}}}},
 };
-const PARAM_NAMES={crackle:"Crackle",hiss:"Hiss",wow:"Wow",age:"Age",band:"Narrow",noise:"Static",drift:"Fading",room:"Room",low:"Low",mid:"Mid",midF:"Mid Hz",high:"High",thr:"Thresh",ratio:"Ratio",att:"Attack",rel:"Release",gain:"Gain",drive:"Drive",tone:"Tone",mix:"Mix",bits:"Bits",down:"Rate ÷",rate:"Rate",depth:"Depth",fb:"Feedback",q:"Q",base:"Freq",type:"LP·HP·BP",freq:"Freq",time:"Beats",pp:"Ping-pong",size:"Size",pre:"Pre-delay",damp:"Damp"};
+const PARAM_NAMES={shift:"Shift Hz",prob:"Chance",crackle:"Crackle",hiss:"Hiss",wow:"Wow",age:"Age",band:"Narrow",noise:"Static",drift:"Fading",room:"Room",low:"Low",mid:"Mid",midF:"Mid Hz",high:"High",thr:"Thresh",ratio:"Ratio",att:"Attack",rel:"Release",gain:"Gain",drive:"Drive",tone:"Tone",mix:"Mix",bits:"Bits",down:"Rate ÷",rate:"Rate",depth:"Depth",fb:"Feedback",q:"Q",base:"Freq",type:"LP·HP·BP",freq:"Freq",time:"Beats",pp:"Ping-pong",size:"Size",pre:"Pre-delay",damp:"Damp"};
 const CHAINS={
  "Voice":[["comp",{thr:-22,ratio:3,att:.005,rel:.2,gain:5}],["eq",{low:-4,mid:2,midF:2500,high:3}],["reverb",{size:1.6,pre:.02,mix:.18,damp:7000}]],
  "Radio":[["filter",{type:2,freq:1600,q:.9}],["dist",{drive:.35,tone:5000,mix:.7}],["comp",{thr:-30,ratio:8,att:.003,rel:.1,gain:10}]],
@@ -531,6 +554,12 @@ async function renderKit(){
    ["Tape hiss",5,c=>{const n=noise(c,5),f=c.createBiquadFilter(),g=c.createGain();f.type="highshelf";f.frequency.value=4000;f.gain.value=8;g.gain.value=.06;n.connect(f).connect(g).connect(c.destination);n.start()}],
    ["Radio static",4,c=>{const n=noise(c,4),f=c.createBiquadFilter(),g=c.createGain(),l=c.createOscillator(),lg=c.createGain();f.type="bandpass";f.frequency.value=2200;f.Q.value=.5;l.frequency.value=7;lg.gain.value=.15;g.gain.value=.3;l.connect(lg).connect(g.gain);l.start();n.connect(f).connect(g).connect(c.destination);n.start()}],
    ["Shortwave sweep",5,c=>{const o=c.createOscillator(),g=c.createGain(),n=noise(c,5),nf=c.createBiquadFilter(),ng=c.createGain();o.type="sine";o.frequency.setValueAtTime(400,0);o.frequency.exponentialRampToValueAtTime(3200,2.5);o.frequency.exponentialRampToValueAtTime(700,5);g.gain.value=.12;o.connect(g).connect(c.destination);o.start();nf.type="bandpass";nf.frequency.value=1800;ng.gain.value=.25;n.connect(nf).connect(ng).connect(c.destination);n.start();[1.1,2.6,3.9].forEach(t0=>{const b=c.createOscillator(),bg=c.createGain();b.frequency.value=1000;bg.gain.setValueAtTime(0,t0);bg.gain.linearRampToValueAtTime(.15,t0+.05);bg.gain.linearRampToValueAtTime(0,t0+.25);b.connect(bg).connect(c.destination);b.start()})}],
+   ["Lorenz drone",8,c=>{const b=c.createBuffer(2,c.sampleRate*8,c.sampleRate);let x=.1,y=0,z=0;const dt=.0035;const L=b.getChannelData(0),R=b.getChannelData(1);for(let i=0;i<L.length;i++){const dx=10*(y-x),dy=x*(28-z)-y,dz=x*y-8/3*z;x+=dx*dt;y+=dy*dt;z+=dz*dt;const e=Math.min(1,i/8000,(L.length-i)/20000);L[i]=x/22*e;R[i]=y/28*e}const s=c.createBufferSource();s.buffer=b;const f=c.createBiquadFilter();f.type="highpass";f.frequency.value=30;s.connect(f).connect(c.destination);s.start()},2],
+   ["Logistic noise",4,c=>{const b=c.createBuffer(1,c.sampleRate*4,c.sampleRate),d=b.getChannelData(0);let x=.5;for(let i=0;i<d.length;i++){const r=3.55+.45*(i/d.length);x=r*x*(1-x);d[i]=(x-.5)*.8*Math.min(1,(d.length-i)/4000)}const s=c.createBufferSource();s.buffer=b;s.connect(c.destination);s.start()}],
+   ["Henon glitch",3,c=>{const b=c.createBuffer(1,c.sampleRate*3,c.sampleRate),d=b.getChannelData(0);let x=0,y=0,h=0,hold=1;for(let i=0;i<d.length;i++){if(i%hold===0){const nx=1-1.4*x*x+y;y=.3*x;x=nx;h=x*.6;hold=1+Math.floor(Math.abs(y)*400)}d[i]=h*Math.min(1,(d.length-i)/3000)}const s=c.createBufferSource();s.buffer=b;s.connect(c.destination);s.start()}],
+   ["Chua buzz",3,c=>{const b=c.createBuffer(1,c.sampleRate*3,c.sampleRate),d=b.getChannelData(0);let x=.7,y=0,z=0;const a=15.6,bb=28,m0=-1.143,m1=-.714,dt=.006;for(let i=0;i<d.length;i++){const f=m1*x+.5*(m0-m1)*(Math.abs(x+1)-Math.abs(x-1));const dx=a*(y-x-f),dy=x-y+z,dz=-bb*y;x+=dx*dt;y+=dy*dt;z+=dz*dt;d[i]=x/3*Math.min(1,i/500,(d.length-i)/4000)}const s=c.createBufferSource();s.buffer=b;s.connect(c.destination);s.start()}],
+   ["Polivoks bass",1.5,c=>{const g=c.createGain(),f=c.createBiquadFilter(),w=c.createWaveShaper();w.curve=driveCurve(.6);f.type="lowpass";f.Q.value=18;f.frequency.setValueAtTime(3500,0);f.frequency.exponentialRampToValueAtTime(90,.6);g.gain.setValueAtTime(0,0);g.gain.linearRampToValueAtTime(.5,.005);g.gain.setValueAtTime(.5,1.1);g.gain.linearRampToValueAtTime(0,1.5);w.connect(f).connect(g).connect(c.destination);[[55,"sawtooth",0],[55.6,"square",-1200]].forEach(([fr,ty,dt])=>{const o=c.createOscillator();o.type=ty;o.frequency.value=fr;o.detune.value=dt;o.connect(w);o.start()})}],
+   ["Polivoks lead",2,c=>{const g=c.createGain(),f=c.createBiquadFilter(),w=c.createWaveShaper(),l=c.createOscillator(),lg=c.createGain();w.curve=driveCurve(.8);f.type="bandpass";f.Q.value=9;f.frequency.value=1400;l.frequency.value=6;lg.gain.value=900;l.connect(lg).connect(f.frequency);l.start();g.gain.setValueAtTime(0,0);g.gain.linearRampToValueAtTime(.35,.02);g.gain.setValueAtTime(.35,1.6);g.gain.linearRampToValueAtTime(0,2);w.connect(f).connect(g).connect(c.destination);const o=c.createOscillator(),o2=c.createOscillator();o.type="sawtooth";o2.type="sawtooth";o.frequency.setValueAtTime(330,0);o.frequency.exponentialRampToValueAtTime(440,.15);o2.frequency.value=443;o.connect(w);o2.connect(w);o.start();o2.start()}],
    ["Crackle",3,c=>{const b=c.createBuffer(1,c.sampleRate*3,c.sampleRate),d=b.getChannelData(0);for(let i=0;i<d.length;i++)d[i]=Math.random()<.0015?(Math.random()*2-1):0;const s=c.createBufferSource();s.buffer=b;const f=c.createBiquadFilter();f.type="highpass";f.frequency.value=800;s.connect(f).connect(c.destination);s.start()}],
   ];
   for(const [n,sec,fn,ch] of list)await mk(n,sec,fn,ch||1);
@@ -893,6 +922,94 @@ function autoEl(tr,kind){
   return box;
 }
 
+
+/* ================= ATELIER: offline transformations ================= */
+function fft(re,im,inv){const n=re.length;for(let i=1,j=0;i<n;i++){let b=n>>1;for(;j&b;b>>=1)j^=b;j^=b;if(i<j){let t=re[i];re[i]=re[j];re[j]=t;t=im[i];im[i]=im[j];im[j]=t}}
+  for(let len=2;len<=n;len<<=1){const ang=2*Math.PI/len*(inv?1:-1),wr=Math.cos(ang),wi=Math.sin(ang);for(let i=0;i<n;i+=len){let cr=1,ci=0;for(let j=0;j<len/2;j++){const a=i+j,b=a+len/2,xr=re[b]*cr-im[b]*ci,xi=re[b]*ci+im[b]*cr;re[b]=re[a]-xr;im[b]=im[a]-xi;re[a]+=xr;im[a]+=xi;const t=cr*wr-ci*wi;ci=cr*wi+ci*wr;cr=t}}}
+  if(inv)for(let i=0;i<n;i++){re[i]/=n;im[i]/=n}}
+const hann=N=>{const w=new Float64Array(N);for(let i=0;i<N;i++)w[i]=.5-.5*Math.cos(2*Math.PI*i/N);return w};
+function frameMag(x,pos,N,w){const re=new Float64Array(N),im=new Float64Array(N);for(let i=0;i<N;i++){const k=pos+i;re[i]=(k>=0&&k<x.length?x[k]:0)*w[i]}fft(re,im);const m=new Float64Array(N/2+1);for(let i=0;i<=N/2;i++)m[i]=Math.hypot(re[i],im[i]);return m}
+function synthRandom(mag,N){const re=new Float64Array(N),im=new Float64Array(N);for(let i=1;i<N/2;i++){const p=Math.random()*2*Math.PI;re[i]=mag[i]*Math.cos(p);im[i]=mag[i]*Math.sin(p);re[N-i]=re[i];im[N-i]=-im[i]}re[0]=0;fft(re,im,true);return re}
+/* generic spectral engine: outLen samples, magAt(ch, outFrameIndex) -> magnitude array */
+function spectralRender(b,outLen,N,magAt){
+  const H=N/2,w=hann(N),r=newBuf(b.numberOfChannels,outLen,b.sampleRate);
+  for(let c=0;c<b.numberOfChannels;c++){const y=r.getChannelData(c),acc=new Float64Array(outLen+N);
+    for(let f=0,o=0;o<outLen;f++,o+=H){const s=synthRandom(magAt(c,f,o),N);for(let i=0;i<N;i++)acc[o+i]+=s[i]*w[i]}
+    for(let i=0;i<outLen;i++)y[i]=acc[i]}
+  return normalizeTo(r,peakOfBuf(b)||.8);
+}
+function peakOfBuf(b){let m=0;for(let c=0;c<b.numberOfChannels;c++){const d=b.getChannelData(c);for(let i=0;i<d.length;i++)m=Math.max(m,Math.abs(d[i]))}return m}
+function normalizeTo(b,target){const p=peakOfBuf(b);if(p>0){const g=target/p;for(let c=0;c<b.numberOfChannels;c++){const d=b.getChannelData(c);for(let i=0;i<d.length;i++)d[i]*=g}}return b}
+const SP_N=sec=>{let n=256;while(n<sec*44100&&n<65536)n*=2;return n};
+const AT={
+ paul:{n:"Paulstretch",p:{stretch:8,win:.25},r:{stretch:[1.5,64,.5],win:[.05,1,.01]},
+  run(b,p){const N=SP_N(p.win),outLen=Math.min(Math.floor(b.length*p.stretch),b.sampleRate*600),w=hann(N),hin=N/2/p.stretch;
+   return spectralRender(b,outLen,N,(c,f)=>frameMag(b.getChannelData(c),Math.floor(f*hin)-N/2,N,w))}},
+ freeze:{n:"Spectral freeze",p:{at:.5,dur:12,win:.18},r:{at:[0,1,.01],dur:[1,120,1],win:[.03,.8,.01]},
+  run(b,p){const N=SP_N(p.win),w=hann(N),pos=Math.floor(p.at*(b.length-N));const mags=[];for(let c=0;c<b.numberOfChannels;c++)mags.push(frameMag(b.getChannelData(c),pos,N,w));
+   const outLen=Math.floor(p.dur*b.sampleRate),r=spectralRender(b,outLen,N,c=>mags[c]);fadeEdges(r,.3);return r}},
+ blur:{n:"Spectral blur",p:{amount:12,win:.09},r:{amount:[2,80,1],win:[.02,.4,.01]},
+  run(b,p){const N=SP_N(p.win),w=hann(N),H=N/2,F=Math.ceil(b.length/H)+1,K=p.amount|0;const all=[];
+   for(let c=0;c<b.numberOfChannels;c++){const x=b.getChannelData(c),fr=[];for(let f=0;f<F;f++)fr.push(frameMag(x,f*H-H,N,w));all.push(fr)}
+   return spectralRender(b,b.length,N,(c,f)=>{const fr=all[c],m=new Float64Array(N/2+1);let n=0;for(let k=Math.max(0,f-K);k<=Math.min(F-1,f+K);k++){const a=fr[k];for(let i=0;i<m.length;i++)m[i]+=a[i];n++}for(let i=0;i<m.length;i++)m[i]/=n;return m})}},
+ morph:{n:"Morph → copied clip",need:"copy",p:{curve:1,win:.09},r:{curve:[.2,5,.1],win:[.02,.4,.01]},
+  run(b,p,b2){const N=SP_N(p.win),w=hann(N),H=N/2,len=Math.max(b.length,b2.length);
+   return spectralRender(b,len,N,(c,f,o)=>{const t=Math.pow(o/len,p.curve);const A=frameMag(b.getChannelData(c%b.numberOfChannels),Math.floor(o/len*b.length)-H,N,w),B=frameMag(b2.getChannelData(c%b2.numberOfChannels),Math.floor(o/len*b2.length)-H,N,w);for(let i=0;i<A.length;i++)A[i]=Math.pow(A[i]+1e-9,1-t)*Math.pow(B[i]+1e-9,t);return A})}},
+ cross:{n:"Cross-synthesis (vocoder) with copied clip",need:"copy",p:{smooth:24,win:.05},r:{smooth:[1,120,1],win:[.01,.2,.005]},
+  run(b,p,b2){const N=SP_N(p.win),w=hann(N),H=N/2,len=b.length,S=p.smooth|0;
+   return spectralRender(b,len,N,(c,f,o)=>{const M=frameMag(b.getChannelData(c%b.numberOfChannels),o-H,N,w),C=frameMag(b2.getChannelData(c%b2.numberOfChannels),(o%Math.max(1,b2.length-N))-H,N,w);
+     const env=new Float64Array(M.length),cen=new Float64Array(M.length);const sm=(src,dst)=>{let acc=0;const q=[];for(let i=0;i<src.length;i++){acc+=src[i];q.push(src[i]);if(q.length>S)acc-=q.shift();dst[i]=acc/q.length}};sm(M,env);sm(C,cen);
+     for(let i=0;i<M.length;i++)M[i]=C[i]*env[i]/(cen[i]+1e-6);return M})}},
+ grain:{n:"Granular / brassage",p:{dur:10,size:.08,density:40,jitter:1,pitch:0,spread:3,rev:.15},r:{dur:[1,120,1],size:[.005,.5,.005],density:[2,300,1],jitter:[0,1,.01],pitch:[-24,24,1],spread:[0,24,.5],rev:[0,1,.01]},
+  run(b,p){const sr=b.sampleRate,outLen=Math.floor(p.dur*sr),r=newBuf(2,outLen,sr),L=r.getChannelData(0),R=r.getChannelData(1),src=[b.getChannelData(0),b.getChannelData(Math.min(1,b.numberOfChannels-1))];
+   const n=Math.floor(p.dur*p.density);for(let g=0;g<n;g++){const at=Math.floor(Math.random()*outLen),len=Math.floor(p.size*sr*(.5+Math.random())),cen=at/outLen*(1-p.jitter)+Math.random()*p.jitter,from=Math.floor(cen*(b.length-len*4));
+     const rate=Math.pow(2,(p.pitch+(Math.random()*2-1)*p.spread)/12),rv=Math.random()<p.rev,pan=Math.random(),gl=Math.cos(pan*Math.PI/2),gr=Math.sin(pan*Math.PI/2);
+     for(let i=0;i<len&&at+i<outLen;i++){const e=Math.sin(Math.PI*i/len)**2,ph=(rv?len-i:i)*rate,k=from+Math.floor(ph),fr=ph%1;const vL=(src[0][k]||0)*(1-fr)+(src[0][k+1]||0)*fr,vR=(src[1][k]||0)*(1-fr)+(src[1][k+1]||0)*fr;L[at+i]+=vL*e*gl;R[at+i]+=vR*e*gr}}
+   return normalizeTo(r,.9)}},
+ shred:{n:"Shred",p:{pieces:16,fade:.005},r:{pieces:[2,256,1],fade:[0,.05,.001]},
+  run(b,p){const n=p.pieces|0,cuts=[0];for(let i=1;i<n;i++)cuts.push(Math.floor(Math.random()*b.length));cuts.push(b.length);cuts.sort((a,b)=>a-b);const segs=[];for(let i=0;i<n;i++)segs.push([cuts[i],cuts[i+1]]);segs.sort(()=>Math.random()-.5);
+   const r=newBuf(b.numberOfChannels,b.length,b.sampleRate),F=Math.floor(p.fade*b.sampleRate);for(let c=0;c<b.numberOfChannels;c++){const x=b.getChannelData(c),y=r.getChannelData(c);let o=0;for(const[a,z]of segs){const l=z-a;for(let i=0;i<l;i++){const e=F?Math.min(1,i/F,(l-i)/F):1;y[o+i]=x[a+i]*e}o+=l}}return r}},
+ wavesets:{n:"Wavesets",p:{mode:0,n:3},r:{mode:[0,3,1],n:[2,12,1]},
+  run(b,p){const x0=b.getChannelData(0),z=[0];for(let i=1;i<x0.length;i++)if(x0[i-1]<0&&x0[i]>=0)z.push(i);z.push(x0.length);const sets=[];for(let i=0;i+1<z.length;i++)sets.push([z[i],z[i+1]]);
+   const plan=[];const m=p.mode|0,n=p.n|0;sets.forEach((s,i)=>{if(m===0)for(let k=0;k<n;k++)plan.push([s,0]);else if(m===1){if(i%n===0)plan.push([s,0])}else if(m===2)plan.push([s,1]);else{const j=Math.floor(i/n)*n;plan.push([sets[Math.min(sets.length-1,j+((i*7)%n))],0])}});
+   const len=Math.min(plan.reduce((a,[s])=>a+s[1]-s[0],0),b.sampleRate*600),r=newBuf(b.numberOfChannels,len,b.sampleRate);
+   for(let c=0;c<b.numberOfChannels;c++){const x=b.getChannelData(c),y=r.getChannelData(c);let o=0;for(const[[a,e],rv]of plan){for(let i=a;i<e&&o<len;i++)y[o++]=rv?x[e-1-(i-a)]:x[i];if(o>=len)break}}return r}},
+ stutter:{n:"Stutter",p:{slice:.125,repeats:4,prob:.5},r:{slice:[.03125,1,.03125],repeats:[2,16,1],prob:[0,1,.01]},
+  run(b,p){const S=Math.floor(spb()*p.slice*b.sampleRate),out=[];let len=0;for(let a=0;a<b.length;a+=S){const k=Math.random()<p.prob?p.repeats|0:1;for(let j=0;j<k;j++){out.push([a,Math.min(b.length,a+S),j]);len+=Math.min(b.length,a+S)-a}}
+   const r=newBuf(b.numberOfChannels,Math.min(len,b.sampleRate*600),b.sampleRate);for(let c=0;c<b.numberOfChannels;c++){const x=b.getChannelData(c),y=r.getChannelData(c);let o=0;for(const[a,e,j]of out){const g=Math.pow(.85,j);for(let i=a;i<e&&o<y.length;i++){const q=i-a,l=e-a;y[o++]=x[i]*g*Math.min(1,q/64,(l-q)/64)}}}return r}},
+ bend:{n:"Circuit bend",p:{chaos:.5,seed:1},r:{chaos:[0,1,.01],seed:[1,99,1]},
+  run(b,p){let s=p.seed*9301;const rnd=()=>(s=(s*9301+49297)%233280)/233280;const r=newBuf(b.numberOfChannels,b.length,b.sampleRate),sr=b.sampleRate;const ev=[];
+   for(let t=0;t<b.length;){const l=Math.floor(sr*(.02+rnd()*.4));ev.push([t,l,rnd()<p.chaos?Math.floor(rnd()*5):-1,rnd(),rnd()]);t+=l}
+   for(let c=0;c<b.numberOfChannels;c++){const x=b.getChannelData(c),y=r.getChannelData(c);for(const[t,l,k,u,v]of ev){const loop=Math.max(16,Math.floor(u*u*sr*.05)),bits=1+Math.floor(v*6),hold=1+Math.floor(u*40);
+     for(let i=0;i<l&&t+i<y.length;i++){let s2=x[t+i];if(k===0)s2=x[t+(i%loop)];else if(k===1)s2=Math.round(x[t+i]*(1<<bits))/(1<<bits);else if(k===2)s2=x[t+i-(i%hold)];else if(k===3)s2=Math.sign(x[t+i])*Math.min(1,Math.abs(x[t+i])*8)*.6;else if(k===4)s2=x[Math.min(x.length-1,t+Math.floor(i*(.5+v*1.5)))];y[t+i]=s2}}}return r}},
+ tapestop:{n:"Tape stop",p:{time:1.2},r:{time:[.1,6,.05]},
+  run(b,p){const sr=b.sampleRate,T=Math.min(b.length,Math.floor(p.time*sr)),st=b.length-T,r=newBuf(b.numberOfChannels,b.length,sr);
+   for(let c=0;c<b.numberOfChannels;c++){const x=b.getChannelData(c),y=r.getChannelData(c);y.set(x.subarray(0,st));let ph=st;for(let i=st;i<b.length;i++){const v=1-(i-st)/T;ph+=v*v;const k=Math.floor(ph),f=ph-k;y[i]=((x[k]||0)*(1-f)+(x[k+1]||0)*f)*Math.min(1,v*4)}}return r}},
+ varispeed:{n:"Varispeed (tape)",p:{speed:.5},r:{speed:[.1,4,.01]},run(b,p){return resample(b,p.speed)}},
+ revbeats:{n:"Reverse each beat",p:{div:1},r:{div:[.125,4,.125]},
+  run(b,p){const S=Math.max(64,Math.floor(spb()*p.div*b.sampleRate)),r=newBuf(b.numberOfChannels,b.length,b.sampleRate);for(let c=0;c<b.numberOfChannels;c++){const x=b.getChannelData(c),y=r.getChannelData(c);for(let a=0;a<x.length;a+=S){const e=Math.min(x.length,a+S);for(let i=a;i<e;i++)y[i]=x[e-1-(i-a)]*Math.min(1,(i-a)/32,(e-i)/32)}}return r}},
+ ringx:{n:"Ring-modulate with copied clip",need:"copy",p:{},r:{},
+  run(b,p,b2){const r=newBuf(b.numberOfChannels,b.length,b.sampleRate);for(let c=0;c<b.numberOfChannels;c++){const x=b.getChannelData(c),m=b2.getChannelData(c%b2.numberOfChannels),y=r.getChannelData(c);for(let i=0;i<x.length;i++)y[i]=x[i]*(m[i%m.length]||0)}return normalizeTo(r,.9)}},
+ convx:{n:"Convolve with copied clip",need:"copy",p:{},r:{},
+  async run(b,p,b2){const oc=new OfflineAudioContext(2,b.length+b2.length,b.sampleRate),s=oc.createBufferSource(),cv=oc.createConvolver();cv.normalize=true;cv.buffer=b2;s.buffer=b;s.connect(cv).connect(oc.destination);s.start();return normalizeTo(await oc.startRendering(),.9)}},
+};
+const AT_FR={paul:"Paulstretch",freeze:"Gel spectral",blur:"Flou spectral",morph:"Morphing → clip copié",cross:"Synthèse croisée (vocodeur) avec le clip copié",grain:"Granulaire / brassage",shred:"Déchiquetage",wavesets:"Wavesets",stutter:"Bégaiement",bend:"Circuit tordu",tapestop:"Arrêt de bande",varispeed:"Varispeed (bande)",revbeats:"Inverser chaque temps",ringx:"Modulation en anneau avec le clip copié",convx:"Convolution avec le clip copié"};
+const AT_PN={stretch:"×",win:"Window s",at:"Position",dur:"Length s",amount:"Frames",curve:"Curve",smooth:"Smooth",size:"Grain s",density:"Grains/s",jitter:"Scatter",pitch:"Pitch",spread:"Pitch spread",rev:"Reversed",pieces:"Pieces",fade:"Fade s",mode:"Repeat·Omit·Reverse·Shuffle",n:"N",slice:"Slice (beats)",repeats:"Repeats",prob:"Probability",chaos:"Chaos",seed:"Seed",time:"Time s",speed:"Speed",div:"Beats"};
+function fadeEdges(b,sec){const n=Math.floor(sec*b.sampleRate);for(let c=0;c<b.numberOfChannels;c++){const d=b.getChannelData(c);for(let i=0;i<n&&i<d.length;i++){d[i]*=i/n;d[d.length-1-i]*=i/n}}}
+let atLast={};
+function atelier(tr,c,x,y){
+  openMenu(x,y,Object.entries(AT).map(([k,v])=>[(lang==="fr"?AT_FR[k]:v.n),()=>atDialog(tr,c,k),v.need==="copy"&&!clipboard]));
+}
+function atDialog(tr,c,k){
+  const def=AT[k],p={...def.p,...(atLast[k]||{})};const d=$("#dAt");
+  const fields=Object.keys(def.p).map(key=>{const[mn,mx,st]=def.r[key];const inp=el("input",{type:"range",min:mn,max:mx,step:st});inp.value=p[key];const v=el("i",{},String(p[key]));
+    inp.oninput=()=>{p[key]=+inp.value;v.textContent=key==="mode"?["Repeat","Omit","Reverse","Shuffle"][p[key]|0]:String(p[key])};inp.oninput();return el("label",{},el("span",{},AT_PN[key]||key,v),inp)});
+  d.replaceChildren(el("h3",{},lang==="fr"?AT_FR[k]:def.n),...fields,el("div",{class:"row"},el("button",{onclick:()=>d.close()},"×"),el("button",{class:"on",onclick:async()=>{d.close();atLast[k]={...p};
+    const b2=def.need==="copy"&&clipboard?clipBuffer(clipboard):null;await processClip(tr,c,async b=>await def.run(b,p,b2))}},"OK")));
+  d.showModal();
+}
+function clipBuffer(c){const s=lib.get(c.snd);if(!s)return null;return sliceBuf(c.rev?reversed(s).buffer:s.buffer,c.rev?s.buffer.duration-(c.off+c.len):c.off,c.len)}
+
 /* ================= menus & clip operations ================= */
 function openMenu(x,y,items){
   const m=$("#menu");m.replaceChildren(...items.filter(Boolean).map(([lbl,fn,dis])=>lbl==="—"?el("hr"):el("button",{class:dis?"dis":"",onclick:()=>{closeMenu();if(!dis)fn()}},lbl)));
@@ -905,10 +1022,10 @@ let clipboard=null;
 function edit(fn){snapshot();fn();render();save();restartIfPlaying()}
 async function processClip(tr,c,fn){ // destructive process on the clip's visible part -> new sound
   const s=lib.get(c.snd);if(!s)return;status(t("working"));await new Promise(r=>setTimeout(r,30));
-  try{let b=sliceBuf(c.rev?reversed(s).buffer:s.buffer,c.rev?s.buffer.duration-(c.off+c.len):c.off,c.len);b=fn(b);
+  try{let b=sliceBuf(c.rev?reversed(s).buffer:s.buffer,c.rev?s.buffer.duration-(c.off+c.len):c.off,c.len);b=await fn(b);
     const ns=addSound({id:"proc:"+uid(),name:(c.name||s.name),buffer:b,src:"proc",credit:s.credit});storeSound(ns);
     edit(()=>{c.snd=ns.id;c.off=0;c.len=b.duration;c.rev=false;c.fadeIn=Math.min(c.fadeIn||0,b.duration);c.fadeOut=Math.min(c.fadeOut||0,b.duration)});renderMine()}
-  finally{status()}
+  catch(e){console.warn(e);toast("✕")}finally{status()}
 }
 function clipMenu(x,y,tr,c){
   openMenu(x,y,[
@@ -921,6 +1038,7 @@ function clipMenu(x,y,tr,c){
     [t("transpose"),()=>{const v=parseFloat(prompt(t("semis"),"0"));if(v&&Math.abs(v)<=24)processClip(tr,c,b=>pitchShift(b,v))}],
     [t("stretch"),()=>{const v=parseFloat(prompt(t("speed"),"100"));if(v&&v>=25&&v<=400&&v!==100)processClip(tr,c,b=>wsola(b,v/100))}],
     [t("denoise"),()=>processClip(tr,c,denoiseBuf)],
+    [t("atelier"),()=>setTimeout(()=>atelier(tr,c,x,y),10)],
     [t("toSounds"),()=>processClip(tr,c,b=>b)],
     ["—"],
     [t("loop"),()=>{const n=parseInt(prompt(t("times"),"4"));if(n>0&&n<=128)edit(()=>{for(let i=1;i<=n;i++)tr.clips.push({...c,id:uid(),start:c.start+c.len*i})})}],

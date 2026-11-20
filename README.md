@@ -7,16 +7,17 @@ https://mauktenieb.github.io/studio/
 ## What it does
 
 - Tracks with volume, pan, mute, solo, colour, order, duplication, and volume and pan automation.
-- An effect rack per track, in any order: EQ, compressor, distortion, bitcrusher, chorus, flanger, phaser, tremolo, auto-pan, wah, filter, delay with ping-pong, reverb, vibrato, gate; ten chain presets (Voice, Radio, Telephone, Lo-fi, Robot, Space, Cathedral, Doubler, Noise wall, Dub).
+- An effect rack per track, in any order: EQ, compressor, distortion, bitcrusher, chorus, flanger, phaser, tremolo, auto-pan, wah, filter, delay with ping-pong, reverb, vibrato, gate, ring modulator, frequency shifter (Hilbert), resonator, glitch buffer, vinyl, AM radio, room; ten chain presets (Voice, Radio, Telephone, Lo-fi, Robot, Space, Cathedral, Doubler, Noise wall, Dub).
 - Clips that move, trim from both edges, fade in and out, split, duplicate, copy, paste, repeat, mute, rename and change track.
 - Clip processing: reverse, normalize, gain, transpose with duration kept, speed change with pitch kept (WSOLA), denoise, bounce.
+- Workshop (clip menu): Paulstretch, spectral freeze, spectral blur, spectral morph and cross-synthesis (vocoder) with a copied clip, granular brassage, shred, wavesets (repeat, omit, reverse, shuffle), stutter, circuit bend, tape stop, varispeed, reverse each beat, ring modulation and convolution with a copied clip.
 - Master bus with its own effect rack and 23 mastering presets (Universal, Fire, Clarity, Tape, Warm, Punch, Bright, Loud, Wide, Vintage, Lo-fi, Bass boost, Vocal, Acoustic, Classical, Jazz, Hip-hop, EDM, Rock, Ambient, Podcast, Noise, Neutral): shelving EQ, three-band compression, tape saturation, stereo width, glue compression, limiter and soft clipper.
 - Loudness targets measured in LUFS after ITU-R BS.1770 (K-weighting, gating): −9 club, −11 CD, −14 streaming, −16 Apple and podcast, −23 EBU R128, −24 ATSC A/85; the export iterates until the mix lands on the target, with the peak held under the preset ceiling.
 - Room reverbs modelled from early reflections and frequency-dependent decay: closet, bathroom, kitchen, bedroom, living room, vocal booth, studio, classroom, car, stairwell, parking garage, club, theatre, concert hall, church, cathedral, cave, tunnel, plate, spring.
 - Tempo, metronome, count-in, snap to the sixteenth, loop region drawn on the ruler, chromatic tuner, lyrics pad.
 - Microphone recording onto the armed track, with optional input monitoring.
 - Live search in Internet Archive, restricted to public domain, CC0, CC BY and CC BY-SA items, with seventeen listening categories: field recordings, city, forest, animals, factory, vehicles, firearms, voices, languages, ethnography, traditional music, chants, jazz, classical, concerts, oral history, sound effects. Freesound gets sixteen quick searches on the same themes.
-- A built-in kit of sixteen sounds, synthesized by the browser at load time.
+- A built-in kit synthesized by the browser at load time: drums, basses, pads, drones, vinyl and radio noises, chaotic oscillators (Lorenz, logistic map, Hénon, Chua) and Polivoks-style voices.
 - Live search in Freesound, restricted to CC0 and CC BY sounds.
 - Import of any audio file the browser decodes.
 - Export as WAV mix, MP3 mix or WAV stems, with a credits file listing every borrowed sound.
