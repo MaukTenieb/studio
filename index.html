@@ -299,6 +299,13 @@ body.empty #emptyGo{display:flex}
 .create-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px}
 .create-grid button{flex-direction:column;min-height:110px;gap:8px;font-size:1.05em;font-weight:600;background:linear-gradient(rgba(11,9,8,.35),rgba(11,9,8,.75)),url(img/metal.webp) center/cover!important}
 .create-grid button svg{width:40px;height:40px}
+/* séquenceur : la bibliothèque remplit les rangées */
+button.sq-n{flex:none;min-width:44px;min-height:0;padding:3px 6px}
+.sq-add{align-self:flex-start;min-height:calc(var(--u)*.8);gap:6px;padding:0 14px;border-left:3px dashed #8a7a5a!important}
+body.picking #seq .sq-snd,body.picking #seq .sq-add{animation:sqpick 1s ease-in-out infinite;box-shadow:0 0 0 2px var(--rc,#f2e3a6),0 0 14px rgba(242,227,166,.45)}
+@keyframes sqpick{50%{box-shadow:0 0 0 2px var(--rc,#f2e3a6),0 0 4px rgba(242,227,166,.15)}}
+.sq-trk{display:grid;grid-template-columns:repeat(auto-fill,minmax(64px,1fr));gap:6px}
+.sq-trk button{min-height:52px;font:700 16px/1 "Barlow Semi Condensed",sans-serif;border-left:3px solid var(--rc)!important;gap:4px}.sq-trk button.on{background:#f2e3a6!important;color:#140f0a!important}.sq-trk small{color:#e3a64a}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 @media (max-width:760px){
   #app{grid-template-columns:1fr;grid-template-rows:auto 1fr auto auto}
@@ -1786,16 +1793,16 @@ function laneAt(x,y){return document.elementsFromPoint(x,y).find(n=>n.classList&
 /* au doigt : glisser fait défiler la liste ; un appui tenu (0,3 s) attrape le son pour le poser sur une piste ; une touche brève l'écoute */
 /* son pris au doigt : il reste en main jusqu'à ce qu'on touche une piste, à l'endroit voulu ; une seconde pression sur la ligne le repose */
 let PICK=null;
-function pickSound(item,row){if(PICK&&PICK.row===row){dropPick();return}dropPick();PICK={item,row};row.classList.add("held");document.body.classList.add("picking");try{navigator.vibrate&&navigator.vibrate(12)}catch(_){}toast((lang==="fr"?"Touchez une piste : ":"Tap a track: ")+item.name)}
+function pickSound(item,row){if(PICK&&PICK.row===row){dropPick();return}dropPick();PICK={item,row};row.classList.add("held");document.body.classList.add("picking");try{navigator.vibrate&&navigator.vibrate(12)}catch(_){}toast((lang==="fr"?(seqOn?"Touchez une rangée : ":"Touchez une piste : "):(seqOn?"Tap a row: ":"Tap a track: "))+item.name)}
 function dropPick(){if(PICK)PICK.row.classList.remove("held");PICK=null;document.body.classList.remove("picking")}
 async function placeItem(item,row,tr,at){row.classList.add("loading");let s;try{s=await ensureSound(item);s=await tempoFit(s,item)}catch(e){toast("✕")}row.classList.remove("loading");if(!s)return;
   snapshot();if(!tr){tr=freeTrack(-1);if(!tr)return;rebuildChains()}const c={id:uid(),snd:s.id,start:at,off:0,len:s.buffer.duration,gain:1};tr.clips.push(c);state.sel=c.id;render();save();restartIfPlaying()}
-addEventListener("pointerdown",e=>{if(!PICK)return;const lane=e.target.closest&&e.target.closest(".lane");if(!lane){if(!e.target.closest(".snd"))dropPick();return}e.preventDefault();e.stopPropagation();
+addEventListener("pointerdown",e=>{if(!PICK)return;const lane=e.target.closest&&e.target.closest(".lane");if(!lane){if(!e.target.closest(".snd,.sq-snd,.sq-add"))dropPick();return}e.preventDefault();e.stopPropagation();
   const tr=state.tracks.find(x=>x.id===lane.dataset.id),at=snapT(Math.max(0,(e.clientX-lane.getBoundingClientRect().left)/state.pps)),{item,row}=PICK;dropPick();placeItem(item,row,tr,at)},true);
 function touchHold(e,item,row){const x0=e.clientX,y0=e.clientY,id=e.pointerId;let held=false;
   const t=setTimeout(()=>{held=true;cleanup();pickSound(item,row)},300);
   const mv=ev=>{if(ev.pointerId===id&&Math.hypot(ev.clientX-x0,ev.clientY-y0)>9){clearTimeout(t);cleanup()}};
-  const up=ev=>{if(ev.pointerId!==id)return;clearTimeout(t);cleanup();if(!held&&ev.type==="pointerup")preview(item,row)};
+  const up=ev=>{if(ev.pointerId!==id)return;clearTimeout(t);cleanup();if(!held&&ev.type==="pointerup"){preview(item,row);if(seqOn)pickSound(item,row)}};
   const cleanup=()=>{removeEventListener("pointermove",mv);removeEventListener("pointerup",up);removeEventListener("pointercancel",up)};
   addEventListener("pointermove",mv);addEventListener("pointerup",up);addEventListener("pointercancel",up)}
 addEventListener("touchmove",ev=>{if(drag)ev.preventDefault()},{passive:false});
@@ -1805,7 +1812,8 @@ function startDrag(e,item,row,fromHold){
   const mv=ev=>{if(ev.pointerId!==drag.id)return;if(!drag.moved&&Math.hypot(ev.clientX-drag.x0,ev.clientY-drag.y0)>6){drag.moved=true;const g=$("#ghost");g.textContent=item.name;g.style.display="block"}
     if(drag.moved){const g=$("#ghost");g.style.left=ev.clientX+12+"px";g.style.top=ev.clientY+8+"px"}};
   const up=async ev=>{if(ev.pointerId!==drag.id)return;removeEventListener("pointermove",mv);removeEventListener("pointerup",up);removeEventListener("pointercancel",up);row.classList.remove("held");
-    $("#ghost").style.display="none";const d=drag;drag=null;if(!d.moved){if(!fromHold)preview(item,row);return}
+    $("#ghost").style.display="none";const d=drag;drag=null;if(!d.moved){if(!fromHold)preview(item,row);if(seqOn)pickSound(item,row);return}
+    const sqr=document.elementFromPoint(ev.clientX,ev.clientY)?.closest("#seq .sq-row,#seq .sq-add");if(sqr){seqTake(item,sqr.dataset.ri!=null?+sqr.dataset.ri:-1);return}
     const lane=laneAt(ev.clientX,ev.clientY);let tr,at;
     if(lane){tr=state.tracks.find(x=>x.id===lane.dataset.id);at=snapT(Math.max(0,(ev.clientX-lane.getBoundingClientRect().left)/state.pps))}
     else{const sc=$("#scroller").getBoundingClientRect();if(ev.clientX<sc.left||ev.clientX>sc.right||ev.clientY<sc.top||ev.clientY>sc.bottom)return;
@@ -2627,8 +2635,18 @@ function renderSeq(){const box=$("#seq");box.classList.toggle("on",seqOn);$("#bS
     const sel=el("button",{class:"sq-snd",style:`--rc:${col}`,title:lang==="fr"?"Choisir le son de cette rangée":"Choose this row's sound"},el("span",{class:"tp"},el("i",{},cur?cur.name:"—")));
     sel.onclick=async()=>{if(PICK){const {item,row}=PICK;dropPick();try{const s=await ensureSound(item);r.snd=s.id;renderSeq()}catch(e){toast("✕")}return}seqChooser(r,own,opts,col)};
     const cells=SEQ.edit?seqRowCtl(r):el("div",{class:"sq-cells",style:`--n:${rlen(r)};--rc:${col}`},...Array.from({length:rlen(r)},(_,k)=>{const b=el("b",{class:r.st[k]?"on":"","data-k":String(k)});b.onpointerdown=e=>{e.preventDefault();r.st[k]^=1;b.classList.toggle("on",!!r.st[k]);if(r.st[k]){const s=lib.get(r.snd);if(s&&!SEQ.play){const c=audio(),x=c.createBufferSource();x.buffer=s.buffer;x.connect(master.post||master.input);x.start()}}};return b}));
-    return el("div",{class:"sq-row",style:`--rc:${col}`},el("span",{class:"sq-n"},num(r.tr+1)),sel,cells)}));
+    const nb=el("button",{class:"sq-n",title:lang==="fr"?"Piste où écrire":"Track to write to"},num(r.tr+1));nb.onclick=()=>seqTrackPick(r,col);
+    return el("div",{class:"sq-row","data-ri":String(ri),style:`--rc:${col}`},nb,sel,cells)}));
+  const add=el("button",{class:"sq-add",title:lang==="fr"?"Ajouter une rangée":"Add a row"},);add.innerHTML='<svg><use href="#i-plus"/></svg><span class="lbl2">'+(lang==="fr"?"Rangée":"Row")+'</span>';
+  add.onclick=async()=>{if(PICK){const {item}=PICK;dropPick();seqTake(item,-1);return}if(SEQ.rows.length>=32)return;const n=SEQ.rows.length,used=new Set(SEQ.rows.map(r=>r.tr));let tr=0;while(used.has(tr)&&tr<31)tr++;const m=SESSION_MASKS[n%SESSION_MASKS.length];SEQ.rows.push({mask:m,tr,snd:"ik:"+MASK_CUTS[m][0],st:new Uint8Array(32),len:0,prob:1,ms:0});renderSeq();const r=SEQ.rows[n];seqChooser(r,MASK_CUTS[m].map((c,j)=>lib.get("ik:"+c)||maskItem(m,j)),seqSounds(),FAUNA_C[m])};
+  if(SEQ.rows.length<32)grid.append(add);
   box.replaceChildren(el("div",{class:"ms-row"},play,...lens,dice,ed,sw,bars,write,close),grid);fit()}
+async function seqTake(item,ri){let s;try{s=await ensureSound(item)}catch(e){toast("✕");return}
+  if(ri<0||!SEQ.rows[ri]){if(SEQ.rows.length>=32)return;const used=new Set(SEQ.rows.map(r=>r.tr));let tr=0;while(used.has(tr)&&tr<31)tr++;const n=SEQ.rows.length;SEQ.rows.push({mask:SESSION_MASKS[n%SESSION_MASKS.length],tr,snd:s.id,st:new Uint8Array(32),len:0,prob:1,ms:0})}
+  else SEQ.rows[ri].snd=s.id;renderSeq()}
+function seqTrackPick(r,col){const F=lang==="fr",sh=$("#sheet"),close=()=>{sh.classList.remove("on","wide");sh.replaceChildren()};
+  sh.classList.add("wide");sh.replaceChildren(el("div",{class:"lt"},el("b",{},F?"Écrire cette rangée sur la piste…":"Write this row to track…"),el("button",{onclick:close},"×")),
+    el("div",{class:"sq-trk"},...state.tracks.slice(0,32).map((t,i)=>{const b=el("button",{class:i===r.tr?"on":"",style:`--rc:${col}`},num(i+1),t.clips.length?el("small",{},"●"):null);b.onclick=()=>{r.tr=i;close();renderSeq()};return b})));sh.classList.add("on")}
 function seqRowCtl(r){const F=lang==="fr";const num=(lab,min,max,st,val,fmt,on)=>{const i=el("input",{type:"range",min,max,step:st,value:val}),o=el("output",{},fmt(val));i.oninput=()=>{o.textContent=fmt(+i.value);on(+i.value)};return el("label",{title:lab},el("span",{},lab),i,o)};
   const eu=el("button",{title:F?"Remplissage euclidien":"Euclidean fill"},"E");eu.onclick=()=>{const k=Math.max(1,r.st.slice(0,rlen(r)).reduce((a,b)=>a+b,0));r.st=euclid(k,rlen(r));toast("E("+k+","+rlen(r)+")")};
   return el("div",{class:"sq-ctl"},num(F?"Pas":"Steps",3,32,1,rlen(r),v=>String(v),v=>r.len=v),num(F?"Probabilité":"Probability",0,1,.05,r.prob,v=>Math.round(v*100)+" %",v=>r.prob=v),num(F?"Décalage":"Offset",-40,40,1,r.ms,v=>(v>0?"+":"")+v+" ms",v=>r.ms=v),eu)}

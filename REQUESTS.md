@@ -6,6 +6,8 @@ Critères de qualité appliqués à chaque lot : direction artistique, réalisme
 
 ## Fait
 
+- 20 nov. 14 h 50 : la bibliothèque remplit le séquenceur — toucher un son puis une rangée (téléphone), ou le glisser sur la rangée (ordinateur) ; bouton « + Rangée » ; numéro de rangée = piste où écrire, au choix 01 à 32. Relevé BandLab : BANDLAB-RELEVE.md.
+
 - 20 nov. 14 h 30 : mode simple par défaut (Créer, Pads, Rythme, Master), Atelier derrière un bouton ; feuille Créer à six portes (Rythme, Sons, Voix, Boîtes d'artistes, Film, Platines) ; gros + sur projet vide. Pads = surface Enveloppe × Hauteur existante, reprise telle quelle.
 
 - Station audio dans le navigateur, façon BandLab, un seul fichier, dépôt MaukTenieb/studio, en ligne sur https://mauktenieb.github.io/studio/
