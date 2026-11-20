@@ -36,6 +36,8 @@ Critères de qualité appliqués à chaque lot : direction artistique, réalisme
 - Export par lots : tranches d'un clip détectées entre les silences, normalisées à −1 dB de crête, nommées selon UCS (CatID_Nom_Créateur_Source).
 - Scène vue du dessus : chaque piste qui contient du son devient un objet à la couleur de son Mask ; gauche-droite = panoramique, profondeur = distance (réverbération partagée de la salle, absorption de l'air, volume) ; l'export suit ; objets superposés en éventail.
 - Zoom sémantique : à partir de 300 px par seconde, la forme d'onde d'un clip devient un spectrogramme (graves en bas, aigus en haut, couleur du Mask).
+- Chaleur des pistes : saturation douce après chaque fader, transparente à faible niveau.
+- Branches de projet dans la palette de commandes : créer (« branche nom »), ouvrir, fusionner (les pistes vides reçoivent le contenu de l'autre branche).
 - Collection « Huit univers sonores » : 133 entrées tirées des annexes.
 - DA de la kave Korhogo, photographique : acier bruni du flanc de borne, jonc chromé, plaque MAUK TENIEB, étiquettes Dymo, écrans à phosphore photographiés, disque photographié pour le Scratch, capuchons rétroéclairés, cave voûtée, étagères de bandes, deux photographies de groupe de la Fauna à l'ouverture.
 - Proportions continues : chaque aire (pistes, bibliothèque, tiroir du bas) suit le format de l'écran ; poignée de partage entre pistes et tiroir ; téléphone couché avec bibliothèque à droite.
@@ -57,8 +59,6 @@ Critères de qualité appliqués à chaque lot : direction artistique, réalisme
   - Espaces de travail par étape (composition, mixage, mastering), vue des circuits en nœuds, données spectrales sur les formes d'onde, spatialisation 3D avec Doppler, détection des coupes vidéo, micro-accordage (maqâm, raga, gamelan) et mesure de hauteur au cent près.
   - Banques des huit univers (power electronics, dark ambient, hip-hop et IDM, sound design, dub, orchestre, monde et micro-intervalles, ethnographie de terrain) en recherche directe dans Freesound et Wikimedia Commons.
 - Annexe du 20 nov. 2026, 5 h 14, un brouillon de DAW imaginaire (lu avec esprit critique, sans reprendre aucun de ses noms) :
-  - Branches de projet façon Git (versions Dub, Noise, Orchestrale de la même matière).
-  - Chaleur des pistes : pousser le gain sature en douceur, à la manière du matériel analogique.
   - Écartés : GESTURE-NET (remplace le MIDI, sans objet ici) ; séparateur sémantique par IA profonde (hors de portée du navigateur ; le studio garde attaques, harmonique / percussif, bandes, milieu / côtés).
   - Écartés : articulations MIDI, MPE, keyswitches (règle « zéro MIDI ») ; abandon du skeuomorphisme (la DA photographique de la kave prime) ; collaboration en temps réel (le studio tourne sans serveur, sur GitHub Pages).
 - Vignettes vidéo de KamOrhogo sur les pistes 19 à 32 : contrôle du rendu.

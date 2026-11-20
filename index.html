@@ -836,7 +836,10 @@ function buildChain(c,tr,dest){
   /* scène : la profondeur éloigne la piste (air qui absorbe les aigus, volume, réverbération partagée de la salle) */
   const dLp=c.createBiquadFilter(),dG=c.createGain(),dSend=c.createGain();dLp.type="lowpass";
   const dep=tr.depth||0;dLp.frequency.value=20000*Math.pow(.17,dep);dG.gain.value=1-dep*.62;dSend.gain.value=dep*.75;
-  node.connect(vol).connect(auto).connect(pan).connect(dLp).connect(dG).connect(mute).connect(dest);
+  /* chaleur : saturation douce après le fader ; transparente à faible niveau, elle chauffe quand on pousse */
+  if(!c._heat){const n=2048,cv=new Float32Array(n);for(let i=0;i<n;i++){const x=(i/(n-1)*2-1)*2;cv[i]=Math.tanh(x)/2}c._heat=cv}
+  const heat=c.createWaveShaper(),hp=c.createGain(),hu=c.createGain();heat.curve=c._heat;heat.oversample="2x";hp.gain.value=.5;hu.gain.value=2;
+  node.connect(vol).connect(hp).connect(heat).connect(hu).connect(auto).connect(pan).connect(dLp).connect(dG).connect(mute).connect(dest);
   if(!c._scene)c._scene=new Map();let bus=c._scene.get(dest);if(!bus){const g=c.createGain(),cv=c.createConvolver();cv.buffer=makeRoomIR(c,ROOMS[13]||ROOMS[ROOMS.length-1],1.2,1);g.connect(cv).connect(dest);bus=g;c._scene.set(dest,bus)}
   mute.connect(dSend).connect(bus);
   const an=c.createAnalyser?c.createAnalyser():null;if(an&&!(c instanceof OfflineAudioContext)){an.fftSize=512;mute.connect(an)}
@@ -857,7 +860,7 @@ function fixTrack(tr){tr.rack=tr.rack||[];tr.auto=tr.auto||{vol:[],pan:[]};delet
 const spb=()=>60/state.bpm;const bar=()=>spb()*4;
 const snapT=x=>state.snap?Math.round(x/(spb()/4))*(spb()/4):x;
 function projEnd(){let e=0;for(const tr of state.tracks)for(const c of tr.clips)e=Math.max(e,c.start+c.len);return e}
-const PROJ_KEYS=["bpm","loop","loopA","loopB","pps","tracks","masterVol","limiter","masterPreset","masterRack","target","lyrics","countIn","monitor","mInt","mEq"];
+const PROJ_KEYS=["bpm","loop","loopA","loopB","pps","tracks","masterVol","limiter","masterPreset","masterRack","target","lyrics","countIn","monitor","mInt","mEq","branch"];
 const projJSON=()=>JSON.stringify(Object.fromEntries(PROJ_KEYS.map(k=>[k,state[k]])));
 
 /* ================= undo ================= */
@@ -2391,10 +2394,15 @@ function cmdList(){const F=lang==="fr",tr=curTrack(),tn=tr?tr.name:"";const A=[]
   for(const k of Object.keys(CHAINS))add((F?"Chaîne ":"Chain ")+k+" → "+tn,"chain chaîne preset rack",()=>{const t=curTrack();if(!t)return;snapshot();t.rack=CHAINS[k].map(([ty,p])=>({id:uid(),type:ty,on:true,p:{...FX[ty].p,...p}}));rebuildChains();fxOpen=t.id;renderFx();render();save()},tn);
   for(const n of NB_LIST)add((F?"Boîte à bruit : ":"Noise box: ")+((F&&NB_FR[n])||n),"noise bruit",async()=>{const l=await renderNoiseBoxes();const sd=l[NB_LIST.indexOf(n)];if(!sd)return;const t=freeTrack(-1);if(!t)return;snapshot();t.clips.push({id:uid(),snd:sd.id,start:snapT(state.pos||0),off:0,len:sd.buffer.duration,gain:1});rebuildChains();render();save()});
   return A}
+async function cmdBranches(A,q){const F=lang==="fr",bs=await brList(),cur=state.branch||"main";
+  if(q)A.push({n:(F?"Créer la branche « ":"New branch “")+q+(F?" »":"”"),k:"",f:()=>brNew(q),h:"⎇"});
+  bs.filter(b=>b!==cur).forEach(b=>{A.push({n:(F?"Ouvrir la branche « ":"Open branch “")+b+(F?" »":"”"),k:("branche branch ouvrir open "+b).toLowerCase(),f:()=>brOpen(b),h:"⎇"});A.push({n:(F?"Fusionner la branche « ":"Merge branch “")+b+(F?" »":"”"),k:("branche branch fusionner merge "+b).toLowerCase(),f:()=>brMerge(b),h:"⎇"})})}
 function cmdOpen(){let box=$("#cmdk");if(!box){box=el("div",{id:"cmdk"});document.body.append(box);box.addEventListener("pointerdown",e=>{if(e.target===box)cmdClose()})}
   const inp=el("input",{type:"search",placeholder:lang==="fr"?"Une action, un effet, un son…":"An action, an effect, a sound…",enterkeyhint:"go"}),ul=el("ul");box.replaceChildren(el("div",{class:"box"},inp,ul));box.classList.add("on");
-  const all=cmdList();let hit=[],sel=0;
+  const all=cmdList();let hit=[],sel=0,brs=[];brList().then(b=>{brs=b;draw()});
   const draw=()=>{const q=inp.value.trim().toLowerCase(),w=q.split(/\s+/).filter(Boolean);hit=w.length?all.filter(a=>w.every(x=>a.k.includes(x))):all.slice(0,40);
+    const F=lang==="fr",cur=state.branch||"main",bq=q.replace(/^(branche|branch)\s*/,"");if(/^(branche|branch)/.test(q)||w.length){brs.filter(b=>b!==cur&&(!w.length||/^(branche|branch)/.test(q)||b.toLowerCase().includes(q))).forEach(b=>{hit.push({n:(F?"Ouvrir la branche « ":"Open branch “")+b+(F?" »":"”"),f:()=>brOpen(b),h:"⎇"});hit.push({n:(F?"Fusionner la branche « ":"Merge branch “")+b+(F?" »":"”"),f:()=>brMerge(b),h:"⎇"})})}
+    if(/^(branche|branch)\s+\S/.test(q))hit.unshift({n:(F?"Créer la branche « ":"New branch “")+inp.value.trim().replace(/^\S+\s+/,"")+(F?" »":"”"),f:()=>brNew(inp.value.trim().replace(/^\S+\s+/,"")),h:"⎇ "+cur});
     if(w.length)hit.push({n:(lang==="fr"?"Chercher le son « ":"Search sounds “")+inp.value.trim()+(lang==="fr"?" »":"”"),k:"",f:()=>{$("#gsQ").value=inp.value.trim();globalSearch(inp.value.trim())}});
     sel=Math.min(sel,hit.length-1);ul.replaceChildren(...hit.slice(0,60).map((a,i)=>{const li=el("li",{class:i===sel?"on":""},el("span",{},a.n),a.h?el("small",{},a.h):"");li.onclick=()=>{cmdClose();a.f()};return li}))};
   inp.oninput=()=>{sel=0;draw()};inp.onkeydown=e=>{if(e.key==="ArrowDown"){sel=Math.min(hit.length-1,sel+1);draw();e.preventDefault()}else if(e.key==="ArrowUp"){sel=Math.max(0,sel-1);draw();e.preventDefault()}else if(e.key==="Enter"){const a=hit[sel];cmdClose();a&&a.f()}else if(e.key==="Escape")cmdClose()};
@@ -2434,6 +2442,17 @@ function renderScene(){const box=$("#scene");box.classList.toggle("on",sceneOn);
   box.replaceChildren(...objs.map(x=>x[0]),close);if(!list.length)box.append(el("div",{class:"note",style:"position:absolute;left:50%;top:50%;transform:translate(-50%,-50%)"},"…"))}
 $("#bScene").onclick=()=>drawer("scene");
 addEventListener("resize",()=>{if(sceneOn)renderScene()});
+
+/* ================= branches de projet : plusieurs versions de la même matière, à la manière de Git ================= */
+async function brList(){return(await dbAll("proj").catch(()=>[])).filter(x=>x&&typeof x==="object"&&x.br).map(x=>x.br).sort()}
+async function brSave(name){await dbPut("proj","br:"+name,{br:name,json:projJSON(),t:Date.now()})}
+async function brOpen(name){const cur=state.branch||"main";await brSave(cur);const r=await dbGet("proj","br:"+name).catch(()=>null);if(!r)return;stop();snapshot();
+  const o=JSON.parse(r.json);Object.assign(state,o);state.branch=name;state.tracks.forEach(fixTrack);const ids=new Set(state.tracks.flatMap(tr=>tr.clips.map(c=>c.snd)));for(const id of ids)if(!lib.has(id))await ensureSound({id}).catch(()=>null);
+  fillTracks();rebuildMaster();rebuildChains();syncUI();render();save();toast("⎇ "+name)}
+async function brNew(name){name=name.trim().slice(0,40);if(!name)return;await brSave(state.branch||"main");state.branch=name;await brSave(name);save();toast("⎇ "+name)}
+async function brMerge(name){const r=await dbGet("proj","br:"+name).catch(()=>null);if(!r)return;const o=JSON.parse(r.json);snapshot();let n=0;
+  o.tracks.forEach((t,i)=>{const mine=state.tracks[i];if(mine&&!mine.clips.length&&t.clips.length){mine.clips=t.clips.map(c=>({...c,id:uid()}));mine.rack=t.rack||[];n++}});
+  const ids=new Set(state.tracks.flatMap(tr=>tr.clips.map(c=>c.snd)));for(const id of ids)if(!lib.has(id))await ensureSound({id}).catch(()=>null);rebuildChains();render();save();toast((lang==="fr"?"Fusion : ":"Merged: ")+n)}
 </script>
 </body>
 </html>
