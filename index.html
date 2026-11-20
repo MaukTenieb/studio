@@ -243,32 +243,38 @@ dialog .col{display:flex;flex-direction:column;gap:6px}
   .thead canvas.fig,.thead .kam{width:calc(var(--u)*1.1)}
 }
 
-/* images de la kave (Mauk Tenieb, 20 nov. 2026) */
-#kaveIn{position:fixed;inset:0;z-index:99;background:#0b0908 url(img/kave.webp) center/cover no-repeat;transition:opacity 1.4s ease;pointer-events:auto}
+/* matières de la kave (images de Mauk Tenieb, 20 nov. 2026) : acier bruni lisse, phosphore, disque sur plateau, bandes, Dymo ; une lumière chaude tombe du tube, en haut */
+#kaveIn{position:fixed;inset:0;z-index:99;background:#0b0908 var(--kave) center/cover no-repeat;transition:opacity 1.4s ease}
 #kaveIn.out{opacity:0;pointer-events:none}
 @media (prefers-reduced-motion:reduce){#kaveIn{transition:none}}
-#console{background:linear-gradient(rgba(11,9,8,.8),rgba(11,9,8,.9)),url(img/kave.webp) center 70%/cover}
-aside{background:linear-gradient(rgba(24,21,17,.86),rgba(18,16,13,.93)),url(img/shelves.webp) center/cover}
-.pad{background:#0c120e url(img/pad.webp) center/cover no-repeat!important;box-shadow:inset 0 0 0 2px #050605,inset 0 6px 18px rgba(0,0,0,.8),0 1px 0 rgba(255,255,255,.1)}
-.pad .ax{color:rgba(140,255,170,.75);text-shadow:0 0 6px rgba(80,255,120,.5)}
-.pad .disc{position:absolute;left:50%;top:50%;width:min(86%,86vh);aspect-ratio:1;max-height:92%;transform:translate(-50%,-50%);background:url(img/disc.webp) center/contain no-repeat;pointer-events:none;filter:drop-shadow(0 4px 10px rgba(0,0,0,.8))}
-.pad .disc{width:auto;height:92%}
+@media (orientation:portrait){#kaveIn{background-size:100% auto}}
+html,body{background:#0b0908}
+header{background:linear-gradient(rgba(255,196,120,.11),rgba(0,0,0,0) 45%,rgba(0,0,0,.32)),url(img/steel.webp) 0 0/512px;border-bottom:1px solid #050403;box-shadow:inset 0 1px 0 rgba(255,222,170,.2),0 3px 8px rgba(0,0,0,.6)}
+footer{background:linear-gradient(rgba(0,0,0,.3),rgba(255,196,120,.04)),url(img/steel.webp) 180px 0/512px;border-top:1px solid #050403;box-shadow:inset 0 1px 0 rgba(255,222,170,.12)}
+#ruler{background:linear-gradient(rgba(0,0,0,.45),rgba(0,0,0,.6)),url(img/steel.webp) 0 -90px/512px}
+.thead{background:linear-gradient(rgba(255,210,150,.05),rgba(0,0,0,.28)),url(img/steel.webp) var(--sx,0) var(--sy,0)/512px!important;border-bottom:1px solid #070605;box-shadow:inset 5px 0 0 var(--c),inset 0 1px 0 rgba(255,222,170,.09)}
+.track:nth-child(4n+2) .thead{--sx:-130px;--sy:-200px}.track:nth-child(4n+3) .thead{--sx:-260px;--sy:-60px}.track:nth-child(4n+4) .thead{--sx:-390px;--sy:-330px}
+.thead .name{flex:0 0 auto;width:auto;min-width:2.9em;field-sizing:content;padding:1px 7px 2px;margin-right:auto;background:linear-gradient(#1c1a18,#0d0c0b 55%,#171513);color:#efe6d4;font-weight:700;letter-spacing:.14em;text-transform:uppercase;text-shadow:0 1px 0 rgba(0,0,0,.9),0 -1px 0 rgba(255,255,255,.18);border-radius:1px;box-shadow:0 1px 1px rgba(0,0,0,.7),inset 0 1px 0 rgba(255,255,255,.07);clip-path:polygon(0 8%,100% 0,99% 94%,1% 100%)}
+.thead .kam{background:radial-gradient(ellipse at 50% 35%,#191714,#070606);box-shadow:inset 0 2px 5px rgba(0,0,0,.9),0 1px 0 rgba(255,222,170,.1)}
+aside{background:linear-gradient(rgba(14,12,10,.8),rgba(9,8,7,.92)),var(--shelves) center/cover}
+#console{background:#0c0a08}
+.strip{background:radial-gradient(circle at 7px 7px,#7a6d5c 0 1.6px,#1b1714 2.2px,transparent 2.8px),radial-gradient(circle at calc(100% - 7px) calc(100% - 7px),#7a6d5c 0 1.6px,#1b1714 2.2px,transparent 2.8px),linear-gradient(rgba(255,210,150,.06),rgba(0,0,0,.3)),url(img/steel.webp) var(--sx,0) 0/512px!important;border:1px solid #070605!important;box-shadow:inset 0 1px 0 rgba(255,222,170,.12)}
+.strip:nth-child(3n+2){--sx:-170px}.strip:nth-child(3n+3){--sx:-340px}
+#perform{background:linear-gradient(rgba(11,9,8,.62),rgba(11,9,8,.86)),url(img/cave.webp) center 40%/cover!important}
+.pad{background:#060807 var(--crtA) center/cover no-repeat!important;box-shadow:inset 0 0 0 2px #040403,inset 0 8px 20px rgba(0,0,0,.85),0 1px 0 rgba(255,222,170,.1)}
+.pads>div:nth-child(2) .pad:not(.tt){background-image:var(--crtB)!important}
+.pad .ax{color:rgba(150,255,175,.8);text-shadow:0 0 6px rgba(80,255,120,.55)}
+.pad.tt{background:radial-gradient(ellipse at 50% 0%,rgba(255,200,130,.16),transparent 60%),linear-gradient(rgba(0,0,0,.35),rgba(0,0,0,.55)),url(img/steel.webp) 0 0/512px!important}
+.pad.tt .ax{color:rgba(240,225,200,.65);text-shadow:0 1px 0 #000}
+.pad .disc{position:absolute;left:50%;top:50%;height:94%;aspect-ratio:1;transform:translate(-50%,-50%);background:url(img/disc.webp) center/contain no-repeat;pointer-events:none;filter:drop-shadow(0 6px 10px rgba(0,0,0,.85))}
+.pad.tt .dot{opacity:.35}
 .fader .cap{background:url(img/cap.webp) center/100% 100% no-repeat!important;height:24px!important;box-shadow:0 3px 5px rgba(0,0,0,.6)}
-.kitg.fauna>summary{background:linear-gradient(90deg,rgba(11,9,8,.55),rgba(11,9,8,.2)),url(img/dymo.webp) center/cover;color:#f3ead6;padding:10px 8px;border-radius:3px;text-shadow:0 1px 2px #000}
-
-header,footer{background:linear-gradient(rgba(16,13,10,.42),rgba(12,10,8,.62)),url(img/plate.webp) center/360px}
-#deck{flex:1 1 0;min-width:0;align-self:stretch;margin:-7px 0;background:url(img/transport.webp) center/contain no-repeat;opacity:.95}
-@media (max-width:1100px){#deck{display:none}}
-.thead{background:linear-gradient(90deg,rgba(18,14,10,.62),rgba(18,14,10,.4)),url(img/flank.webp) left top/var(--head) auto fixed!important}
-#console{background:linear-gradient(rgba(11,9,8,.55),rgba(11,9,8,.75)),url(img/strips.webp) 0 0/auto 100% repeat-x!important}
-.strip{background:linear-gradient(rgba(12,10,8,.8),rgba(12,10,8,.86)),url(img/strips.webp) 0 0/800% 100% no-repeat!important}
-.strip:nth-child(8n+1){background-position:0 0,0.000% 0!important}.strip:nth-child(8n+2){background-position:0 0,14.286% 0!important}.strip:nth-child(8n+3){background-position:0 0,28.571% 0!important}.strip:nth-child(8n+4){background-position:0 0,42.857% 0!important}.strip:nth-child(8n+5){background-position:0 0,57.143% 0!important}.strip:nth-child(8n+6){background-position:0 0,71.429% 0!important}.strip:nth-child(8n+7){background-position:0 0,85.714% 0!important}.strip:nth-child(8n+8){background-position:0 0,100.000% 0!important}
-#perform{background:linear-gradient(rgba(11,9,8,.55),rgba(11,9,8,.8)),url(img/cave.webp) center 40%/cover!important}
-.pads>div:nth-child(2) .pad{background-image:url(img/pad2.webp)!important}
+.kitg.fauna>summary{background:linear-gradient(90deg,rgba(11,9,8,.6),rgba(11,9,8,.25)),url(img/dymo.webp) center/cover;color:#f3ead6;padding:10px 8px;border-radius:2px;text-shadow:0 1px 2px #000}
 </style>
 </head>
 <body>
 <div id="kaveIn" aria-hidden="true"></div>
+<script>(()=>{const r=n=>1+Math.floor(Math.random()*n),c=r(4);let d=r(4);if(d===c)d=d%4+1;const st=document.documentElement.style;st.setProperty("--kave",`url(img/kave-${r(4)}.webp)`);st.setProperty("--crtA",`url(img/crt-${c}.webp)`);st.setProperty("--crtB",`url(img/crt-${d}.webp)`);st.setProperty("--shelves",`url(img/shelves-${r(3)}.webp)`)})();</script>
 <svg style="display:none" xmlns="http://www.w3.org/2000/svg">
   <symbol id="i-play" viewBox="0 0 24 24"><path d="M7 4l13 8-13 8z" fill="currentColor"/></symbol>
   <symbol id="i-stop" viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" fill="currentColor"/></symbol>
@@ -333,8 +339,7 @@ header,footer{background:linear-gradient(rgba(16,13,10,.42),rgba(12,10,8,.62)),u
     <button id="bTuner" data-tt="tuner" title="Tuner"><svg><use href="#i-fork"/></svg></button>
   </div>
   <div class="sp"></div>
-  <div id="deck" aria-hidden="true"></div>
-  <div id="vu" title="VU"><canvas id="vuC"></canvas></div>
+    <div id="vu" title="VU"><canvas id="vuC"></canvas></div>
   <div class="grp">
     <button id="bUndo" title="Undo (Ctrl+Z)"><svg><use href="#i-undo"/></svg></button>
     <button id="bNew" title="New project"><svg><use href="#i-new"/></svg></button>
@@ -1381,7 +1386,7 @@ function renderPerform(){
   box.replaceChildren(el("div",{class:"pads"},...PAD.map((pd,i)=>{
     const chips=el("div",{class:"cats"},...Object.entries(PERF).map(([k,d])=>{const b=el("button",{class:pd.t===k?"on":""},pf(k,0));b.onclick=()=>{pd.t=k;if(pd.act){master.perf[i].engage(k,pd.x,pd.y)}renderPerform()};return b}));
     const lock=el("button",{class:"lock"+(pd.lock?" on":""),title:"Lock"},"⏸");lock.onclick=()=>{pd.lock=!pd.lock;if(!pd.lock&&pd.act){pd.act=false;master.perf[i].release()}renderPerform()};
-    const pad=el("div",{class:"pad"+(pd.act?" act":"")},el("span",{class:"ax x"},pf(pd.t,1)),el("span",{class:"ax y"},pf(pd.t,2)),el("i",{class:"dot",style:`left:${pd.x*100}%;top:${(1-pd.y)*100}%`}));if(pd.t==="scratch")pad.prepend(el("b",{class:"disc",style:`transform:translate(-50%,-50%) rotate(${pd.x*720}deg)`}));
+    const pad=el("div",{class:"pad"+(pd.act?" act":"")+(pd.t==="scratch"?" tt":"")},el("span",{class:"ax x"},pf(pd.t,1)),el("span",{class:"ax y"},pf(pd.t,2)),el("i",{class:"dot",style:`left:${pd.x*100}%;top:${(1-pd.y)*100}%`}));if(pd.t==="scratch")pad.prepend(el("b",{class:"disc",style:`transform:translate(-50%,-50%) rotate(${pd.x*720}deg)`}));
     pad.addEventListener("pointerdown",e=>{e.preventDefault();audio();pad.setPointerCapture(e.pointerId);const r=pad.getBoundingClientRect();const at=ev=>{pd.x=clamp((ev.clientX-r.left)/r.width,0,1);pd.y=clamp(1-(ev.clientY-r.top)/r.height,0,1);const d=pad.querySelector(".dot");d.style.left=pd.x*100+"%";d.style.top=(1-pd.y)*100+"%";const ds=pad.querySelector(".disc");if(ds)ds.style.transform=`translate(-50%,-50%) rotate(${pd.x*720}deg)`};
       at(e);pd.act=true;pad.classList.add("act");master.perf[i].engage(pd.t,pd.x,pd.y);
       const mv=ev=>{if(ev.pointerId!==e.pointerId)return;at(ev);master.perf[i].move(pd.x,pd.y)};
