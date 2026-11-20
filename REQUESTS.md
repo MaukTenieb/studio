@@ -72,6 +72,13 @@ Critères de qualité appliqués à chaque lot : direction artistique, réalisme
 
 - Scène : deux objets posés l'un sur l'autre proposent trois touches. Ils se repoussent (chacun creuse de 7 dB le spectre de l'autre à sa fréquence dominante, et ils s'écartent), se fondent (même place, chacun module l'autre en anneau) ou restent tels quels.
 
+- Fusion (20 nov., 6 h 04 : « conserve tous les ajouts mais fusionne, assemble, construis, pense, innove ») :
+  - la loupe du clip réunit spectre (gomme, réparation), échelle réelle en cents et fiche de terrain ; l'accordage mesuré passe d'un geste dans la fiche ;
+  - les boîtes d'artistes deviennent des étiquettes Dymo sur les étagères de la kave : on en sort une, le studio prend sa forme ;
+  - la dérive apprend : chaque état gardé devient une branche datée « garde n » et pousse les dérives suivantes vers sa direction, chaque retour les en éloigne ; les fréquences dérivent sur une échelle logarithmique ;
+  - noms des effets en français quand le studio parle français.
+- Sauvegardes datées et jouables : https://mauktenieb.github.io/studio/versions/
+
 ## À trancher par Mauk Tenieb
 
 - Figurines 3D des pistes 01 à 18 : elles restent en 3D, comme demandé ; la règle photographique de la DA appelle des portraits photographiques. Décision réservée à l'auteur.

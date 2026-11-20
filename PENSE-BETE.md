@@ -30,7 +30,7 @@ Claude relit ce fichier avant chaque lot, puis REQUESTS.md. Chaque ligne reprend
 
 ## Méthode
 
-- Sauvegarde datée avant chaque lot et après chaque lot (python3 /home/claude/gen/snap.py <commit> « libellé ») : copie jouable dans versions/<date>/, liste sur https://mauktenieb.github.io/studio/versions/, étiquette git sauvegarde-<date>. Rembobiner : remettre index.html de la sauvegarde voulue.
+- Sauvegarde datée avant chaque lot et après chaque lot (python3 /home/claude/gen/snap.py <commit> « libellé ») : copie jouable dans versions/<date>/, liste sur https://mauktenieb.github.io/studio/versions/ (le proxy refuse l'envoi des étiquettes git : le dossier versions/ fait foi). Rembobiner : remettre index.html de la sauvegarde voulue.
 
 - Reformuler chaque demande en français simple avant d'agir.
 - Faire le travail seul ; tester soi-même sur ordinateur, téléphone debout, téléphone couché ; jamais confier un test ni un contrôle à Mauk Tenieb.
