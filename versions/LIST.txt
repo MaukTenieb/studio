@@ -1,3 +1,5 @@
+2026-11-20-19h24|a9c23cf|téléphone : couché à deux colonnes, barre du clip, 44 px, 11 px
+2026-11-20-19h05|a9c23cf|avant les corrections de l'analyse
 2026-11-20-14h41|e78324a|séquenceur rempli
 2026-11-20-14h25|ef1178a|mode simple
 2026-11-20-13h59|0e8a2fa|séquenceur : choix des sons au toucher

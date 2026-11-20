@@ -88,7 +88,11 @@ Critères de qualité appliqués à chaque lot : direction artistique, réalisme
 
 ## À faire
 
+- 20 nov. 19 h 04 : corriger le Studio d'après docs/analyse/ECARTS.md (93 écarts, enregistrement au micro retiré), lot par lot : téléphone, son, calculs lourds hors du fil principal, plafonds, collections, règles.
+
 ## Écarté, avec raison
+
+- 20 nov. 19 h 04 : enregistrement au micro (latence des prises, décompte, plusieurs pistes armées, Flashback, rangées de prises, niveau d'entrée) : retiré de l'analyse par Mauk Tenieb (« le point 4 : à retirer »).
 
 - GESTURE-NET, articulations MIDI, MPE, keyswitches : règle « zéro MIDI ».
 - Séparateur sémantique par IA profonde : hors de portée du navigateur ; le studio garde attaques, harmonique / percussif, bandes, milieu / côtés.

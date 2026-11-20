@@ -6,23 +6,11 @@ Gravité choisie : la plus haute des gravités d'origine, baissée d'un cran qua
 
 ## Fait
 
-Zéro écart corrigé à la date de cette liste.
+- 20 nov. 19 h 24 : E-01 ; E-02 ; E-16 ; E-60. Téléphone couché : bibliothèque à droite, tiroirs sur toute la largeur, console à tranches en deux colonnes avec faders, platines avec disques. Barre du clip dans le flux du pied (4 touches sur 5 au doigt, la cinquième au défilement). Cibles : 0 % sous 44 px et 0 % de texte sous 11 px sur iPhone 13 debout et couché, dans les neuf écrans mesurés (contre 96 à 100 % et 21 à 76 %). Téléprompteur : la marge de fin n'entre plus dans le calcul, M et S restent fixes.
 
 ## À faire
 
 ### Bloquant
-
-- E-01 · bloquant · Téléphone couché : tiroirs, bibliothèque, console, pads, Rythme, Master et scène rognés.
-  - Experts : 6 (10-02, 06-08, 03-11, 05-02, 02-04, 08-10). Gravités d'origine : 10-02 bloquant, 06-08 important, 03-11 important, 05-02 important (partie couchée), 02-04 bloquant (partie couchée), 08-10 important (partie scène).
-  - Preuve : En 664 × 390 : bibliothèque en bas sur 156 px (40 % de la hauteur), 1 piste visible, 0 son posable après 4 gestes (10, 03) ; console de 60 à 65 px sans faders ni touche D (02, 10) ; platines sans disques, pads de 317 × 56 px (10) ; Rythme sans rangée visible, Écrire coupé (05, 10) ; Master sur 150 px environ, 40 commandes sous 44 px, texte à 10,2 px (06) ; scène de 664 × 64 px (08). Cause : `@media (max-width:760px)` (lignes 259 et 310) traite le paysage comme le portrait. Captures : [10-iphone-paysage-atelier-console](captures/10-iphone-paysage-atelier-console.webp), [10-iphone-paysage-son-pris](captures/10-iphone-paysage-son-pris.webp), [06-master-iphone-paysage](captures/06-master-iphone-paysage.webp), [05-iphone-paysage-rythme17](captures/05-iphone-paysage-rythme17.webp), [03-larsen-pris-iphone-paysage](captures/03-larsen-pris-iphone-paysage.webp), [08-iphone-paysage-scene](captures/08-iphone-paysage-scene.webp).
-  - Correction : Règle `@media (orientation:landscape) and (max-height:500px)` : bibliothèque à droite sur 32 % de la largeur (`#app{grid-template-columns:1fr 32%}`, `aside{grid-row:1/-1;grid-column:2;height:auto}`) ; tiroir ouvert sur toute la hauteur sous l'en-tête dans la colonne de gauche, pistes repliées ; Master et scène en plein écran. Contrôle : faders de 120 px ou plus, disques de 140 px ou plus, pads de 200 × 150 px ou plus, 5 sons visibles, rangées du Rythme visibles avec Écrire entier.
-  - Charge de la machine : existe quelle que soit la charge.
-
-- E-02 · bloquant · Barre d'actions du clip invisible au doigt : loupe, fiche de terrain, échelle, tranches et étirement hors d'atteinte.
-  - Experts : 3 (07-01, 08-01, 10-01). Gravités d'origine : 07-01 bloquant, 08-01 bloquant, 10-01 bloquant.
-  - Preuve : `#abar` (CSS ligne 197, `z-index:12` dans le pied) passe sous `.lane` en portrait et sous le `canvas` du clip en paysage : `elementFromPoint` au centre des 5 touches rend « lane » ou « CANVAS » (07, 08, 10, trois mesures séparées). La ligne 397 masque en plus la touche Master quand un clip est choisi. Le menu de l'appui long (20 entrées) omet Loupe, fiche et échelle. Captures : [10-iphone-barre-clip-verif](captures/10-iphone-barre-clip-verif.webp), [08-iphone-barre-clip-cachee](captures/08-iphone-barre-clip-cachee.webp), [08-iphone-paysage-barre-clip-cachee](captures/08-iphone-paysage-barre-clip-cachee.webp), [07-barre-clip-iphone](captures/07-barre-clip-iphone.webp).
-  - Correction : 1. Sous 760 px, sortir `#abar` de la pile du pied : `position:fixed` juste au-dessus du pied, `z-index` supérieur à celui de `#tracks` (ou `footer{z-index:20}`). 2. Retirer `.master` de la règle de la ligne 397. 3. Ajouter Loupe, fiche (✎) et échelle (♪) au menu de l'appui long (`clipMenu`, vers la ligne 2246) et du double toucher. 4. Touches de 44 × 44 px. Contrôle : `elementFromPoint` rend la touche visée, sur iphone et iphone-paysage.
-  - Charge de la machine : existe quelle que soit la charge.
 
 - E-03 · bloquant · Calculs lourds sur le fil principal : Paulstretch, séparation harmonique / percussive, Atelier et analyse de hauteur gèlent la page sans avancement ni arrêt.
   - Experts : 3 (04-01, 07-02, 08-02). Gravités d'origine : 04-01 bloquant, 07-02 bloquant, 08-02 important.
@@ -84,31 +72,7 @@ Zéro écart corrigé à la date de cette liste.
   - Correction : Seuil adaptatif : écart de l'image courante rapporté à la médiane des écarts des 2 s précédentes (coupe au-delà de 4 fois la médiane et de 0,04) ; curseur de sensibilité à pictogramme ciseaux.
   - Charge de la machine : existe quelle que soit la charge.
 
-- E-13 · bloquant · Chaque prise au micro tombe trop tôt, de 114 à 892 ms ; les couches successives se décalent en cascade.
-  - Experts : 1 (09-01, 09-04). Gravités d'origine : 09-01 bloquant, 09-04 important.
-  - Preuve : Lignes 1271-1283 : retrait fixe de `outputLatency + 0,02 s` puis `MediaRecorder` lancé par `setTimeout(…,55)` ; l'instant réel de départ de l'encodeur reste inconnu. Boucle numérique : moyenne −407 ms (pc1366, 6 prises) et −358 ms (iphone, 4 prises), 778 ms de dispersion ; une impulsion devient 5 attaques après 3 couches (09). Capture : [09-couches-pc1366](captures/09-couches-pc1366.webp).
-  - Correction : Enregistrer par le module `tap` de Flashback (ligne 2207) au lieu de `MediaRecorder` ; dater le premier bloc reçu par `ctx.currentTime` ; poser la prise à `recStartPos + (t_premier_bloc − t0) − (outputLatency + latence d'entrée)`. Test de latence aller-retour (bip émis, bip repris, écart en ms mémorisé) et réglage manuel en ms. Erreur visée ≤ 3 ms.
-  - Charge de la machine : mécanisme fixe, ampleur liée à la charge. L'ampleur de l'écart grandit avec la charge ; le retrait fixe et le départ par minuterie existent à toute charge : la gravité reste bloquante.
-
-- E-14 · bloquant · Le décompte décale la prise de −2,62 s au début du projet et ses 4 clics restent muets.
-  - Experts : 1 (09-02). Gravités d'origine : 09-02 bloquant.
-  - Preuve : Ligne 1280 : `play(Math.max(0,state.pos-pre))` ; ligne 1230 : `a<p0` reste faux. Impulsion de 1 s retrouvée à −1,622 s ; avance à −65,5 dBFS (09, S6).
-  - Correction : Démarrer l'horloge à `state.pos − pre` même sous 0 (silence avant 0) ; ne retrancher que l'avance réellement jouée ; appeler `clicks()` sur `[recStartPos − pre, recStartPos)`.
-  - Charge de la machine : existe quelle que soit la charge.
-
-- E-15 · bloquant · Une seule piste armée et une seule entrée : zéro prise simultanée de deux musiciens.
-  - Experts : 1 (09-03). Gravités d'origine : 09-03 bloquant.
-  - Preuve : `state.armed` garde une piste (ligne 1940) ; `getUserMedia` sans appareil ni canal (ligne 1262) ; bouton micro absent des pistes au téléphone (09, S8). Capture : [09-voix-en-cours-iphone](captures/09-voix-en-cours-iphone.webp).
-  - Correction : `state.armed` en ensemble de pistes ; liste des entrées par `enumerateDevices()` ; choix de l'entrée et du canal (1, 2, 1-2) par piste ; un `ChannelSplitter` par entrée ; une prise par piste à l'arrêt.
-  - Charge de la machine : existe quelle que soit la charge.
-
 ### Important
-
-- E-16 · important · Cibles sous 44 px et textes sous 11 px sur tous les formats.
-  - Experts : 5 (10-04, 10-05, 08-10, 09-13, 05-02, 01-11). Gravités d'origine : 10-04 important, 10-05 important, 08-10 important, 09-13 détail, 05-02 important (partie debout), 01-11 important (partie boutons).
-  - Preuve : 94 à 100 % des cibles visibles sous 44 px sur les quatre formats ; 30 à 45 % des textes sous 11 px sur téléphone (10). `--u:clamp(30px,4.4vmin,42px)` (ligne 29) ; `.lbl{font-size:.8em}` (ligne 290), libellés à 9,5-9,8 px. Entrées de menu de 26 px debout et 16 px couché, objets de scène de 22 px (08) ; `#bRec` de 30 × 42 px couché (09) ; cellules du Rythme de 10,6 × 27 px debout (05) ; boutons ⤢ et × du film de 30 px (01, ligne 444). Captures : [10-iphone-atelier-console](captures/10-iphone-atelier-console.webp), [05-iphone-17pas-doigt](captures/05-iphone-17pas-doigt.webp).
-  - Correction : `@media (pointer:coarse){:root{--u:clamp(44px,6vmin,52px)}}` ; entrées de menu, onglets et objets de scène de 44 px au moins ; `body.simple footer .lbl{font-size:max(12px,.8em)}` ; graduations de la console réduites à 0, −12, −48 en 11 px. Sur ordinateur à la souris, 34 px suffisent. Contrôle : 0 cible sous 44 px et 0 texte sous 11 px sur iphone et iphone-paysage.
-  - Charge de la machine : existe quelle que soit la charge.
 
 - E-17 · important · Catégories et requêtes d'Internet Archive peu pertinentes (régions, Classique, Jazz).
   - Experts : 3 (07-03, 06-04, 09-10, 07-12). Gravités d'origine : 07-03 important, 06-04 important, 09-10 important (partie requête), 07-12 détail.
@@ -368,12 +332,6 @@ Zéro écart corrigé à la date de cette liste.
   - Correction : Copier = presse-papier seul ; Dupliquer reste dans le menu de l'appui long.
   - Charge de la machine : existe quelle que soit la charge.
 
-- E-60 · important · Téléprompteur sur les lettres M et S de la console.
-  - Experts : 1 (10-06). Gravités d'origine : 10-06 important.
-  - Preuve : 38 libellés M / S en défilement sur pc1920, touches affichées « 1 » et « ; » ; `tele()` (ligne 2583) appliqué à `#console` (ligne 2586) (10, S8). Capture : [10-pc1920-atelier-console](captures/10-pc1920-atelier-console.webp).
-  - Correction : Dans `tele()`, ignorer les textes de 2 caractères au plus ; touches M et S en `min-width:1.6em;padding:0`.
-  - Charge de la machine : existe quelle que soit la charge.
-
 - E-61 · important · Noms de clips coupés et poignées de fondu sur chaque clip après Écrire.
   - Experts : 1 (10-07). Gravités d'origine : 10-07 important (partie affichage).
   - Preuve : 21 noms rognés sur pc1920 (« Un », « Ho », « Gra ») ; noms hors de `tele()` (ligne 2583) (10, S4, S11). Capture : [10-pc1366-simple-clip](captures/10-pc1366-simple-clip.webp).
@@ -408,30 +366,6 @@ Zéro écart corrigé à la date de cette liste.
   - Experts : 1 (10-13). Gravités d'origine : 10-13 important.
   - Preuve : Aplat sombre et grille vectorielle des pistes vides ; disque + en dégradé CSS (lignes 296-297) ; Master en cartes à cases (10, S10). Capture : [10-pc1366-simple-master](captures/10-pc1366-simple-master.webp).
   - Correction : Bande magnétique photographiée sous les clips, règle en réglet photographié ; + en bouton lumineux photographié d'une console de 1980 ; huit premiers masterings sur un commutateur rotatif photographié, les autres en étiquettes Dymo.
-  - Charge de la machine : existe quelle que soit la charge.
-
-- E-67 · important · Saisie après coup (Flashback) limitée à 60 s.
-  - Experts : 1 (09-08). Gravités d'origine : 09-08 important.
-  - Preuve : `FB_SEC=60` (ligne 2202) ; Free Jazz dure 37 min 10 s (09, S7).
-  - Correction : Mémoire réglable de 1 à 40 min, sauvegardée par morceaux dans IndexedDB.
-  - Charge de la machine : existe quelle que soit la charge.
-
-- E-68 · important · La prise reste en mémoire jusqu'à l'arrêt.
-  - Experts : 1 (09-09). Gravités d'origine : 09-09 important.
-  - Preuve : `mediaRec.start()` sans tranches (ligne 1283) ; lecture du code, plantage non provoqué (09).
-  - Correction : Prise écrite par tranches de 1 s dans IndexedDB, reconstituée à la réouverture.
-  - Charge de la machine : existe quelle que soit la charge.
-
-- E-69 · important · Une nouvelle prise s'ajoute à l'ancienne : zéro rangée de prises.
-  - Experts : 1 (09-05). Gravités d'origine : 09-05 important.
-  - Preuve : `tr.clips.push` sans retrait (lignes 1274-1275) (09, S5).
-  - Correction : À l'arrêt, prises qui se chevauchent rangées sous la piste (pictogramme pile), une rangée active, assemblage par glissé.
-  - Charge de la machine : existe quelle que soit la charge.
-
-- E-70 · important · Zéro niveau d'entrée et zéro forme d'onde pendant la prise.
-  - Experts : 1 (09-06). Gravités d'origine : 09-06 important.
-  - Preuve : Seul analyseur micro pour l'accordeur (ligne 2364) ; bip du faux micro à +0,5 dBFS sans alerte (09). Capture : [09-prise-en-cours-pc1366](captures/09-prise-en-cours-pc1366.webp).
-  - Correction : Vu-mètre d'entrée sur la piste armée (rouge à −1 dBFS), forme d'onde dessinée depuis le module `tap`.
   - Charge de la machine : existe quelle que soit la charge.
 
 ### Détail
@@ -623,3 +557,5 @@ Zéro écart corrigé à la date de cette liste.
 - 09-11, partie « ramener le gain du master sur la cible −14 LUFS » : écartée au profit de E-21 (borner le relèvement et afficher l'écart). Règle : EBU R128 et l'exigence de Bob Katz placent la vraie crête et la nuance avant la sonie visée ; 03, 04, 06 et 08 mesurent déjà la cible à 0,2 LU près sur des signaux musicaux. La partie vraie crête de 09-11 passe dans E-06.
 - 10-07, partie « Écrire rend chaque rangée en un clip par mesure » : écartée. REQUESTS.md (fait) demande l'écriture en clips audio ; 05 mesure 0,000 ms d'écart par coup et classe « une région par coup » à garder ; la fusion de clips existe déjà. La partie affichage reste dans E-61.
 - 08-11, partie « facteur ×10 000 » : écartée au profit du facteur ×1 000 de 04-02. Les deux experts demandent 3 600 s de sortie ; ×1 000 atteint 3 600 s dès 3,6 s de source.
+
+- Enregistrement au micro, retiré de l'analyse par Mauk Tenieb le 20 novembre 2026 (« le point 4 : à retirer ») : E-13 (Chaque prise au micro tombe trop tôt, de 114 à 892 ms ; les couches successives se décalent en cascade) ; E-14 (Le décompte décale la prise de −2,62 s au début du projet et ses 4 clics restent muets) ; E-15 (Une seule piste armée et une seule entrée : zéro prise simultanée de deux musiciens) ; E-67 (Saisie après coup (Flashback) limitée à 60 s) ; E-68 (La prise reste en mémoire jusqu'à l'arrêt) ; E-69 (Une nouvelle prise s'ajoute à l'ancienne : zéro rangée de prises) ; E-70 (Zéro niveau d'entrée et zéro forme d'onde pendant la prise).

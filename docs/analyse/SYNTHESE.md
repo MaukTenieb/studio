@@ -36,7 +36,7 @@ Lecture :
 
 ## 3. Liste fusionnée des écarts
 
-Règle de fusion : deux écarts fusionnent quand ils désignent la même cause dans index.html ou la même correction. Un écart d'origine qui mêle deux causes se partage entre deux écarts fusionnés (mention « partie »). Les 139 identifiants d'origine se retrouvent tous dans [ECARTS.md](ECARTS.md) (contrôle par script : 0 absent, 0 en trop). Résultat : 100 écarts, dont 15 bloquants, 55 importants, 30 détails. Ordre : gravité, puis nombre d'experts.
+Règle de fusion : deux écarts fusionnent quand ils désignent la même cause dans index.html ou la même correction. Un écart d'origine qui mêle deux causes se partage entre deux écarts fusionnés (mention « partie »). Les 139 identifiants d'origine se retrouvent tous dans [ECARTS.md](ECARTS.md) (contrôle par script : 0 absent, 0 en trop). Résultat : 100 écarts, dont 15 bloquants, 55 importants, 30 détails. Mauk Tenieb retire ensuite les 7 écarts de l'enregistrement au micro (E-13, E-14, E-15, E-67 à E-70) : restent 93 écarts, dont 12 bloquants, 51 importants, 30 détails. Ordre : gravité, puis nombre d'experts.
 
 | N° | Gravité | Experts | Écart | Identifiants d'origine |
 |---|---|---|---|---|
@@ -53,9 +53,6 @@ Règle de fusion : deux écarts fusionnent quand ils désignent la même cause d
 | E-100 | détail | 1 | Axes des pads peu lisibles | 10-16 |
 | E-11 | bloquant | 1 | Console au téléphone debout : touche D de 48 × 22 px, réglage « D ⟲ » hors de l'écran | 02-04 |
 | E-12 | bloquant | 1 | Coupes peu contrastées ignorées : seuil fixe | 01-02 |
-| E-13 | bloquant | 1 | Chaque prise au micro tombe trop tôt, de 114 à 892 ms ; les couches successives se décalent en cascade | 09-01, 09-04 |
-| E-14 | bloquant | 1 | Le décompte décale la prise de −2,62 s au début du projet et ses 4 clics restent muets | 09-02 |
-| E-15 | bloquant | 1 | Une seule piste armée et une seule entrée : zéro prise simultanée de deux musiciens | 09-03 |
 | E-16 | important | 5 | Cibles sous 44 px et textes sous 11 px sur tous les formats | 10-04, 10-05, 08-10, 09-13, 05-02, 01-11 |
 | E-17 | important | 3 | Catégories et requêtes d'Internet Archive peu pertinentes (régions, Classique, Jazz) | 07-03, 06-04, 09-10, 07-12 |
 | E-18 | important | 3 | L'export avec cible de sonie refait jusqu'à 5 rendus complets | 03-06, 04-05, 06-06 |
@@ -107,10 +104,6 @@ Règle de fusion : deux écarts fusionnent quand ils désignent la même cause d
 | E-64 | important | 1 | Le mode simple laisse 18 commandes dans l'en-tête de l'ordinateur | 10-11 |
 | E-65 | important | 1 | Lettres et couleurs hors de `insertkoin/DA.md` | 10-12 |
 | E-66 | important | 1 | Surfaces encore dessinées : pistes vides, bouton +, grille Master | 10-13 |
-| E-67 | important | 1 | Saisie après coup (Flashback) limitée à 60 s | 09-08 |
-| E-68 | important | 1 | La prise reste en mémoire jusqu'à l'arrêt | 09-09 |
-| E-69 | important | 1 | Une nouvelle prise s'ajoute à l'ancienne : zéro rangée de prises | 09-05 |
-| E-70 | important | 1 | Zéro niveau d'entrée et zéro forme d'onde pendant la prise | 09-06 |
 | E-71 | détail | 4 | Libellés et requêtes en anglais dans l'interface française | 04-12, 08-12, 07-11, 05-12 |
 | E-72 | détail | 3 | Pages fermées pendant les exports en série | 03-06, 04-05, 06-06 |
 | E-73 | détail | 2 | Retard constant de 128 échantillons (2,9 ms) au rendu ; stem du film atténué de 2,5 dB | 05-10, 01-17 |
@@ -155,7 +148,6 @@ Le calcul s'applique à 18 corrections candidates ; le tableau donne les dix mei
 | Rang | Correction | Écarts | Effort (h) | Design | DA | Puissance | Ergonomie | Simplicité | Exhaustivité | Pertinence | Originalité | Plaisir | Total | Points / h |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
 | 1 | Mise en page du téléphone couché | E-01 | 8,0 | +0,19 | 0 | 0 | +0,19 | +0,19 | 0 | 0 | 0 | +0,19 | +0,77 | 0,097 |
-| 2 | Calage des prises et décompte | E-13, E-14 | 6,0 | 0 | 0 | +0,08 | +0,08 | 0 | +0,08 | +0,08 | 0 | +0,08 | +0,41 | 0,068 |
 | 3 | Calculs spectraux et analyse de hauteur dans un Web Worker | E-03 | 12,0 | 0 | 0 | 0 | +0,19 | 0 | 0 | 0 | 0 | +0,19 | +0,39 | 0,032 |
 | 4 | Cibles de 44 px et textes de 11 px au doigt | E-16 | 4,0 | +0,13 | 0 | 0 | +0,13 | +0,13 | 0 | 0 | 0 | 0 | +0,39 | 0,097 |
 | 5 | Composante continue retirée | E-07 | 1,0 | 0 | 0 | +0,11 | 0 | 0 | 0 | +0,11 | 0 | +0,11 | +0,33 | 0,327 |
@@ -167,7 +159,6 @@ Le calcul s'applique à 18 corrections candidates ; le tableau donne les dix mei
 
 Scénarios touchés par correction (expert : scénarios) :
 1. Mise en page du téléphone couché : 10 : S3, S8, S9 ; 06 : S11 ; 05 : S2 ; 02 : S3 ; 03 : S4.
-2. Calage des prises et décompte : 09 : S4, S5, S6.
 3. Calculs spectraux et analyse de hauteur dans un Web Worker : 04 : S3, S10 ; 07 : S11 ; 08 : S4, S5, S6, S7.
 4. Cibles de 44 px et textes de 11 px au doigt : 10 : S2, S6, S8, S11 ; 08 : S10 ; 06 : S11 ; 05 : S2.
 5. Composante continue retirée : 03 : S1, S3, S5, S6.
@@ -177,7 +168,9 @@ Scénarios touchés par correction (expert : scénarios) :
 9. Sons d'archive entiers (fin des 240 s) : 06 : S4 ; 04 : S9.
 10. Dub exporté et réinjection réglable : 02 : S4, S5.
 
-Somme brute des dix totaux : +3,62 point de moyenne sur l'ensemble des neuf critères, pour 52,0 h estimées. Meilleurs rendements hors des dix : swing et cycles impairs (E-22, E-47, 1,5 h, +0,18), pistes affichées avant le kit (E-05, 3 h, +0,18), limiteur de piste (E-08, E-40, 3 h, +0,16). Une correction de détail gagne peu de points sur ce barème, parce que Δ vaut 1 ; le barème favorise ce que plusieurs experts relèvent.
+Le rang 2 (calage des prises et décompte, E-13 et E-14) sort avec le point 4 ; les neuf corrections restantes gardent leur rang d'origine, et la dixième place revient à « pistes affichées avant le kit » (E-05, 3 h, +0,18).
+
+Somme brute des dix totaux d'origine : +3,62 point de moyenne sur l'ensemble des neuf critères, pour 52,0 h estimées. Meilleurs rendements hors des dix : swing et cycles impairs (E-22, E-47, 1,5 h, +0,18), pistes affichées avant le kit (E-05, 3 h, +0,18), limiteur de piste (E-08, E-40, 3 h, +0,16). Une correction de détail gagne peu de points sur ce barème, parce que Δ vaut 1 ; le barème favorise ce que plusieurs experts relèvent.
 
 ## 5. Contradictions entre experts et règle qui tranche
 
