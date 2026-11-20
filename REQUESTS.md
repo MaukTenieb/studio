@@ -70,6 +70,8 @@ Critères de qualité appliqués à chaque lot : direction artistique, réalisme
 
 - Fiche de terrain d'un clip (menu du clip) : lieu, date, musiciens, fonction, saison, lutherie, accordage mesuré en cents, texte chanté, traduction. Un point lumineux marque le clip ; la fiche part dans le fichier des crédits.
 
+- Scène : deux objets posés l'un sur l'autre proposent trois touches. Ils se repoussent (chacun creuse de 7 dB le spectre de l'autre à sa fréquence dominante, et ils s'écartent), se fondent (même place, chacun module l'autre en anneau) ou restent tels quels.
+
 ## À trancher par Mauk Tenieb
 
 - Figurines 3D des pistes 01 à 18 : elles restent en 3D, comme demandé ; la règle photographique de la DA appelle des portraits photographiques. Décision réservée à l'auteur.

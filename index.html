@@ -366,6 +366,7 @@ footer:has(#abar.on) #abar{flex:1 1 auto;min-width:0}
   background:radial-gradient(circle at 40% 35%,#fff7dc,var(--c) 45%,color-mix(in srgb,var(--c) 40%,#000) 100%);box-shadow:0 0 calc(var(--s)*.5) var(--c),0 8px 14px rgba(0,0,0,.7)}
 #scene .obj.hit{outline:2px solid #ffe3a0;outline-offset:3px}
 #scene .x{position:absolute;right:8px;top:8px}
+#scene .fric{position:absolute;transform:translate(-50%,-160%);display:flex;gap:6px;z-index:200}#scene .fric button{font-size:20px;line-height:1;min-width:44px;min-height:44px}
 #scene .mode{position:absolute;right:8px;top:52px}
 #scene.nodes{background:linear-gradient(rgba(11,9,8,.55),rgba(11,9,8,.8)),url(img/metal.webp) center/cover}
 #scene svg.nd{position:absolute;inset:0;width:100%;height:100%}
@@ -2541,7 +2542,7 @@ function renderScene(){const box=$("#scene");box.classList.toggle("on",sceneOn);
     o.addEventListener("pointerdown",e=>{e.preventDefault();o.setPointerCapture(e.pointerId);snapshot();const r=box.getBoundingClientRect();
       let lt=performance.now(),la=airDelay(tr);const mv=ev=>{const now=performance.now();tr.pan=clamp(((ev.clientX-r.left)/r.width*100-7)/86*2-1,-1,1);tr.depth=clamp((92-(ev.clientY-r.top)/r.height*100)/80,0,1);place(o,tr);apply(tr);{const na=airDelay(tr),v=(na-la)/Math.max(.008,(now-lt)/1000);lt=now;la=na;const k=clamp(v*8,-1,1);o.style.boxShadow=Math.abs(k)<.05?"":`0 0 calc(var(--s)*${.5+Math.abs(k)}) ${k<0?"#7fd8ff":"#ff5a3a"},0 8px 14px rgba(0,0,0,.7)`;o.title=tr.name+(Math.abs(v)>.002?` · Doppler ${Math.round(-1200*Math.log2(1+v))} c`:"")}
         objs.forEach(([p,t])=>p.classList.toggle("hit",t!==tr&&Math.hypot((t.pan-tr.pan)*.5,(t.depth||0)-tr.depth)<.06))};
-      const up=()=>{o.style.boxShadow="";o.title=tr.name;o.removeEventListener("pointermove",mv);o.removeEventListener("pointerup",up);o.removeEventListener("pointercancel",up);save();render()};
+      const up=()=>{o.style.boxShadow="";o.title=tr.name;o.removeEventListener("pointermove",mv);o.removeEventListener("pointerup",up);o.removeEventListener("pointercancel",up);save();render();const other=objs.find(([p,t])=>t!==tr&&p.classList.contains("hit"));objs.forEach(([p])=>p.classList.remove("hit"));if(other)friction(box,o,tr,other[1])};
       o.addEventListener("pointermove",mv);o.addEventListener("pointerup",up);o.addEventListener("pointercancel",up)});return[o,tr]});
   /* objets au même endroit : éventail visuel, le son garde sa place */
   const grp=new Map();objs.forEach(([o,t])=>{const k=t.pan.toFixed(2)+"|"+(t.depth||0).toFixed(2);if(!grp.has(k))grp.set(k,[]);grp.get(k).push([o,t])});grp.forEach(g=>{if(g.length<2)return;g.forEach(([o,t],i)=>{o._fan=i-(g.length-1)/2;place(o,t)})});
@@ -2780,6 +2781,19 @@ function fieldSheet(sel){const[tr,c]=sel[0]||[];if(!c)return;const F=lang==="fr"
   const close=()=>{sh.classList.remove("on","wide");sh.replaceChildren()};
   const ok=()=>{const nm={};META_K.forEach(([k])=>{const v=ins[k].value.trim();if(v)nm[k]=v});edit(()=>{if(Object.keys(nm).length)c.meta=nm;else delete c.meta});close()};
   sh.classList.add("wide");sh.replaceChildren(el("b",{},(F?"Fiche de terrain — ":"Field sheet — ")+(c.name||lib.get(c.snd)?.name||"")),grid,el("div",{class:"row"},meas,el("button",{onclick:close},"×"),el("button",{class:"on",onclick:ok},"✓")));sh.classList.add("on")}
+
+/* deux objets posés l'un sur l'autre : ils se repoussent (chacun creuse le spectre de l'autre à sa fréquence dominante) ou se fondent (même place, chacun module l'autre en anneau) */
+function domFreq(tr){const c=tr.clips[0];if(!c)return 0;const b=clipBuffer(c);if(!b)return 0;const x=b.getChannelData(0),N=4096,sr=b.sampleRate,acc=new Float64Array(N/2),w=hann(N);let n=0;
+  for(let o=0;o+N<x.length&&n<24;o+=Math.max(N,Math.floor((x.length-N)/24)),n++){const re=new Float64Array(N),im=new Float64Array(N);for(let k=0;k<N;k++)re[k]=x[o+k]*w[k];fft(re,im);for(let k=0;k<N/2;k++)acc[k]+=Math.hypot(re[k],im[k])}
+  let bk=0,bv=0;for(let k=Math.floor(60*N/sr);k<Math.floor(8000*N/sr);k++)if(acc[k]>bv){bv=acc[k];bk=k}return bk*sr/N}
+function friction(box,o,a,b){box.querySelectorAll(".fric").forEach(x=>x.remove());const F=lang==="fr";
+  const set=(t,id,fx)=>{t.rack=t.rack.filter(f=>!String(f.id).startsWith("fr:"));if(fx)t.rack.push({id:"fr:"+id,type:fx.type,on:true,p:{...FX[fx.type].p,...fx.p}})};
+  const rep=el("button",{title:F?"Se repoussent : chacun creuse le spectre de l'autre":"Repel: each carves the other's spectrum"},"⇹"),fus=el("button",{title:F?"Se fondent : même place, modulation croisée":"Fuse: same place, cross-modulation"},"⊛"),un=el("button",{title:F?"Rien":"Nothing"},"×");
+  const w=el("div",{class:"fric",style:`left:${o.style.left};top:${o.style.top}`},rep,fus,un);box.append(w);const gone=setTimeout(()=>w.remove(),8000);
+  rep.onclick=()=>{clearTimeout(gone);snapshot();const fa=domFreq(a),fb=domFreq(b);if(fb)set(a,b.id,{type:"eq",p:{low:0,mid:-7,midF:Math.round(fb),high:0}});if(fa)set(b,a.id,{type:"eq",p:{low:0,mid:-7,midF:Math.round(fa),high:0}});
+    a.pan=clamp(a.pan+(a.pan>=b.pan?.18:-.18),-1,1);rebuildChains();save();render();renderScene();toast((F?"Creusés : ":"Carved: ")+Math.round(fb)+" / "+Math.round(fa)+" Hz")};
+  fus.onclick=()=>{clearTimeout(gone);snapshot();const fa=domFreq(a),fb=domFreq(b);a.pan=b.pan;a.depth=b.depth||0;if(fb)set(a,b.id,{type:"ring",p:{freq:Math.round(fb),mix:.35}});if(fa)set(b,a.id,{type:"ring",p:{freq:Math.round(fa),mix:.35}});rebuildChains();save();render();renderScene();toast(F?"Fondus":"Fused")};
+  un.onclick=()=>{clearTimeout(gone);w.remove()}}
 </script>
 </body>
 </html>

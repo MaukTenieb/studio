@@ -21,6 +21,7 @@ https://mauktenieb.github.io/studio/
 - Room reverbs modelled from early reflections and frequency-dependent decay: closet, bathroom, kitchen, bedroom, living room, vocal booth, studio, classroom, car, stairwell, parking garage, club, theatre, concert hall, church, cathedral, cave, tunnel, plate, spring.
 - Tempo, metronome, count-in, snap to the sixteenth, loop region drawn on the ruler, chromatic tuner, lyrics pad.
 - Sampler colours (SP-1200, MPC60, ASR-10, S950), sub octave with mono lows, large spaces (cave, silo, cathedral) with a hold up to one minute, dub siren and analog laser noise boxes.
+- Stage friction: two overlapping objects repel (each carves the other's dominant frequency) or fuse (same place, cross ring modulation).
 - Field sheet per clip (place, date, musicians, function, season, instruments, measured tuning in cents, sung text, translation), exported with the credits.
 - Artist boxes: 26 Greek-letter boxes, each a tribute to an artist named by the annexes or by Musik; one tap sets track racks, master chain, tempo or seconds, swing, sequencer, dub feedback, then offers sounds to search and gestures for the selected clip. Freesound's Broad Sound Taxonomy and Internet Archive's large free collections (78 rpm records, old radio, broadcasts, read books, rites, NASA, Free Music Archive).
 - Tempo fitted to video cuts and field notes; spectral eraser and repair on boxes drawn over the spectrogram.
@@ -103,3 +104,5 @@ Le tempo peut se caler sur les coupes vidéo et les notes de terrain : les temps
 L'onglet Kit ouvre 26 boîtes d'artistes, sous lettres grecques, chacune « tribute to » un artiste : power electronics, dark ambient, hip-hop, IDM, sound design, dub, musique à l'image, instruments du monde, ethnomusicologie. Une touche prépare le studio selon ses procédés ; la boîte propose ensuite les sons à chercher et les gestes à faire sur un clip. Les collections ajoutent la taxonomie officielle de Freesound ; Internet Archive ajoute les 78 tours (dont 40 000 de jazz), la radio ancienne, les émissions, les livres lus, les rites et cultes, la NASA et le Free Music Archive.
 
 Chaque clip reçoit une fiche de terrain : lieu, date, musiciens, fonction, saison, lutherie, accordage mesuré en cents, texte chanté et traduction. La fiche part dans le fichier des crédits.
+
+Sur la scène, deux objets posés l'un sur l'autre se repoussent, chacun creusant le spectre de l'autre, ou se fondent en se modulant l'un l'autre.
