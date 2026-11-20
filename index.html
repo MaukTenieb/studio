@@ -230,7 +230,7 @@ dialog .col{display:flex;flex-direction:column;gap:6px}
 #status{color:var(--legend-dim)}
 #drop{position:fixed;inset:0;background:rgba(242,227,166,.08);border:3px dashed var(--lit);display:none;z-index:40;pointer-events:none}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
-@media (max-width:760px),(max-height:520px) and (orientation:landscape){
+@media (max-width:760px){
   #app{grid-template-columns:1fr;grid-template-rows:auto 1fr auto auto}
   aside{grid-row:4;grid-column:1;width:auto;height:min(38vh,300px);border-left:0;border-top:2px solid #1d1915}
   aside.min{height:auto}
@@ -249,32 +249,77 @@ dialog .col{display:flex;flex-direction:column;gap:6px}
 @media (prefers-reduced-motion:reduce){#kaveIn{transition:none}}
 @media (orientation:portrait){#kaveIn{background-size:100% auto}}
 html,body{background:#0b0908}
-header{background:linear-gradient(rgba(255,196,120,.11),rgba(0,0,0,0) 45%,rgba(0,0,0,.32)),url(img/steel.webp) 0 0/512px;border-bottom:1px solid #050403;box-shadow:inset 0 1px 0 rgba(255,222,170,.2),0 3px 8px rgba(0,0,0,.6)}
-footer{background:linear-gradient(rgba(0,0,0,.3),rgba(255,196,120,.04)),url(img/steel.webp) 180px 0/512px;border-top:1px solid #050403;box-shadow:inset 0 1px 0 rgba(255,222,170,.12)}
-#ruler{background:linear-gradient(rgba(0,0,0,.45),rgba(0,0,0,.6)),url(img/steel.webp) 0 -90px/512px}
-.thead{background:linear-gradient(rgba(255,210,150,.05),rgba(0,0,0,.28)),url(img/steel.webp) var(--sx,0) var(--sy,0)/512px!important;border-bottom:1px solid #070605;box-shadow:inset 5px 0 0 var(--c),inset 0 1px 0 rgba(255,222,170,.09)}
+header,footer{position:relative}
+header::after,footer::before{content:"";position:absolute;left:0;right:0;height:9px;background:url(img/jonc.webp) 0 50%/auto 100% repeat-x;pointer-events:none;z-index:6}
+header::after{bottom:-6px}footer::before{top:-6px}
+#plaque{flex:1 1 0;min-width:0;align-self:center;height:clamp(22px,4.2vmin,36px);background:url(img/plaque.webp) center/contain no-repeat;filter:drop-shadow(0 2px 2px rgba(0,0,0,.7))}
+@media (max-width:1100px){#plaque{display:none}}
+#console{background:#0c0a08!important}
+
+header{background:linear-gradient(rgba(255,196,120,.11),rgba(0,0,0,0) 45%,rgba(0,0,0,.32)),url(img/metal.webp) 0 0/768px;border-bottom:1px solid #050403;box-shadow:inset 0 1px 0 rgba(255,222,170,.2),0 3px 8px rgba(0,0,0,.6)}
+footer{background:linear-gradient(rgba(0,0,0,.3),rgba(255,196,120,.04)),url(img/metal.webp) 180px 0/768px;border-top:1px solid #050403;box-shadow:inset 0 1px 0 rgba(255,222,170,.12)}
+#ruler{background:linear-gradient(rgba(0,0,0,.45),rgba(0,0,0,.6)),url(img/metal.webp) 0 -90px/768px}
+.thead{background:linear-gradient(rgba(255,210,150,.05),rgba(0,0,0,.28)),url(img/metal.webp) var(--sx,0) var(--sy,0)/768px!important;border-bottom:1px solid #070605;box-shadow:inset 5px 0 0 var(--c),inset 0 1px 0 rgba(255,222,170,.09)}
 .track:nth-child(4n+2) .thead{--sx:-130px;--sy:-200px}.track:nth-child(4n+3) .thead{--sx:-260px;--sy:-60px}.track:nth-child(4n+4) .thead{--sx:-390px;--sy:-330px}
 .thead .name{flex:0 0 auto;width:auto;min-width:2.9em;field-sizing:content;padding:1px 7px 2px;margin-right:auto;background:linear-gradient(#1c1a18,#0d0c0b 55%,#171513);color:#efe6d4;font-weight:700;letter-spacing:.14em;text-transform:uppercase;text-shadow:0 1px 0 rgba(0,0,0,.9),0 -1px 0 rgba(255,255,255,.18);border-radius:1px;box-shadow:0 1px 1px rgba(0,0,0,.7),inset 0 1px 0 rgba(255,255,255,.07);clip-path:polygon(0 8%,100% 0,99% 94%,1% 100%)}
 .thead .kam{background:radial-gradient(ellipse at 50% 35%,#191714,#070606);box-shadow:inset 0 2px 5px rgba(0,0,0,.9),0 1px 0 rgba(255,222,170,.1)}
 aside{background:linear-gradient(rgba(14,12,10,.8),rgba(9,8,7,.92)),var(--shelves) center/cover}
 #console{background:#0c0a08}
-.strip{background:radial-gradient(circle at 7px 7px,#7a6d5c 0 1.6px,#1b1714 2.2px,transparent 2.8px),radial-gradient(circle at calc(100% - 7px) calc(100% - 7px),#7a6d5c 0 1.6px,#1b1714 2.2px,transparent 2.8px),linear-gradient(rgba(255,210,150,.06),rgba(0,0,0,.3)),url(img/steel.webp) var(--sx,0) 0/512px!important;border:1px solid #070605!important;box-shadow:inset 0 1px 0 rgba(255,222,170,.12)}
+.strip{background:url(img/screw.webp) 3px 3px/9px no-repeat,url(img/screw.webp) right 3px bottom 3px/9px no-repeat,linear-gradient(rgba(255,210,150,.05),rgba(0,0,0,.32)),url(img/metal.webp) var(--sx,0) 0/768px!important;border:1px solid #070605!important;box-shadow:inset 0 1px 0 rgba(255,222,170,.12)}
 .strip:nth-child(3n+2){--sx:-170px}.strip:nth-child(3n+3){--sx:-340px}
 #perform{background:linear-gradient(rgba(11,9,8,.62),rgba(11,9,8,.86)),url(img/cave.webp) center 40%/cover!important}
-.pad{background:#060807 var(--crtA) center/cover no-repeat!important;box-shadow:inset 0 0 0 2px #040403,inset 0 8px 20px rgba(0,0,0,.85),0 1px 0 rgba(255,222,170,.1)}
-.pads>div:nth-child(2) .pad:not(.tt){background-image:var(--crtB)!important}
 .pad .ax{color:rgba(150,255,175,.8);text-shadow:0 0 6px rgba(80,255,120,.55)}
-.pad.tt{background:radial-gradient(ellipse at 50% 0%,rgba(255,200,130,.16),transparent 60%),linear-gradient(rgba(0,0,0,.35),rgba(0,0,0,.55)),url(img/steel.webp) 0 0/512px!important}
-.pad.tt .ax{color:rgba(240,225,200,.65);text-shadow:0 1px 0 #000}
-.pad .disc{position:absolute;left:50%;top:50%;height:94%;aspect-ratio:1;transform:translate(-50%,-50%);background:url(img/disc.webp) center/contain no-repeat;pointer-events:none;filter:drop-shadow(0 6px 10px rgba(0,0,0,.85))}
-.pad.tt .dot{opacity:.35}
+.pad.crt{background:#050806 var(--crt) center/cover no-repeat!important;box-shadow:inset 0 0 0 2px #040403,inset 0 0 26px rgba(0,0,0,.85),0 1px 0 rgba(255,222,170,.1)!important}
+.pad.tt{background:radial-gradient(ellipse at 50% -10%,rgba(255,200,130,.14),transparent 60%),linear-gradient(rgba(0,0,0,.4),rgba(0,0,0,.6)),url(img/metal.webp) 0 0/768px!important;box-shadow:inset 0 0 0 1px #050403,inset 0 8px 20px rgba(0,0,0,.7)!important}
+.pad .rec{position:absolute;left:50%;top:50%;height:96%;aspect-ratio:1;max-width:96%;translate:-50% -50%;background:url(img/record.webp) center/contain no-repeat;pointer-events:none;filter:drop-shadow(0 8px 12px rgba(0,0,0,.85))}
+.pad.tt .dot{display:none}
+.pad.tt .ax{color:rgba(240,225,200,.7);text-shadow:0 1px 0 #000}
 .fader .cap{background:url(img/cap.webp) center/100% 100% no-repeat!important;height:24px!important;box-shadow:0 3px 5px rgba(0,0,0,.6)}
 .kitg.fauna>summary{background:linear-gradient(90deg,rgba(11,9,8,.6),rgba(11,9,8,.25)),url(img/dymo.webp) center/cover;color:#f3ead6;padding:10px 8px;border-radius:2px;text-shadow:0 1px 2px #000}
+
+/* proportions (20 nov. 2026) : chaque aire est une fraction de l'écran, recalculée à chaque changement de format (fit) */
+.track{height:var(--th,calc(var(--u)*2.45))}
+aside{width:var(--side-w,clamp(250px,26vw,350px))}
+aside:not(.min){height:var(--side-h,auto)}
+#console,#perform,#mastr{height:var(--drawer,42vh)!important;flex:none;min-height:0}
+#perform{flex-direction:column}#perform.on{display:flex}
+#perform .pads{flex:1;min-height:0;flex-direction:row!important}
+.padbox{min-height:0}
+.padh .cats{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.padh .cats::-webkit-scrollbar{display:none}
+.padh .cats button{flex:none}
+.pad{flex:1;height:auto!important;min-height:56px}
+#split{display:none;flex:none;height:16px;margin:-4px 0;position:relative;z-index:7;cursor:ns-resize;touch-action:none;background:url(img/jonc.webp) 0 50%/auto 9px repeat-x}
+#split::after{content:"";position:absolute;left:50%;top:50%;width:46px;height:6px;margin:-3px 0 0 -23px;border-radius:3px;background:linear-gradient(#5a5046,#2a241f);box-shadow:0 1px 2px #000,inset 0 1px 0 rgba(255,230,190,.25)}
+main.dr #split{display:block}
+/* panneau Master, à la manière de BandLab Mastering : réglages, comparaison A/B à volume égal, intensité, égaliseur, cible de sonie, référence, export d'une ou plusieurs sorties */
+#mastr{display:none;flex-direction:column;gap:8px;padding:10px 12px 12px;overflow:auto;background:linear-gradient(rgba(10,9,8,.72),rgba(10,9,8,.9)),url(img/cave.webp) center 40%/cover}
+#mastr.on{display:flex}
+.ms-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.ms-wave{flex:1 1 220px;min-width:140px;height:calc(var(--u)*1.25);border-radius:3px;background:#0b0a08;box-shadow:inset 0 1px 4px #000,0 1px 0 rgba(255,222,170,.08);cursor:pointer;touch-action:none}
+.ms-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(calc(var(--u)*3.3),1fr));gap:6px}
+.ms-p{position:relative;display:flex!important;flex-direction:column;align-items:flex-start!important;justify-content:center;gap:1px;height:auto!important;min-height:calc(var(--u)*1.45);padding:6px 26px 6px 9px!important;text-align:left}
+.ms-p b{font-weight:700}
+.ms-p small{font-size:.8em;opacity:.78;font-variant-numeric:tabular-nums;white-space:pre-line;line-height:1.2}
+.ms-p .ck{position:absolute;right:6px;top:6px;width:15px;height:15px;border-radius:2px;border:1.5px solid currentColor;opacity:.55}
+.ms-p .ck.on{opacity:1;background:var(--amber);border-color:var(--amber);box-shadow:0 0 6px rgba(255,167,38,.6)}
+.ms-more{grid-column:1/-1;margin-top:2px;color:var(--legend-dim);font-size:.85em}
+.ms-ctl{display:flex;flex-wrap:wrap;gap:8px 18px;align-items:center}
+.ms-ctl label{display:flex;align-items:center;gap:7px;color:var(--legend-dim)}
+.ms-ctl label svg{width:18px;height:18px}
+.ms-ctl input[type=range]{width:clamp(80px,13vw,170px)}
+.ms-ctl output{min-width:2.4em;color:var(--legend);font-variant-numeric:tabular-nums}
+.ms-st{color:var(--legend-dim);font-size:.9em}
+@media (max-height:520px) and (orientation:landscape){
+  header{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;padding:4px 8px;gap:6px}header::-webkit-scrollbar{display:none}
+  #vu{height:calc(var(--u)*1.1)}
+  footer{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none}footer .master{flex-wrap:nowrap}
+}
 </style>
 </head>
 <body>
 <div id="kaveIn" aria-hidden="true"></div>
-<script>(()=>{const r=n=>1+Math.floor(Math.random()*n),c=r(4);let d=r(4);if(d===c)d=d%4+1;const st=document.documentElement.style;st.setProperty("--kave",`url(img/kave-${r(4)}.webp)`);st.setProperty("--crtA",`url(img/crt-${c}.webp)`);st.setProperty("--crtB",`url(img/crt-${d}.webp)`);st.setProperty("--shelves",`url(img/shelves-${r(3)}.webp)`)})();</script>
+<script>(()=>{const r=n=>1+Math.floor(Math.random()*n),c=r(4);let d=r(4);if(d===c)d=d%4+1;const st=document.documentElement.style;st.setProperty("--kave",`url(img/kave-${r(2)}.webp)`);st.setProperty("--crtA",`url(img/crt-${c}.webp)`);st.setProperty("--crtB",`url(img/crt-${d}.webp)`);st.setProperty("--shelves",`url(img/shelves-${r(3)}.webp)`)})();</script>
 <svg style="display:none" xmlns="http://www.w3.org/2000/svg">
   <symbol id="i-play" viewBox="0 0 24 24"><path d="M7 4l13 8-13 8z" fill="currentColor"/></symbol>
   <symbol id="i-stop" viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" fill="currentColor"/></symbol>
@@ -317,7 +362,7 @@ aside{background:linear-gradient(rgba(14,12,10,.8),rgba(9,8,7,.92)),var(--shelve
   <symbol id="i-tune" viewBox="0 0 24 24"><path d="M9 18V5l11-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="17" cy="16" r="3"/></symbol>
   <symbol id="i-stretch" viewBox="0 0 24 24"><path d="M3 12h18M7 8l-4 4 4 4M17 8l4 4-4 4M12 5v14"/></symbol>
   <symbol id="i-denoise" viewBox="0 0 24 24"><path d="M3 12h3l2-5 3 10 2-6 2 3h6"/><path d="M4 4l16 16"/></symbol>
-  <symbol id="i-xy" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 12h18M12 3v18" stroke-dasharray="2 2"/><circle cx="16" cy="8" r="2.5" fill="currentColor"/></symbol>
+  <symbol id="i-master" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="2.4" fill="currentColor"/><path d="M6.6 9.2a6.2 6.2 0 0 1 3.4-3.1M17.4 14.8a6.2 6.2 0 0 1-3.4 3.1"/></symbol><symbol id="i-xy" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 12h18M12 3v18" stroke-dasharray="2 2"/><circle cx="16" cy="8" r="2.5" fill="currentColor"/></symbol>
   <symbol id="i-undo" viewBox="0 0 24 24"><path d="M9 14L4 9l5-5"/><path d="M4 9h11a5 5 0 0 1 0 10h-3"/></symbol>
 </svg>
 <div id="app">
@@ -339,7 +384,8 @@ aside{background:linear-gradient(rgba(14,12,10,.8),rgba(9,8,7,.92)),var(--shelve
     <button id="bTuner" data-tt="tuner" title="Tuner"><svg><use href="#i-fork"/></svg></button>
   </div>
   <div class="sp"></div>
-    <div id="vu" title="VU"><canvas id="vuC"></canvas></div>
+    <div id="plaque" role="img" aria-label="Mauk Tenieb"></div>
+  <div id="vu" title="VU"><canvas id="vuC"></canvas></div>
   <div class="grp">
     <button id="bUndo" title="Undo (Ctrl+Z)"><svg><use href="#i-undo"/></svg></button>
     <button id="bNew" title="New project"><svg><use href="#i-new"/></svg></button>
@@ -354,9 +400,11 @@ aside{background:linear-gradient(rgba(14,12,10,.8),rgba(9,8,7,.92)),var(--shelve
   </div><div id="rulerC"><canvas id="rulerCanvas"></canvas></div></div>
   <div id="scroller"><div id="tracks"><div id="loopband"></div><div id="playhead"></div><div id="trackList"></div>
     <button id="addTrack"><svg><use href="#i-plus"/></svg><span data-t="track">Track</span></button></div></div>
+  <div id="split" role="separator" aria-orientation="horizontal"></div>
   <div id="perform"></div>
   <div id="sheet"></div>
   <div id="console"></div>
+  <div id="mastr"></div>
   <div id="fx"></div>
 </main>
 <footer>
@@ -365,7 +413,7 @@ aside{background:linear-gradient(rgba(14,12,10,.8),rgba(9,8,7,.92)),var(--shelve
   <div id="abar"></div>
   <span id="status" class="note"></span>
   <span class="sp"></span>
-  <span class="master"><button id="mFx" title="Master FX">Master</button><select id="mTgt" title="Loudness"></select><button id="mMeas" title="Measure LUFS">LUFS</button><input id="mVol" type="range" min="0" max="1.2" step="0.01" title="Master volume"><select id="mPre" title="Mastering"></select><button id="mLim" class="on" title="Limiter">Limiter</button></span>
+  <span class="master"><button id="mFx" title="Mastering"><svg><use href="#i-master"/></svg><span>Master</span></button><select id="mTgt" title="Loudness"></select><button id="mMeas" title="Measure LUFS">LUFS</button><input id="mVol" type="range" min="0" max="1.2" step="0.01" title="Master volume"><select id="mPre" title="Mastering"></select><button id="mLim" class="on" title="Limiter">Limiter</button></span>
 </footer>
 <aside id="side">
   <div class="gsearch"><svg><use href="#i-search"/></svg><input id="gsQ" type="search" data-tp="searchAll" placeholder="Search every sound…" enterkeyhint="search"></div>
@@ -636,6 +684,9 @@ const MASTERS={
  Ambient:{low:1,mid:-1,midF:2500,high:1,mb:.1,sat:.1,width:1.4,glue:.2,drive:1,ceil:-1},
  Podcast:{low:-3,mid:2,midF:3000,high:1,mb:.6,sat:0,width:.6,glue:.6,drive:4,ceil:-1},
  Noise:{low:3,mid:3,midF:2500,high:3,mb:1,sat:1,width:1.2,glue:1,drive:12,ceil:-.5},
+ Natural:{low:.5,mid:.5,midF:2500,high:1,mb:.15,sat:.05,width:1.05,glue:.25,drive:1.5,ceil:-1},
+ Cinematic:{low:3,mid:-.5,midF:800,high:1.5,mb:.25,sat:.1,width:1.2,glue:.3,drive:2,ceil:-1},
+ Spatial:{low:.5,mid:0,midF:1000,high:2,mb:.3,sat:.05,width:1.55,glue:.3,drive:2,ceil:-1},
 };
 const TARGETS=[["off","LUFS —"],[-9,"−9 Club"],[-11,"−11 CD"],[-14,"−14 Streaming"],[-16,"−16 Apple / Podcast"],[-23,"−23 EBU R128"],[-24,"−24 ATSC A/85"]];
 
@@ -651,8 +702,25 @@ function audio(){
 }
 function lr4(c,type,f){const a=c.createBiquadFilter(),b=c.createBiquadFilter();a.type=b.type=type;a.frequency.value=b.frequency.value=f;a.Q.value=b.Q.value=.7071;a.connect(b);return{in:a,out:b}}
 function tapeCurve(amt){const n=2048,c=new Float32Array(n),k=1+amt*6;for(let i=0;i<n;i++){const x=i/n*2-1;c[i]=Math.tanh(k*x)/Math.tanh(k)}return c}
+/* intensité 0–10 (6 = réglage d'origine) et égaliseur 3 bandes de mastering, comme BandLab Mastering */
+function scaledM(p,v,eq){const b=MASTERS[p]||MASTERS.Neutral,k=(v==null?6:v)/6,e=eq||{};return{low:b.low*k+(e.lo||0),mid:b.mid*k+(e.mi||0),midF:b.midF,high:b.high*k+(e.hi||0),mb:Math.min(1,b.mb*k),sat:Math.min(1,b.sat*k),width:1+(b.width-1)*k,glue:Math.min(1,b.glue*k),drive:b.drive*k,ceil:b.ceil}}
+/* chaîne de mastering seule (EQ, multibande, bande, largeur, colle, limiteur, écrêtage doux) : écoute et export du panneau Master */
+function mchain(c,m,trimDb,dest){
+  const input=c.createGain();let node=input;
+  const lo=c.createBiquadFilter(),mid=c.createBiquadFilter(),hi=c.createBiquadFilter();lo.type="lowshelf";lo.frequency.value=100;mid.type="peaking";mid.Q.value=.8;hi.type="highshelf";hi.frequency.value=8000;
+  lo.gain.value=m.low;mid.gain.value=m.mid;mid.frequency.value=m.midF;hi.gain.value=m.high;node.connect(lo).connect(mid).connect(hi);node=hi;
+  if(m.mb>0){const sum=c.createGain();const mk=(src,thr)=>{const k=c.createDynamicsCompressor();k.threshold.value=thr;k.ratio.value=1.5+m.mb*3;k.attack.value=.01;k.release.value=.2;k.knee.value=8;const g=c.createGain();g.gain.value=Math.pow(10,(m.mb*3)/20);src.connect(k).connect(g).connect(sum)};
+    const l=lr4(c,"lowpass",200),h1=lr4(c,"highpass",200),l2=lr4(c,"lowpass",3000),h=lr4(c,"highpass",3000);node.connect(l.in);mk(l.out,-18-m.mb*8);node.connect(h1.in);h1.out.connect(l2.in);mk(l2.out,-20-m.mb*8);node.connect(h.in);mk(h.out,-22-m.mb*8);node=sum}
+  if(m.sat>0){const w=c.createWaveShaper(),wet=c.createGain(),dry=c.createGain(),o=c.createGain();w.curve=tapeCurve(m.sat);w.oversample="4x";wet.gain.value=m.sat*.7;dry.gain.value=1-m.sat*.7;node.connect(w).connect(wet).connect(o);node.connect(dry).connect(o);node=o}
+  if(m.width!==1){const sp=c.createChannelSplitter(2),mg=c.createChannelMerger(2),k=m.width,LL=c.createGain(),LR=c.createGain(),RL=c.createGain(),RR=c.createGain();LL.gain.value=RR.gain.value=(1+k)/2;LR.gain.value=RL.gain.value=(1-k)/2;
+    node.connect(sp);sp.connect(LL,0);sp.connect(RL,1);sp.connect(LR,0);sp.connect(RR,1);LL.connect(mg,0,0);RL.connect(mg,0,0);LR.connect(mg,0,1);RR.connect(mg,0,1);node=mg}
+  const glue=c.createDynamicsCompressor(),glueG=c.createGain();glue.ratio.value=2;glue.attack.value=.03;glue.release.value=.3;glue.knee.value=10;glue.threshold.value=m.glue>0?-10-m.glue*10:0;glueG.gain.value=Math.pow(10,(m.glue*3)/20);node.connect(glue).connect(glueG);node=glueG;
+  const trim=c.createGain(),lim=c.createDynamicsCompressor(),clip=c.createWaveShaper(),pre=c.createGain(),unpre=c.createGain();trim.gain.value=Math.pow(10,(trimDb+m.drive)/20);
+  lim.attack.value=.001;lim.release.value=.06;lim.knee.value=0;lim.ratio.value=20;lim.threshold.value=m.ceil-1.5;
+  const ceil=Math.pow(10,m.ceil/20),cc=new Float32Array(2048);for(let i=0;i<2048;i++){const x=(i/2047*2-1)*2;cc[i]=(Math.abs(x)<ceil*.9?x:Math.sign(x)*(ceil*.9+(ceil*.1)*Math.tanh((Math.abs(x)-ceil*.9)/(ceil*.1))))/2}clip.curve=cc;pre.gain.value=.5;unpre.gain.value=2;
+  node.connect(trim).connect(lim).connect(pre).connect(clip).connect(unpre).connect(dest);return{input}}
 function buildMaster(c,dest,tap,trimDb=0){
-  const m=MASTERS[state.masterPreset]||MASTERS.Neutral;
+  const m=scaledM(state.masterPreset,state.mInt,state.mEq);
   const input=c.createGain();let node=input;const fx=new Map();
   for(const f of state.masterRack){if(!f.on||!FX[f.type])continue;const u=FX[f.type].make(c,f.p);node.connect(u.in);node=u.out;fx.set(f.id,u)}
   let perf=null;if(!(c instanceof OfflineAudioContext)){perf=[perfSlot(c),perfSlot(c)];node.connect(perf[0].in);perf[0].out.connect(perf[1].in);node=perf[1].out}
@@ -673,7 +741,7 @@ function buildMaster(c,dest,tap,trimDb=0){
   const ceil=Math.pow(10,m.ceil/20);const cc=new Float32Array(2048);for(let i=0;i<2048;i++){const x=(i/2047*2-1)*2;cc[i]=(Math.abs(x)<ceil*.9?x:Math.sign(x)*(ceil*.9+(ceil*.1)*Math.tanh((Math.abs(x)-ceil*.9)/(ceil*.1))))/2}clip.curve=cc;
   const pre=c.createGain();pre.gain.value=.5;const unpre=c.createGain();unpre.gain.value=2; // waveshaper domain ±2
   node.connect(trim).connect(lim).connect(post).connect(pre).connect(clip).connect(unpre).connect(vol).connect(dest);if(tap)vol.connect(tap);
-  const set=()=>{const mm=MASTERS[state.masterPreset]||MASTERS.Neutral;trim.gain.value=Math.pow(10,(trimDb+(state.limiter?mm.drive:0))/20);
+  const set=()=>{const mm=scaledM(state.masterPreset,state.mInt,state.mEq);trim.gain.value=Math.pow(10,(trimDb+(state.limiter?mm.drive:0))/20);
     lim.threshold.value=state.limiter?mm.ceil-1.5:0;lim.ratio.value=state.limiter?20:1;post.gain.value=1;vol.gain.value=state.masterVol};
   set();return{input,set,fx,perf};
 }
@@ -955,7 +1023,7 @@ function trimTail(b){let last=0;for(let c=0;c<b.numberOfChannels;c++){const d=b.
 const stamp=()=>"studio-"+new Date().toISOString().slice(0,16).replace(/[:T]/g,"-");
 function creditsTxt(used){const cred=[...used].filter(s=>s.credit);if(!cred.length)return null;return(lang==="fr"?"Sons utilisés":"Sounds used")+"\n\n"+cred.map(s=>`"${s.credit.title}" — ${s.credit.author} — ${s.credit.license} — ${s.credit.url}`).join("\n")+"\n"}
 async function masteredRender(){
-  let trim=0,r=await renderOffline(null,0);if(!r)return null;const m=MASTERS[state.masterPreset]||MASTERS.Neutral;
+  let trim=0,r=await renderOffline(null,0);if(!r)return null;const m=scaledM(state.masterPreset,state.mInt,state.mEq);
   if(state.target!=="off"&&state.target!=null){for(let k=0;k<4;k++){const l=await lufsOf(r.b);const diff=+state.target-l;if(!isFinite(l)||Math.abs(diff)<.15)break;trim+=diff;r=await renderOffline(null,trim)}}
   capPeak(r.b,m.ceil);r.lufs=await lufsOf(r.b);r.peak=peakDb(r.b);showLoud(r);return r;
 }
@@ -1386,8 +1454,11 @@ function renderPerform(){
   box.replaceChildren(el("div",{class:"pads"},...PAD.map((pd,i)=>{
     const chips=el("div",{class:"cats"},...Object.entries(PERF).map(([k,d])=>{const b=el("button",{class:pd.t===k?"on":""},pf(k,0));b.onclick=()=>{pd.t=k;if(pd.act){master.perf[i].engage(k,pd.x,pd.y)}renderPerform()};return b}));
     const lock=el("button",{class:"lock"+(pd.lock?" on":""),title:"Lock"},"⏸");lock.onclick=()=>{pd.lock=!pd.lock;if(!pd.lock&&pd.act){pd.act=false;master.perf[i].release()}renderPerform()};
-    const pad=el("div",{class:"pad"+(pd.act?" act":"")+(pd.t==="scratch"?" tt":"")},el("span",{class:"ax x"},pf(pd.t,1)),el("span",{class:"ax y"},pf(pd.t,2)),el("i",{class:"dot",style:`left:${pd.x*100}%;top:${(1-pd.y)*100}%`}));if(pd.t==="scratch")pad.prepend(el("b",{class:"disc",style:`transform:translate(-50%,-50%) rotate(${pd.x*720}deg)`}));
-    pad.addEventListener("pointerdown",e=>{e.preventDefault();audio();pad.setPointerCapture(e.pointerId);const r=pad.getBoundingClientRect();const at=ev=>{pd.x=clamp((ev.clientX-r.left)/r.width,0,1);pd.y=clamp(1-(ev.clientY-r.top)/r.height,0,1);const d=pad.querySelector(".dot");d.style.left=pd.x*100+"%";d.style.top=(1-pd.y)*100+"%";const ds=pad.querySelector(".disc");if(ds)ds.style.transform=`translate(-50%,-50%) rotate(${pd.x*720}deg)`};
+    /* Scratch : le disque photographié, vu du dessus, tourne sous la main ; autres modes : un écran à phosphore photographié de face */
+    const tt=pd.t==="scratch",dot=el("i",{class:"dot",style:`left:${pd.x*100}%;top:${(1-pd.y)*100}%`}),axs=[el("span",{class:"ax x"},pf(pd.t,1)),el("span",{class:"ax y"},pf(pd.t,2))];let pad,area;
+    if(tt)pad=el("div",{class:"pad tt"+(pd.act?" act":"")},el("b",{class:"rec",style:`transform:rotate(${pd.x*720}deg)`}),...axs,dot);
+    else pad=el("div",{class:"pad crt"+(pd.act?" act":""),style:`--crt:var(${i?"--crtB":"--crtA"})`},...axs,dot);area=pad;
+    pad.addEventListener("pointerdown",e=>{e.preventDefault();audio();pad.setPointerCapture(e.pointerId);const r=area.getBoundingClientRect();const at=ev=>{pd.x=clamp((ev.clientX-r.left)/r.width,0,1);pd.y=clamp(1-(ev.clientY-r.top)/r.height,0,1);dot.style.left=pd.x*100+"%";dot.style.top=(1-pd.y)*100+"%";const ds=pad.querySelector(".rec");if(ds)ds.style.transform=`rotate(${pd.x*720}deg)`};
       at(e);pd.act=true;pad.classList.add("act");master.perf[i].engage(pd.t,pd.x,pd.y);
       const mv=ev=>{if(ev.pointerId!==e.pointerId)return;at(ev);master.perf[i].move(pd.x,pd.y)};
       const up=ev=>{if(ev.pointerId!==e.pointerId)return;pad.removeEventListener("pointermove",mv);pad.removeEventListener("pointerup",up);pad.removeEventListener("pointercancel",up);if(!pd.lock){pd.act=false;pad.classList.remove("act");master.perf[i].release()}};
@@ -2013,6 +2084,115 @@ addEventListener("pointerdown",()=>audio(),{once:true,capture:true});
   syncUI();render();requestAnimationFrame(frame);kamLoad();
   if(navigator.storage&&navigator.storage.persist)navigator.storage.persist().catch(()=>{});
 })();
+
+/* ================= Master : panneau de mastering (à la manière de BandLab Mastering) ================= */
+const L=(fr,en)=>lang==="fr"?fr:en;
+const MS_MAIN=["Universal","Fire","Clarity","Tape","Natural","Cinematic","Spatial","Punch"];
+let mastrOn=false;
+const MS={B:null,used:null,ex:null,exL:null,src:null,out:null,chain:null,t0:0,off:0,play:false,ab:"m",eq:true,sel:new Set(),meas:new Map(),gen:0,raf:0};
+const msTgt=()=>state.target==="off"||state.target==null?null:+state.target;
+const msKey=p=>p+"|"+(state.mInt??6)+"|"+JSON.stringify(state.mEq||{});
+function msStatus(t){const e=document.querySelector("#mastr .ms-st");if(e)e.textContent=t||""}
+async function rawMix(){const p=state.masterPreset,l=state.limiter,i=state.mInt,e=state.mEq;state.masterPreset="Neutral";state.limiter=false;try{return await renderOffline(null,0)}finally{state.masterPreset=p;state.limiter=l;state.mInt=i;state.mEq=e}}
+/* l'extrait le plus fort (20 s) sert aux mesures rapides */
+function loudest(b,sec){const sr=b.sampleRate,n=Math.min(b.length,Math.floor(sec*sr));if(n>=b.length)return b;const hop=Math.floor(sr/2),E=[];for(let a=0;a<b.length;a+=hop){let q=0;for(let c=0;c<b.numberOfChannels;c++){const d=b.getChannelData(c);for(let i=a;i<Math.min(b.length,a+hop);i+=4)q+=d[i]*d[i]}E.push(q)}
+  const w=Math.floor(n/hop);let best=0,bi=0,cur=0;for(let i=0;i<E.length;i++){cur+=E[i];if(i>=w)cur-=E[i-w];if(i>=w-1&&cur>best){best=cur;bi=i-w+1}}
+  const o=new AudioBuffer({numberOfChannels:b.numberOfChannels,length:n,sampleRate:sr});for(let c=0;c<b.numberOfChannels;c++)o.copyToChannel(b.getChannelData(c).subarray(bi*hop,bi*hop+n),c);return o}
+async function renderChain(B,m,trimDb){const oc=new OfflineAudioContext(2,B.length,B.sampleRate);const s=oc.createBufferSource();s.buffer=B;s.connect(mchain(oc,m,trimDb,oc.destination).input);s.start();return oc.startRendering()}
+/* mesure d'un réglage : sonie naturelle, puis sonie et crête à la cible */
+async function msMeasure(p){const k=msKey(p);if(MS.meas.has(k))return MS.meas.get(k);if(!MS.ex)return null;const m=scaledM(p,state.mInt,state.mEq);
+  const tg=msTgt();let trim=0,b1=await renderChain(MS.ex,m,0),l=await lufsOf(b1);const L0=l;
+  if(tg!=null&&isFinite(l))for(let i=0;i<5;i++){const d=tg-l;if(Math.abs(d)<.2)break;trim+=d;b1=await renderChain(MS.ex,m,trim);l=await lufsOf(b1)}
+  const r={L0,trim,L:l,pk:peakDb(b1)};MS.meas.set(k,r);return r}
+const msTrim=p=>{const r=MS.meas.get(msKey(p));return r&&msTgt()!=null?r.trim:0};
+const fmtDb=x=>isFinite(x)?(x<0?"−":"")+Math.abs(x).toFixed(1).replace(".",lang==="fr"?",":"."):"−∞";
+async function msMeasureAll(){const g=++MS.gen;const list=[state.masterPreset,...MS_MAIN,...Object.keys(MASTERS).filter(k=>k!=="Neutral"&&!MS_MAIN.includes(k))];
+  for(const p of [...new Set(list)]){if(g!==MS.gen||!mastrOn)return;const r=await msMeasure(p);msCard(p,r);if(p===state.masterPreset)msRoute()}}
+function msCard(p,r){const c=document.querySelector(`#mastr .ms-p[data-p="${CSS.escape(p)}"] small`);if(c&&r)c.textContent=fmtDb(r.L)+" LUFS\n"+L("crête ","peak ")+fmtDb(r.pk)+" dB"}
+/* écoute : le mix brut passe dans la chaîne du réglage choisi ; A = original, B = master ; « = » égalise la sonie */
+function msOrigGain(){const r=MS.meas.get(msKey(state.masterPreset));const tgt=r?r.L:msTgt();return MS.eq&&tgt!=null&&isFinite(tgt)&&isFinite(MS.exL)?tgt-MS.exL:0}
+function msRoute(){if(!MS.src||!ctx)return;const c=ctx,T=c.currentTime,old=MS.chain,g=c.createGain();g.gain.value=0;g.connect(MS.out);let inp,to=1;
+  if(MS.ab==="o"){inp=g;to=Math.pow(10,msOrigGain()/20)}else{const p=state.masterPreset;inp=mchain(c,scaledM(p,state.mInt,state.mEq),msTrim(p),g).input}
+  MS.src.connect(inp);g.gain.setTargetAtTime(to,T,.02);MS.chain={g,inp};
+  if(old){old.g.gain.setTargetAtTime(0,T,.02);const src=MS.src;setTimeout(()=>{try{src.disconnect(old.inp)}catch(e){}try{old.g.disconnect()}catch(e){}},250)}}
+function msStop(keep){if(MS.src){try{MS.src.onended=null;MS.src.stop()}catch(e){}if(keep!==true&&ctx)MS.off=Math.max(0,ctx.currentTime-MS.t0)}MS.src=null;MS.chain=null;if(MS.out){const o=MS.out;setTimeout(()=>{try{o.disconnect()}catch(e){}},300)}MS.out=null;MS.play=false;cancelAnimationFrame(MS.raf);msBar()}
+function msPlay(from){if(!MS.B)return;if(typeof playing!=="undefined"&&playing)stop();msStop(true);const c=audio();const s=c.createBufferSource();s.buffer=MS.B;const out=c.createGain();out.connect(c.destination);if(analyser)out.connect(analyser);
+  MS.out=out;MS.src=s;msRoute();from=clamp(from??MS.off,0,Math.max(0,MS.B.duration-.05));s.start(0,from);MS.t0=c.currentTime-from;MS.play=true;s.onended=()=>{if(MS.src===s){MS.src=null;MS.play=false;MS.off=0;msBar()}};msBar();msTick()}
+function msTick(){cancelAnimationFrame(MS.raf);const cv=document.querySelector("#mastr .ms-wave");if(cv)msWave(cv);if(MS.play)MS.raf=requestAnimationFrame(msTick)}
+function msWave(cv){const dpr=devicePixelRatio||1,W=Math.max(10,cv.clientWidth*dpr|0),H=Math.max(10,cv.clientHeight*dpr|0);if(cv.width!==W)cv.width=W;if(cv.height!==H)cv.height=H;const x=cv.getContext("2d");x.clearRect(0,0,W,H);if(!MS.B)return;
+  if(!MS.pk||MS.pk.length!==W){const d=MS.B.getChannelData(0),st=Math.max(1,Math.floor(d.length/W));MS.pk=new Float32Array(W);for(let i=0;i<W;i++){let m=0;for(let j=i*st;j<Math.min(d.length,(i+1)*st);j+=8)m=Math.max(m,Math.abs(d[j]));MS.pk[i]=m}}
+  const pos=MS.play&&ctx?ctx.currentTime-MS.t0:MS.off,px=pos/MS.B.duration*W;for(let i=0;i<W;i++){const h=Math.max(1,MS.pk[i]*H*.92);x.fillStyle=i<px?"#ffa726":"rgba(239,227,207,.45)";x.fillRect(i,(H-h)/2,1,h)}
+  x.fillStyle="#ffe3a0";x.fillRect(px|0,0,Math.max(1,dpr),H)}
+function msBar(){const b=document.querySelector("#mastr .ms-play");if(b)b.innerHTML=`<svg><use href="#i-${MS.play?"stop":"play"}"/></svg>`;const cv=document.querySelector("#mastr .ms-wave");if(cv)msWave(cv)}
+async function msExport(list){if(!MS.B||!list.length)return;const fmt=document.querySelector("#mastr .ms-fmt").value,name=stamp(),tg=msTgt();
+  for(const p of list){msStatus(p+" …");const m=scaledM(p,state.mInt,state.mEq);await msMeasure(p);let trim=msTrim(p),b=await renderChain(MS.B,m,trim);
+    if(tg!=null)for(let k=0;k<3;k++){const l=await lufsOf(b),d=tg-l;if(!isFinite(l)||Math.abs(d)<.15)break;trim+=d;b=await renderChain(MS.B,m,trim)}
+    capPeak(b,m.ceil);b=trimTail(b);download(fmt==="mp3"?await mp3Blob(b):wavBlob(b),`${name}-${p.replace(/[^\w-]+/g,"_")}${tg!=null?"_"+tg+"LUFS":""}.${fmt}`);await new Promise(r=>setTimeout(r,800))}
+  const c=creditsTxt(MS.used);if(c)download(new Blob([c],{type:"text/plain"}),name+"-credits.txt");msStatus(L("Exporté : ","Exported: ")+list.join(", "))}
+/* référence : un morceau de référence donne la cible de sonie et l'équilibre grave / médium / aigu */
+async function bandsDb(b){const oc=new OfflineAudioContext(3,b.length,b.sampleRate),s=oc.createBufferSource();s.buffer=b;const mg=oc.createChannelMerger(3);
+  [["lowpass",200],["bandpass",1200],["highpass",4000]].forEach(([t,f],i)=>{const q=oc.createBiquadFilter();q.type=t;q.frequency.value=f;if(t==="bandpass")q.Q.value=.5;s.connect(q).connect(mg,0,i)});mg.connect(oc.destination);s.start();const r=await oc.startRendering();
+  const db=[0,1,2].map(i=>{const d=r.getChannelData(i);let q=0;for(let j=0;j<d.length;j+=2)q+=d[j]*d[j];return 10*Math.log10(q/(d.length/2)+1e-12)});const mean=(db[0]+db[1]+db[2])/3;return db.map(v=>v-mean)}
+async function msReference(file){try{msStatus(L("Référence …","Reference …"));const ref=await audio().decodeAudioData(await file.arrayBuffer());const rx=loudest(ref,20),rl=await lufsOf(rx);
+  state.mEq={lo:0,mi:0,hi:0};const cur=await renderChain(MS.ex,scaledM(state.masterPreset,state.mInt,state.mEq),0);const a=await bandsDb(rx),b=await bandsDb(cur);
+  const q=v=>Math.round(clamp(v,-6,6)*2)/2;state.mEq={lo:q(a[0]-b[0]),mi:q(a[1]-b[1]),hi:q(a[2]-b[2])};if(isFinite(rl))state.target=Math.round(rl);
+  MS.meas.clear();rebuildMaster();syncUI&&syncUI();save();renderMastr();msMeasureAll();msStatus(L("Calé sur ","Matched to ")+file.name.replace(/\.[^.]+$/,"")+" : "+fmtDb(rl)+" LUFS")}catch(e){console.warn(e);msStatus("✕")}}
+async function openMastr(){mastrOn=true;renderMastr();if(MS.B&&MS.fresh===projJSON())return;msStatus(L("Rendu du mix …","Rendering the mix …"));MS.B=null;MS.pk=null;MS.meas.clear();
+  const r=await rawMix();if(!mastrOn)return;if(!r){msStatus(L("Projet vide","Empty project"));return}MS.B=r.b;MS.used=r.used;MS.ex=loudest(r.b,20);MS.exL=await lufsOf(MS.ex);MS.off=0;MS.fresh=projJSON();renderMastr();msStatus("");msMeasureAll()}
+function closeMastr(){msStop();mastrOn=false;MS.gen++;renderMastr()}
+let msDeb=0;
+function msChanged(){clearTimeout(msDeb);msDeb=setTimeout(()=>{rebuildMaster();save();msMeasureAll();msRoute()},120)}
+function renderMastr(){const box=$("#mastr");box.classList.toggle("on",mastrOn);$("#mFx").classList.toggle("on",mastrOn);if(!mastrOn){box.replaceChildren();fit();return}
+  const play=el("button",{class:"ms-play",title:L("Écouter","Listen")});play.onclick=()=>MS.play?msStop():msPlay();
+  const ab=["o","m"].map(v=>{const b=el("button",{class:MS.ab===v?"on":"",title:v==="o"?L("Original","Original"):L("Master","Master")},v==="o"?"A":"B");b.onclick=()=>{MS.ab=v;msRoute();renderMastr()};return b});
+  const eq=el("button",{class:MS.eq?"on":"",title:L("Même sonie pour comparer","Equal loudness")},"=");eq.onclick=()=>{MS.eq=!MS.eq;msRoute();eq.classList.toggle("on",MS.eq)};
+  const wave=el("canvas",{class:"ms-wave"});wave.addEventListener("pointerdown",e=>{if(!MS.B)return;const r=wave.getBoundingClientRect(),t=clamp((e.clientX-r.left)/r.width,0,1)*MS.B.duration;MS.off=t;if(MS.play)msPlay(t);else msBar()});
+  const rack=el("button",{title:L("Rack du master","Master rack")},el("svg",{},el("use",{href:"#i-fx"})));rack.innerHTML='<svg><use href="#i-fx"/></svg>';rack.onclick=()=>{fxOpen=fxOpen==="master"?null:"master";renderFx();render()};
+  const card=p=>{const b=el("button",{class:"ms-p"+(state.masterPreset===p?" on":""),"data-p":p},el("b",{},p),el("small",{},""),el("i",{class:"ck"+(MS.sel.has(p)?" on":"")}));
+    b.onclick=e=>{if(e.target.classList.contains("ck")){MS.sel.has(p)?MS.sel.delete(p):MS.sel.add(p);e.target.classList.toggle("on",MS.sel.has(p));msExpN();return}
+      state.masterPreset=p;MS.ab="m";$("#mPre").value=p;rebuildMaster();save();box.querySelectorAll(".ms-p").forEach(x=>x.classList.toggle("on",x.dataset.p===p));box.querySelectorAll(".ms-ab button").forEach((x,i)=>x.classList.toggle("on",i===1));msMeasure(p).then(()=>{msRoute()});if(!MS.play&&MS.B)msPlay()};
+    const r=MS.meas.get(msKey(p));if(r)setTimeout(()=>msCard(p,r));return b};
+  const more=Object.keys(MASTERS).filter(k=>k!=="Neutral"&&!MS_MAIN.includes(k));
+  const grid=el("div",{class:"ms-grid"},...MS_MAIN.map(card),el("div",{class:"ms-more"},L("Autres masterings du studio","More studio masterings")),...more.map(card));
+  const rng=(ico,ttl,min,max,st,val,fmt,on)=>{const i=el("input",{type:"range",min,max,step:st,value:val}),o=el("output",{},fmt(val));i.oninput=()=>{o.textContent=fmt(+i.value);on(+i.value)};i.ondblclick=()=>{const d=ico==="i-gain"?6:0;i.value=d;i.oninput()};const lb=el("label",{title:ttl},i,o);lb.insertAdjacentHTML("afterbegin",ico.startsWith("i-")?`<svg><use href="#${ico}"/></svg>`:`<span>${ico}</span>`);return lb};
+  const sgn=v=>(v>0?"+":v<0?"−":"")+Math.abs(v);const E=state.mEq||(state.mEq={lo:0,mi:0,hi:0});
+  const tgt=el("select",{title:L("Sonie de sortie","Output loudness")},...TARGETS.map(([v,n])=>el("option",{value:String(v)},n)));tgt.value=String(state.target);tgt.onchange=()=>{state.target=tgt.value==="off"?"off":+tgt.value;$("#mTgt").value=tgt.value;MS.meas.clear();msChanged()};
+  const fi=el("input",{type:"file",accept:"audio/*",style:"display:none"});fi.onchange=()=>fi.files[0]&&msReference(fi.files[0]);
+  const ref=el("button",{title:L("Mastering de référence : charger un morceau","Reference mastering: load a track")});ref.innerHTML=`<svg><use href="#i-file"/></svg><span>${L("Référence","Reference")}</span>`;ref.onclick=()=>fi.click();
+  const ctl=el("div",{class:"ms-ctl"},
+    rng("i-gain",L("Intensité","Intensity"),0,10,1,state.mInt??6,v=>String(v),v=>{state.mInt=v;msChanged()}),
+    rng(L("Grave","Low"),L("Grave","Low"),-6,6,.5,E.lo,sgn,v=>{E.lo=v;msChanged()}),
+    rng(L("Médium","Mid"),L("Médium","Mid"),-6,6,.5,E.mi,sgn,v=>{E.mi=v;msChanged()}),
+    rng(L("Aigu","High"),L("Aigu","High"),-6,6,.5,E.hi,sgn,v=>{E.hi=v;msChanged()}),tgt,ref,fi);
+  const fmt=el("select",{class:"ms-fmt",title:L("Format","Format")},el("option",{value:"wav"},"WAV"),el("option",{value:"mp3"},"MP3"));
+  const ex1=el("button",{title:L("Exporter ce master","Export this master")});ex1.innerHTML=`<svg><use href="#i-down"/></svg><span>${L("Exporter","Export")}</span>`;ex1.onclick=()=>msExport([state.masterPreset]);
+  const exN=el("button",{class:"ms-exn",title:L("Exporter les masters cochés","Export the ticked masters")});exN.onclick=()=>msExport([...MS.sel]);
+  const close=el("button",{title:L("Fermer","Close")},"✕");close.onclick=()=>drawer("mastr");
+  box.replaceChildren(el("div",{class:"ms-row"},play,el("span",{class:"ms-row ms-ab"},...ab),eq,wave,rack,close),grid,ctl,el("div",{class:"ms-row"},fmt,ex1,exN,el("span",{class:"ms-st"})));msExpN();msBar();fit()}
+function msExpN(){const b=document.querySelector("#mastr .ms-exn");if(b){b.innerHTML=`<svg><use href="#i-down"/></svg><span>${L("Exporter les cochés","Export ticked")} (${MS.sel.size})</span>`;b.disabled=!MS.sel.size}}
+
+/* tiroirs du bas : console, pads, master ; un seul ouvert, comme les tiroirs de BandLab */
+function drawer(n){const was=n==="console"?consoleOn:n==="perf"?perfOn:mastrOn;consoleOn=false;perfOn=false;if(mastrOn&&!(n==="mastr"&&!was))closeMastr();
+  if(!was){if(n==="console")consoleOn=true;else if(n==="perf")perfOn=true;else openMastr()}renderConsole();renderPerform();fit()}
+$("#bConsole").onclick=()=>drawer("console");$("#bPerf").onclick=()=>drawer("perf");$("#mFx").onclick=()=>drawer("mastr");
+
+/* proportions : chaque aire suit le format de l'écran, en continu */
+function fit(){const vv=window.visualViewport,W=vv?vv.width:innerWidth,H=vv?vv.height:innerHeight,land=W>=H,narrow=W<=760,R=document.documentElement.style;
+  R.setProperty("--side-w",narrow?"auto":Math.round(clamp(W*(H<=520?.36:.25),240,400))+"px");R.setProperty("--side-h",narrow?Math.round(H*(land?.4:.3))+"px":"auto");
+  const m=$("main");if(!m)return;const open=consoleOn||perfOn||mastrOn;m.classList.toggle("dr",open);
+  const mh=Math.max(120,m.clientHeight-($("#ruler")?.offsetHeight||0)),ratio=clamp(+localStorage.getItem("st.split."+(land?"l":"p"))||(land?.5:.66),.16,.84);
+  const dh=Math.round(clamp(mh*ratio,110,mh-56));R.setProperty("--drawer",dh+"px");
+  const ctl=document.querySelector(".thead .ctl"),need=ctl?[...ctl.children].reduce((a,c)=>a+c.offsetHeight,0)+3*(ctl.children.length-1)+12:60;
+  const free=open?mh-dh-12:mh,th=Math.round(clamp(Math.max(need,free/(H<=520?2.4:land?6:4.6)),need,Math.max(need,120)));
+  if(th!==fit.th){fit.th=th;R.setProperty("--th",th+"px");if(typeof render==="function")requestAnimationFrame(()=>render())}}
+(()=>{const sp=$("#split");if(!sp)return;sp.addEventListener("pointerdown",e=>{e.preventDefault();sp.setPointerCapture(e.pointerId);const m=$("main"),land=innerWidth>=innerHeight,mh=m.clientHeight-($("#ruler")?.offsetHeight||0),bottom=m.getBoundingClientRect().bottom;
+  const mv=ev=>{const r=clamp((bottom-ev.clientY)/mh,.16,.84);localStorage.setItem("st.split."+(land?"l":"p"),r.toFixed(3));fit();if(consoleOn)renderConsole()};
+  const up=()=>{sp.removeEventListener("pointermove",mv);sp.removeEventListener("pointerup",up);sp.removeEventListener("pointercancel",up);if(mastrOn)msBar();if(perfOn)renderPerform()};
+  sp.addEventListener("pointermove",mv);sp.addEventListener("pointerup",up);sp.addEventListener("pointercancel",up)});
+  sp.addEventListener("dblclick",()=>{localStorage.removeItem("st.split."+(innerWidth>=innerHeight?"l":"p"));fit()})})();
+addEventListener("resize",fit);window.visualViewport&&visualViewport.addEventListener("resize",fit);addEventListener("orientationchange",()=>setTimeout(fit,200));
+$("#bSide").addEventListener("click",()=>setTimeout(fit,30));
+requestAnimationFrame(fit);setTimeout(fit,400);
 </script>
 </body>
 </html>

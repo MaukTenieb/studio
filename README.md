@@ -45,6 +45,10 @@ The collections count about 900 entries: genre packs in eleven families, each wi
 
 The interface takes the materials of a Korhogo kave: burnished steel plates for the bars, a painted cabinet flank behind the track column, a reel-to-reel deck in the top bar, the vaulted cellar behind the pads, green phosphor screens in the pads, a record under the hand in the Scratch pad, backlit fader caps, tape shelves behind the sound library, Dymo labels on the Fauna drawer, and the Fauna gathered around the desk at opening. Images: Mauk Tenieb.
 
+The Master button opens a mastering drawer in the manner of BandLab Mastering: the mix renders once, then plays through Universal, Fire, Clarity, Tape, Natural, Cinematic, Spatial, Punch or one of the studio's own masterings. A and B switch between the original and the master, = matches their loudness, the intensity runs on eleven levels, a three-band EQ trims the tone, the target sets the output loudness, and Reference matches loudness and tonal balance to a track you load. Export writes the chosen master, or every ticked master in one go.
+
+Every area follows the screen: track height, side panel, bottom drawer. A grip between the tracks and the drawer sets their share; a double tap resets it.
+
 One search field at the top of the side panel looks through the kit, the collections, the user's sounds, Freesound, Wikimedia Commons, Jamendo and Internet Archive at once.
 
 ## Keys
@@ -74,3 +78,5 @@ Le pictogramme des pads, à côté de la console, ouvre deux pads XY sur le bus 
 Les clips prennent les couleurs de la Fauna Korhogo : chaque piste de 01 à 18 prend la couleur du Mask qu'elle montre, les pistes 19 à 32 un second tirage des mêmes dix-huit couleurs. Le kit ajoute la Fauna Korhogo (les coupes des sorties de chaque Mask), 26 kits par style de dix sons synthétisés, et la Borne (88 enregistrements d'objets réels, CC0). Le rack reçoit les sept effets de Musik, les préréglages de chaîne les six kits Α à Ζ. Les collections comptent environ 900 entrées : packs par genre avec leurs éléments, instruments, kits d'artistes (catalogue Korhogo sur Internet Archive, trente preneurs de son de Freesound), objets et bruitages, véhicules et machines, armes et conflits, médias, humeurs, animaux.
 
 L'interface prend les matières d'une kave Korhogo : plaques d'acier bruni, flanc peint derrière les pistes, magnétophone à bandes dans la barre du haut, cave voûtée derrière les pads, écrans à phosphore vert, disque sous la main dans le pad Scratch, capuchons rétroéclairés, étagères de bandes derrière la bibliothèque, étiquettes Dymo sur le tiroir Fauna, et la Fauna réunie autour de la console à l'ouverture. Images : Mauk Tenieb.
+
+Le bouton Master ouvre un tiroir de mastering à la manière de BandLab Mastering : écoute A/B à sonie égale, intensité sur onze niveaux, égaliseur trois bandes, cible de sonie, mastering de référence, export d'une ou de plusieurs sorties. Chaque aire suit l'écran ; une poignée partage les pistes et le tiroir.

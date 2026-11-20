@@ -1,0 +1,38 @@
+# Registre des demandes de Mauk Tenieb
+
+Ce registre recense chaque demande sur le studio, depuis l'ouverture du chantier. Une demande entre dès qu'elle est formulée. Elle passe à « fait » après un test sur ordinateur, sur téléphone debout et sur téléphone couché. Claude relit ce registre au début de chaque reprise et travaille d'abord sur les lignes « à faire ».
+
+Critères de qualité appliqués à chaque lot : direction artistique, réalisme photographique, beauté, commodité, simplicité, exhaustivité de la bibliothèque de sons, ergonomie, UI-UX, proportions constantes sur tous les écrans.
+
+## Fait
+
+- Station audio dans le navigateur, façon BandLab, un seul fichier, dépôt MaukTenieb/studio, en ligne sur https://mauktenieb.github.io/studio/
+- Toutes les fonctions de BandLab étudiées et reprises : pistes, clips, découpe, boucle, fondus, inversion, transposition, étirement, débruitage, rack d'effets, automation, accordeur, métronome, enregistrement au micro, export WAV, MP3 et pistes séparées.
+- Zéro MIDI : uniquement de l'audio interne.
+- 32 pistes numérotées de 01 à 32. Pistes 01 à 18 : les Masks de la Fauna en figurines 3D animées et bioluminescentes, tirés au hasard à chaque session. Pistes 19 à 32 : vidéos et sons de KamOrhogo.
+- Couleurs des clips : couleurs canoniques des 18 Masks.
+- Commandes de mixage tactiles de BandLab mobile, au doigt et à la souris ; console de 33 tranches.
+- Pads XY tactiles à deux paramètres : Enveloppe × Hauteur, Scratch, Filtre, Gate, Stutter, Arrêt de bande, Écho, Réverb, Crush, Flanger.
+- Découpe qui coupe le son à l'endroit indiqué.
+- Fusion et séparation de clips : attaques, silences, harmonique / percussif, bandes, milieu / côtés.
+- Masterings, sonie (LUFS), réverbérations de pièces naturelles.
+- Bouton Master à la manière de BandLab Mastering : Universal, Fire, Clarity, Tape, Natural, Cinematic, Spatial, Punch et 22 masterings du studio ; écoute A/B à sonie égale ; intensité sur 11 niveaux ; égaliseur 3 bandes ; cible de sonie ; mastering de référence ; export d'une sortie ou de toutes les sorties cochées.
+- Bibliothèques libres : Freesound, Internet Archive, Wikimedia Commons, Jamendo.
+- Collections : 926 entrées (packs par genre avec leurs éléments, instruments, kits d'artistes, objets, machines, armes, médias, humeurs, animaux, voix, langues, chants, lieux, matériel d'enregistrement, infrasons, synthèse).
+- Kits : sons synthétisés, 26 kits par style, Fauna Korhogo (coupes des sorties de chaque Mask), la Borne (88 objets réels).
+- Kits d'artistes : catalogue Korhogo sur Internet Archive (Mauk Tenieb, C7H5N3O6, dogXim, Ts'ui Pên, Auvergne) et trente preneurs de son de Freesound.
+- Barre de recherche sur tous les kits, collections et sons.
+- Effets de Musik repris (gross beat, granulizer, tranches à l'envers, octaver, écho de bande, larsen, résonateur métal) et kits Α à Ζ.
+- DA de la kave Korhogo, photographique : acier bruni du flanc de borne, jonc chromé, plaque MAUK TENIEB, étiquettes Dymo, écrans à phosphore photographiés, disque photographié pour le Scratch, capuchons rétroéclairés, cave voûtée, étagères de bandes, deux photographies de groupe de la Fauna à l'ouverture.
+- Proportions continues : chaque aire (pistes, bibliothèque, tiroir du bas) suit le format de l'écran ; poignée de partage entre pistes et tiroir ; téléphone couché avec bibliothèque à droite.
+
+## À trancher par Mauk Tenieb
+
+- Figurines 3D des pistes 01 à 18 : elles restent en 3D, comme demandé ; la règle photographique de la DA appelle des portraits photographiques. Décision réservée à l'auteur.
+
+## À faire
+
+- Boucles calées sur le tempo du projet au dépôt, comme dans BandLab : lecture du tempo dans le nom du son, étirement automatique.
+- Recherche par tempo et par tonalité dans les packs.
+- Contrôle de chaque panneau secondaire (rack d'effets, feuille de réglages, dialogues) sur téléphone debout et couché.
+- Vignettes vidéo de KamOrhogo sur les pistes 19 à 32 : contrôle du rendu.
