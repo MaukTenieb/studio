@@ -61,6 +61,9 @@ Critères de qualité appliqués à chaque lot : direction artistique, réalisme
 - Grands espaces : grotte, silo (échos de paroi métallique), cathédrale ; la tenue allonge la queue jusqu'à une minute, avec une lente dérive de hauteur.
 - Boîtes à bruit : sirène dub et laser analogique, chacun dans un écho à bande qui s'emballe.
 
+- Calage sur l'image : le tempo se règle pour que les temps forts tombent sur les coupes vidéo et les notes de terrain (palette de commandes, ou Alt + clic sur un repère de la règle).
+- Gomme spectrale (menu du clip) : on encadre des zones du spectrogramme ; « réparer » les remplit avec le son d'avant et d'après, « effacer » les vide.
+
 ## À trancher par Mauk Tenieb
 
 - Figurines 3D des pistes 01 à 18 : elles restent en 3D, comme demandé ; la règle photographique de la DA appelle des portraits photographiques. Décision réservée à l'auteur.

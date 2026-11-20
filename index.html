@@ -204,6 +204,8 @@ dialog .col{display:flex;flex-direction:column;gap:6px}
 
 #sheet{display:none;position:absolute;left:50%;bottom:8px;transform:translateX(-50%);z-index:20;width:min(94%,460px);background:linear-gradient(var(--panel-hi),var(--panel-lo));border:1px solid #1d1915;border-radius:6px;padding:12px 14px;box-shadow:0 12px 30px rgba(0,0,0,.5);flex-direction:column;gap:6px}
 #sheet.on{display:flex}
+#sheet.wide{width:min(96%,1100px)}
+#sheet canvas.spe{width:100%;height:min(46vh,340px);touch-action:none;cursor:crosshair;border-radius:3px;background:#070606}
 #sheet b{font-weight:600}
 #sheet label{display:flex;flex-direction:column;gap:2px;color:var(--legend-dim)}
 #sheet label span{display:flex;justify-content:space-between}#sheet label i{font-style:normal;color:var(--legend);font-variant-numeric:tabular-nums}
@@ -1552,7 +1554,7 @@ function renderActionBar(){
   const one=sel.length===1?sel[0]:null,B=(ic,lbl,fn,dis)=>{const b=el("button",{title:lbl,class:dis?"dis":""},icon(ic),el("span",{},lbl));b.onclick=()=>{if(!dis)fn()};return b};
   const m=regionMore(sel),at=()=>{const r=bar.getBoundingClientRect();return[r.left+r.width/2,r.top-10]};
   const main=[B("del",t("del"),delSel),B("dup",t("copy"),()=>{const[,c]=sel[0];clipboard={...c};dupSel()}),B("loop","Loop",()=>edit(()=>{for(const[tr,c]of sel)tr.clips.push({...c,id:uid(),start:c.start+c.len})})),B("cut",t("slice"),splitSel)];
-  const more=[B("tune",lang==="fr"?"Échelle":"Scale",()=>scaleSheet(sel),!one),B("down",lang==="fr"?"Tranches":"Slices",()=>exportSlices(sel),!one),B("shift",t("shift"),m.shift),B("gain","Gain",m.gain),B("tune",t("transposeS"),m.transpose,!one),B("stretch","Timestretch",m.stretch,!one),B("fade",t("fades"),m.fade),B("denoise",t("denoise"),m.denoise,!one),B("rev",t("reverse"),m.reverse),
+  const more=[B("erase",lang==="fr"?"Gomme spectrale":"Spectral eraser",()=>eraseSheet(sel),!one),B("tune",lang==="fr"?"Échelle":"Scale",()=>scaleSheet(sel),!one),B("down",lang==="fr"?"Tranches":"Slices",()=>exportSlices(sel),!one),B("shift",t("shift"),m.shift),B("gain","Gain",m.gain),B("tune",t("transposeS"),m.transpose,!one),B("stretch","Timestretch",m.stretch,!one),B("fade",t("fades"),m.fade),B("denoise",t("denoise"),m.denoise,!one),B("rev",t("reverse"),m.reverse),
     B("fuse",t("fuseS"),fuse,sel.length<2),B("lab",t("atelierS"),()=>{const[x,y]=at();atelier(one[0],one[1],x,y)},!one),B("split2",t("separateS"),()=>{const[x,y]=at();sepMenu(one[0],one[1],x,y)},!one)];
   const tog=el("button",{title:t("more"),class:abarMore?"on":""},el("b",{style:"font-size:1.3em;line-height:1"},"⋯"),el("span",{},t("more")));tog.onclick=()=>{abarMore=!abarMore;renderActionBar()};
   bar.replaceChildren(...(abarMore?more:main),tog);
@@ -2476,6 +2478,7 @@ function cmdList(){const F=lang==="fr",tr=curTrack(),tn=tr?tr.name:"";const A=[]
   add(F?"Annuler":"Undo","undo",clk("bUndo"));add(F?"Boucle":"Loop","loop cycle",clk("bLoop"));add(F?"Métronome":"Metronome","click",clk("bMetro"));add(F?"Magnétisme":"Snap","grid grille",clk("bSnap"));add(F?"Accordeur":"Tuner","tune cents hauteur",clk("bTuner"));add(F?"Retour en arrière 60 s":"Flashback 60 s","capture",clk("bFlash"));
   add("Master","mastering lufs bandlab",()=>drawer("mastr"));add("Console","mix mixer faders",()=>drawer("console"));add("Pads XY","perform scratch filter",()=>drawer("perf"));add(F?"Séquenceur à pas":"Step sequencer","steps pattern grille",()=>drawer("seq"));
   STAGES.forEach((st,i)=>add((F?"Étape ":"Stage ")+(i+1)+" : "+(F?st[0]:st[1]),"étape stage espace workspace alt+"+(i+1),()=>stage(i),"Alt+"+(i+1)));
+  add(F?"Caler le tempo sur les coupes et les notes":"Fit tempo to cuts and notes","tempo image video coupes beat mapping caler synchro",()=>fitTempo());
   add(F?"Repérer les coupes des vidéos":"Mark video cuts","vidéo video coupes cuts plans scene kamorhogo",markVideoCuts);
   add(F?"Dérive":"Drift","emergence lorenz evolve",driftToggle);add(F?"Garder la dérive":"Keep drift","keep",driftKeep);
   add("Export WAV","exporter mix",()=>doExport("wav"));add("Export MP3","exporter",()=>doExport("mp3"));add(F?"Export des pistes séparées":"Export stems","stems",()=>doExport("stems"));
@@ -2663,6 +2666,42 @@ function renderNodes(box){cancelAnimationFrame(ndRaf);const W=box.clientWidth,H=
   box.replaceChildren(svg,close,sceneModeBtn());if(!list.length)box.append(el("div",{class:"note",style:"position:absolute;left:50%;top:50%;transform:translate(-50%,-50%)"},fr?"Posez un son sur une piste":"Drop a sound on a track"));
   const lv=new Map();const tick=()=>{if(!sceneOn||sceneMode!=="nodes")return;edges.forEach(([p,tr,k])=>{if(!tr||k==="dub")return;let m=lv.get(tr.id);if(m===undefined){const ch=chains.get(tr.id);m=0;if(ch&&ch.an&&playing){const d=ch.mbuf||(ch.mbuf=new Float32Array(ch.an.fftSize));ch.an.getFloatTimeDomainData(d);for(const v of d)m=Math.max(m,Math.abs(v))}lv.set(tr.id,m)}
     if(k!=="scene"){p.setAttribute("opacity",tr.mute?.15:.4+.6*Math.min(1,m*1.5));p.setAttribute("stroke-width",2+4*Math.min(1,m))}});lv.clear();ndRaf=requestAnimationFrame(tick)};tick()}
+
+/* calage sur l'image : le tempo se règle pour que les temps forts tombent sur les coupes et les notes de terrain */
+function fitTempo(only){const N=only?[only]:(state.notes||[]).filter(n=>n.t>.2);const F=lang==="fr";if(!N.length){status(F?"Aucune coupe ni note sur la règle":"No cut or note on the ruler");return}
+  let best=state.bpm,bs=-1;const cur=state.bpm;
+  for(let b=60;b<=190;b+=.01){const sp=60/b;let sc=0;for(const n of N){const k=n.t/sp,d=Math.abs(k-Math.round(k))*sp,down=Math.round(k)%4===0?2:1;sc+=down*Math.exp(-Math.pow(d/.012,2))}sc-=Math.abs(b-cur)*1e-4;if(sc>bs){bs=sc;best=b}}
+  best=Math.round(best*100)/100;snapshot();state.bpm=best;$("#bpm").value=best;render();save();restartIfPlaying();
+  const sp=60/best,hit=N.filter(n=>{const k=n.t/sp;return Math.abs(k-Math.round(k))*sp<.012}).length;
+  status((F?"Tempo ":"Tempo ")+best+" — "+hit+"/"+N.length+(F?" repères sur un temps":" marks on a beat"));return{bpm:best,hit,n:N.length}}
+$("#rulerC").addEventListener("click",e=>{if(!e.altKey)return;const r=$("#rulerC").getBoundingClientRect(),t=(e.clientX-r.left+$("#scroller").scrollLeft)/state.pps;const n=(state.notes||[]).find(n=>Math.abs(n.t-t)*state.pps<10);if(n)fitTempo(n)});
+
+/* gomme spectrale : on encadre une zone du spectrogramme ; « effacer » la vide, « réparer » la remplit avec le son d'avant et d'après */
+function eraseSheet(sel){const[tr,c]=sel[0]||[];const s=c&&lib.get(c.snd);if(!s)return;const F=lang==="fr",b=clipBuffer(c),sr=b.sampleRate,N=2048,H=512;
+  const mono=new Float32Array(b.length);for(let ch=0;ch<b.numberOfChannels;ch++){const d=b.getChannelData(ch);for(let i=0;i<d.length;i++)mono[i]+=d[i]/b.numberOfChannels}
+  const S=stft(mono,N,H),B=N/2+1,fmin=20,fmax=sr/2,yOf=f=>1-Math.log(Math.max(fmin,f)/fmin)/Math.log(fmax/fmin),fOf=y=>fmin*Math.pow(fmax/fmin,1-y);
+  const sh=$("#sheet"),cv=el("canvas",{class:"spe"}),rects=[];let mode="repair";
+  const draw=()=>{const W=cv.width=cv.clientWidth*2,Hh=cv.height=cv.clientHeight*2,g=cv.getContext("2d"),img=g.createImageData(W,Hh);
+    for(let x=0;x<W;x++){const f=Math.min(S.F-1,Math.floor(x/W*S.F)),re=S.re[f],im=S.im[f];for(let y=0;y<Hh;y++){const k=Math.min(B-1,Math.round(fOf(y/Hh)/fmax*(B-1))),m=Math.hypot(re[k],im[k]),v=clamp((20*Math.log10(m+1e-9)+10)/70,0,1),o=(y*W+x)*4;
+      img.data[o]=255*Math.min(1,v*1.6);img.data[o+1]=255*Math.pow(v,1.6)*.85;img.data[o+2]=255*Math.pow(v,4)*.6;img.data[o+3]=255}}g.putImageData(img,0,0);
+    g.lineWidth=3;rects.forEach(r=>{g.strokeStyle=r.mode==="erase"?"#ff5a3a":"#7fd8ff";g.fillStyle=r.mode==="erase"?"rgba(255,90,58,.18)":"rgba(127,216,255,.16)";const x0=r.t0/b.duration*W,x1=r.t1/b.duration*W,y0=yOf(r.f1)*Hh,y1=yOf(r.f0)*Hh;g.fillRect(x0,y0,x1-x0,y1-y0);g.strokeRect(x0,y0,x1-x0,y1-y0)})};
+  cv.addEventListener("pointerdown",e=>{e.preventDefault();cv.setPointerCapture(e.pointerId);const R0=cv.getBoundingClientRect(),px=ev=>[clamp((ev.clientX-R0.left)/R0.width,0,1),clamp((ev.clientY-R0.top)/R0.height,0,1)],a=px(e),r={mode};rects.push(r);
+    const upd=ev=>{const z=px(ev);r.t0=Math.min(a[0],z[0])*b.duration;r.t1=Math.max(a[0],z[0])*b.duration;r.f0=fOf(Math.max(a[1],z[1]));r.f1=fOf(Math.min(a[1],z[1]));draw()};upd(e);
+    const up=()=>{cv.removeEventListener("pointermove",upd);cv.removeEventListener("pointerup",up);if(r.t1-r.t0<.005)rects.splice(rects.indexOf(r),1);draw()};cv.addEventListener("pointermove",upd);cv.addEventListener("pointerup",up)});
+  const mb=(m,ic,ttl)=>{const x=el("button",{class:mode===m?"on":"",title:ttl,style:"font-size:20px;line-height:1"},ic);x.onclick=()=>{mode=m;[...x.parentNode.children].forEach(y=>y.classList.toggle("on",y===x))};return x};
+  const close=()=>{sh.classList.remove("on","wide");sh.replaceChildren()};
+  const apply=()=>{if(!rects.length){close();return}const out=newBuf(b.numberOfChannels,b.length,sr);
+    for(let ch=0;ch<b.numberOfChannels;ch++){const X=stft(b.getChannelData(ch),N,H);rects.forEach(r=>{const f0=Math.max(0,Math.floor(r.t0*sr/H)),f1=Math.min(X.F-1,Math.ceil(r.t1*sr/H)+1),k0=Math.max(0,Math.floor(r.f0/fmax*(B-1))),k1=Math.min(B-1,Math.ceil(r.f1/fmax*(B-1)));
+        const L=Math.max(0,f0-1),Rr=Math.min(X.F-1,f1+1);for(let f=f0;f<=f1;f++){const u=f1>f0?(f-f0)/(f1-f0):.5;for(let k=k0;k<=k1;k++){let sc=0;
+          if(r.mode==="repair"){const m0=Math.hypot(X.re[L][k],X.im[L][k]),m1=Math.hypot(X.re[Rr][k],X.im[Rr][k]),tgt=m0*(1-u)+m1*u,m=Math.hypot(X.re[f][k],X.im[f][k]);sc=m>1e-9?Math.min(1,tgt/m):0}
+          X.re[f][k]*=sc;X.im[f][k]*=sc;const kk=N-k;if(k>0&&kk<N&&kk!==k){X.re[f][kk]*=sc;X.im[f][kk]*=sc}}}});
+      out.copyToChannel(istft(X.re,X.im,N,H,b.length,X.w),ch)}
+    const ns=addSound({id:"proc:"+uid(),name:(c.name||s.name)+(F?" gommé":" erased"),buffer:out,src:"proc",credit:s.credit});storeSound(ns);
+    edit(()=>{c.snd=ns.id;c.off=0;c.rev=false;c.len=out.duration});close();toast(F?"Zone traitée":"Done")};
+  sh.classList.add("wide");sh.replaceChildren(el("b",{},(F?"Gomme spectrale — ":"Spectral eraser — ")+(c.name||s.name)),cv,
+    el("div",{class:"row"},el("span",{},mb("repair","◩",F?"Réparer : remplir avec le son d'avant et d'après":"Repair: fill from before and after"),mb("erase","▢",F?"Effacer la zone":"Erase the area")),
+      el("button",{title:F?"Retirer le dernier cadre":"Remove last box",onclick:()=>{rects.pop();draw()}},icon("undo")),el("button",{onclick:close},"×"),el("button",{class:"on",onclick:apply},"✓")));
+  sh.classList.add("on");requestAnimationFrame(draw)}
 </script>
 </body>
 </html>

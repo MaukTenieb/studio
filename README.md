@@ -21,6 +21,7 @@ https://mauktenieb.github.io/studio/
 - Room reverbs modelled from early reflections and frequency-dependent decay: closet, bathroom, kitchen, bedroom, living room, vocal booth, studio, classroom, car, stairwell, parking garage, club, theatre, concert hall, church, cathedral, cave, tunnel, plate, spring.
 - Tempo, metronome, count-in, snap to the sixteenth, loop region drawn on the ruler, chromatic tuner, lyrics pad.
 - Sampler colours (SP-1200, MPC60, ASR-10, S950), sub octave with mono lows, large spaces (cave, silo, cathedral) with a hold up to one minute, dub siren and analog laser noise boxes.
+- Tempo fitted to video cuts and field notes; spectral eraser and repair on boxes drawn over the spectrogram.
 - Stage in real distances (6 m wide, 14 m deep): each object's sound takes the time of the air to arrive, so a fast move bends its pitch (Doppler). The object reddens moving away, turns blue coming closer.
 - Routing view, inside the Stage drawer: each track through its effects to the master, the master rack and the output, with the stage and dub sends. Tap a track to mute it, an effect to bypass it, hold the orange port to send to the dub. Links thicken with the signal level.
 - Actual scale of a clip: pitch tracked every 20 ms, a 0–1200 cent histogram with peaks named to the cent, compared with equal temperament, just intonation, maqam rast and bayati, slendro, pelog and raga bhairav.
@@ -94,3 +95,5 @@ Dans le tiroir Scène, une touche ouvre le plan des branchements : chaque piste 
 La scène mesure 6 m de large et 14 m de profondeur. Le son de chaque objet met le temps de l'air à arriver ; déplacé vite, il glisse en hauteur comme une sirène qui passe (effet Doppler). L'objet rougit en s'éloignant, bleuit en s'approchant.
 
 Le rack reçoit la couleur des échantillonneurs SP-1200, MPC60, ASR-10 et S950, un sous-grave à l'octave inférieure avec graves au centre, et trois grands espaces : grotte, silo, cathédrale, avec une tenue jusqu'à une minute. Les boîtes à bruit ajoutent la sirène dub et le laser analogique.
+
+Le tempo peut se caler sur les coupes vidéo et les notes de terrain : les temps forts tombent sur l'image. La gomme spectrale du menu d'un clip efface ou répare les zones encadrées sur son spectrogramme.
