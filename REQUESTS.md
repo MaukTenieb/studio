@@ -6,6 +6,8 @@ Critères de qualité appliqués à chaque lot : direction artistique, réalisme
 
 ## Fait
 
+- 20 nov. 21 h 24 (« pas des trucs à la Fruity Loops : de petits pavés réguliers et lumineux ») : le séquenceur s'ouvre sur la Console de Musik — bac des figurines en haut, banc de noyer photographié à œillets de laiton en bas, un emplacement par pas ; on pose une figurine au doigt (glisser, ou toucher puis toucher) ou à la souris, on la déplace d'un œillet à l'autre, on la retire en la lâchant hors du banc ; le voyant s'allume au pas joué. La grille, derrière la touche Console, devient l'écran à phosphore vert d'un séquenceur Page R (Fairlight CMI), comme le rack de Musik.
+
 - 20 nov. 14 h 50 : la bibliothèque remplit le séquenceur — toucher un son puis une rangée (téléphone), ou le glisser sur la rangée (ordinateur) ; bouton « + Rangée » ; numéro de rangée = piste où écrire, au choix 01 à 32. Relevé BandLab : BANDLAB-RELEVE.md.
 
 - 20 nov. 14 h 30 : mode simple par défaut (Créer, Pads, Rythme, Master), Atelier derrière un bouton ; feuille Créer à six portes (Rythme, Sons, Voix, Boîtes d'artistes, Film, Platines) ; gros + sur projet vide. Pads = surface Enveloppe × Hauteur existante, reprise telle quelle.
