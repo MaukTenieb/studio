@@ -94,6 +94,13 @@ Critères de qualité appliqués à chaque lot : direction artistique, réalisme
 
 - Silence au repos (20 nov., 13 h 40 : « l'appli larsenne avant même qu'on lance quoi que ce soit ») : les effets qui produisent du son par eux-mêmes (boucles de larsen de Musik, craquements et souffle du vinyle, parasites de la radio AM) se taisent à l'arrêt et reprennent à la lecture, à l'enregistrement ou sur la piste armée en écoute. Mesure : −34 dB (larsen) et −14 dB (vinyle) à l'arrêt avant, −78 dB après.
 
+- Prise en main au téléphone (20 nov., 13 h 42 : « tout est rigide, j'arrive pas sur mon téléphone à redimensionner, toucher, accéder ») ; mesuré au doigt sur un iPhone simulé (390 × 664) :
+  - en-tête sur une rangée (lecture, enregistrement, compteur, tempo, annuler) ; ⋯ ouvre les autres commandes ; cibles de 117 sous 36 px ramenées à 0 hormis les étiquettes de piste ;
+  - têtes de piste allégées (M, S, effets) ; armer, enveloppes, volume et pano passent par le menu ⋯ de la piste et la console ; hauteur des pistes recalculée d'après leur contenu ;
+  - bords de clip élargis au doigt (26 px) pour raccourcir ;
+  - bibliothèque : le doigt fait défiler la liste ; une touche brève écoute ; un appui tenu prend le son, une touche sur une piste le pose à cet endroit ;
+  - poignée au-dessus de la bibliothèque : on la tire pour agrandir ou réduire, la taille reste en mémoire.
+
 ## Jugement par quatre instances séparées (20 nov., 12 h 03)
 
 Juges : son, direction artistique et écrans, fidélité aux demandes, code et sécurité. Rapports : /home/claude/judges/<juge>/RAPPORT.md (hors dépôt). Notes reçues au premier passage : son 4/10, DA 5/10, fidélité 5/10, code 5/10. Second passage : son 7/10, DA 6/10, fidélité 6/10, code 8/10.

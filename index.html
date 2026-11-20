@@ -250,6 +250,38 @@ dialog .col{display:flex;flex-direction:column;gap:6px}
 #toast.on{opacity:1}
 #status{color:var(--legend-dim)}
 #drop{position:fixed;inset:0;background:rgba(242,227,166,.08);border:3px dashed var(--lit);display:none;z-index:40;pointer-events:none}
+
+/* téléphone : un doigt, pas une souris. Cibles d'au moins 40 px, une seule rangée d'en-tête (le reste derrière ⋯), bords de clip larges, bibliothèque qu'on agrandit en tirant sa poignée */
+#bMoreH{display:none}#sgrip{display:none}
+@media (max-width:760px){
+  #app{max-width:100vw;overflow-x:hidden}
+  header{flex-wrap:nowrap;gap:4px;padding:5px 6px;max-width:100vw;box-sizing:border-box}
+  header .grp{flex-wrap:nowrap;gap:4px}header.more .grp{flex-wrap:wrap}
+  header #bBack{display:none}header.more #bBack{display:inline-flex}
+  header button,header input{min-height:42px;min-width:40px;padding-left:4px;padding-right:4px}
+  header #bpm{width:50px}
+  #clock{flex:0 1 auto;min-width:0;font-size:.82em}
+  header.more #bMoreH{background:var(--lit,#f2e3a6);color:#120f0c}
+  .thead .r2 .rec,.thead .r2 .au,.thead .r3{display:none!important}
+  .thead .r2{flex-wrap:nowrap!important}.thead .r2 button{min-width:33px!important;min-height:36px!important;padding:0!important}
+  #vu,#plaque{display:none!important}
+  header #bMetro,header #bLoop,header #bSnap,header #bFree,header #bCount,header #bMon,header #bFlash,header #bTuner,header #bCmd,header #bNew,header #bExport,header #bLang{display:none}
+  #bMoreH{display:inline-flex}
+  header.more{flex-wrap:wrap}
+  header.more #bMetro,header.more #bLoop,header.more #bSnap,header.more #bFree,header.more #bCount,header.more #bMon,header.more #bFlash,header.more #bTuner,header.more #bCmd,header.more #bNew,header.more #bExport,header.more #bLang{display:inline-flex}
+  #bZout,#bZin{min-width:36px;min-height:36px}
+  #sgrip{display:block;height:22px;flex:none;cursor:ns-resize;touch-action:none;background:url(img/jonc.webp) 50% 50%/auto 9px repeat-x;position:relative}
+  #sgrip::after{content:"";position:absolute;left:50%;top:7px;width:48px;height:6px;margin-left:-24px;border-radius:3px;background:rgba(255,222,170,.35)}
+  aside{height:var(--side-h,30vh)!important}
+}
+@media (pointer:coarse){
+  .snd{touch-action:pan-y;min-height:40px;align-items:center}.snd.held{outline:2px solid #ffa726;background:rgba(255,167,38,.18)}body.picking .lane{box-shadow:inset 0 0 0 1px rgba(255,167,38,.35)}
+  .clip .h{width:26px}.clip .h.l{left:-6px}.clip .h.r{right:-6px}
+  .thead .r2 button{min-width:38px;min-height:38px}.thead .r1 button{min-width:38px!important;min-height:34px!important}
+  #bZout,#bZin{min-width:38px!important;min-height:36px!important}
+  footer button{min-height:42px;min-width:42px}
+  aside nav button{min-height:40px}
+}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 @media (max-width:760px){
   #app{grid-template-columns:1fr;grid-template-rows:auto 1fr auto auto}
@@ -457,7 +489,7 @@ body.drw-wide aside{display:none!important}
   <symbol id="i-tune" viewBox="0 0 24 24"><path d="M9 18V5l11-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="17" cy="16" r="3"/></symbol>
   <symbol id="i-stretch" viewBox="0 0 24 24"><path d="M3 12h18M7 8l-4 4 4 4M17 8l4 4-4 4M12 5v14"/></symbol>
   <symbol id="i-denoise" viewBox="0 0 24 24"><path d="M3 12h3l2-5 3 10 2-6 2 3h6"/><path d="M4 4l16 16"/></symbol>
-  <symbol id="i-master" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="2.4" fill="currentColor"/><path d="M6.6 9.2a6.2 6.2 0 0 1 3.4-3.1M17.4 14.8a6.2 6.2 0 0 1-3.4 3.1"/></symbol><symbol id="i-drift" viewBox="0 0 24 24"><path d="M12 12c0-1.7 1.3-3 3-3s3 1.3 3 3-1.8 5-6 5-7-3-7-7 3.5-8 8-8 9 3.6 9 9"/><circle cx="12" cy="12" r="1.3" fill="currentColor"/></symbol><symbol id="i-keep" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></symbol><symbol id="i-steps" viewBox="0 0 24 24"><rect x="3" y="5" width="4" height="4" fill="currentColor"/><rect x="10" y="5" width="4" height="4"/><rect x="17" y="5" width="4" height="4" fill="currentColor"/><rect x="3" y="14" width="4" height="4"/><rect x="10" y="14" width="4" height="4" fill="currentColor"/><rect x="17" y="14" width="4" height="4"/></symbol><symbol id="i-dice" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="3"/><circle cx="9" cy="9" r="1.4" fill="currentColor"/><circle cx="15" cy="15" r="1.4" fill="currentColor"/><circle cx="15" cy="9" r="1.4" fill="currentColor"/><circle cx="9" cy="15" r="1.4" fill="currentColor"/></symbol><symbol id="i-cmd" viewBox="0 0 24 24"><path d="M9 6a3 3 0 1 0-3 3h12a3 3 0 1 0-3-3v12a3 3 0 1 0 3-3H6a3 3 0 1 0 3 3z"/></symbol><symbol id="i-unkeep" viewBox="0 0 24 24"><path d="M12 4a8 8 0 1 0 8 8"/><path d="M20 4l-6 6M14 4l6 6"/></symbol><symbol id="i-loupe" viewBox="0 0 24 24"><circle cx="10" cy="10" r="6"/><path d="M14.5 14.5L21 21" stroke-width="2.6"/><path d="M7 11l2-3 2 4 2-2"/></symbol><symbol id="i-nodes" viewBox="0 0 24 24"><rect x="2" y="4" width="6" height="5" rx="1"/><rect x="2" y="15" width="6" height="5" rx="1"/><rect x="16" y="9.5" width="6" height="5" rx="1"/><path d="M8 6.5c4 0 4 5.5 8 5.5M8 17.5c4 0 4-5.5 8-5.5"/></symbol><symbol id="i-stage" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="1.5"/><circle cx="7.5" cy="16.5" r="2.4" fill="currentColor"/><circle cx="15.5" cy="12" r="1.7" fill="currentColor"/><circle cx="11" cy="7" r="1.1" fill="currentColor"/></symbol><symbol id="i-secs" viewBox="0 0 24 24"><circle cx="12" cy="13" r="8"/><path d="M12 13V8M9.5 2.5h5M12 2.5V5"/></symbol><symbol id="i-decks" viewBox="0 0 24 24"><circle cx="7" cy="12" r="5"/><circle cx="17" cy="12" r="5"/><circle cx="7" cy="12" r="1" fill="currentColor"/><circle cx="17" cy="12" r="1" fill="currentColor"/><path d="M10 20h4"/></symbol><symbol id="i-xy" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 12h18M12 3v18" stroke-dasharray="2 2"/><circle cx="16" cy="8" r="2.5" fill="currentColor"/></symbol>
+  <symbol id="i-master" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="2.4" fill="currentColor"/><path d="M6.6 9.2a6.2 6.2 0 0 1 3.4-3.1M17.4 14.8a6.2 6.2 0 0 1-3.4 3.1"/></symbol><symbol id="i-drift" viewBox="0 0 24 24"><path d="M12 12c0-1.7 1.3-3 3-3s3 1.3 3 3-1.8 5-6 5-7-3-7-7 3.5-8 8-8 9 3.6 9 9"/><circle cx="12" cy="12" r="1.3" fill="currentColor"/></symbol><symbol id="i-keep" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></symbol><symbol id="i-steps" viewBox="0 0 24 24"><rect x="3" y="5" width="4" height="4" fill="currentColor"/><rect x="10" y="5" width="4" height="4"/><rect x="17" y="5" width="4" height="4" fill="currentColor"/><rect x="3" y="14" width="4" height="4"/><rect x="10" y="14" width="4" height="4" fill="currentColor"/><rect x="17" y="14" width="4" height="4"/></symbol><symbol id="i-dice" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="3"/><circle cx="9" cy="9" r="1.4" fill="currentColor"/><circle cx="15" cy="15" r="1.4" fill="currentColor"/><circle cx="15" cy="9" r="1.4" fill="currentColor"/><circle cx="9" cy="15" r="1.4" fill="currentColor"/></symbol><symbol id="i-cmd" viewBox="0 0 24 24"><path d="M9 6a3 3 0 1 0-3 3h12a3 3 0 1 0-3-3v12a3 3 0 1 0 3-3H6a3 3 0 1 0 3 3z"/></symbol><symbol id="i-unkeep" viewBox="0 0 24 24"><path d="M12 4a8 8 0 1 0 8 8"/><path d="M20 4l-6 6M14 4l6 6"/></symbol><symbol id="i-dots" viewBox="0 0 24 24"><circle cx="5" cy="12" r="1.8" fill="currentColor"/><circle cx="12" cy="12" r="1.8" fill="currentColor"/><circle cx="19" cy="12" r="1.8" fill="currentColor"/></symbol><symbol id="i-loupe" viewBox="0 0 24 24"><circle cx="10" cy="10" r="6"/><path d="M14.5 14.5L21 21" stroke-width="2.6"/><path d="M7 11l2-3 2 4 2-2"/></symbol><symbol id="i-nodes" viewBox="0 0 24 24"><rect x="2" y="4" width="6" height="5" rx="1"/><rect x="2" y="15" width="6" height="5" rx="1"/><rect x="16" y="9.5" width="6" height="5" rx="1"/><path d="M8 6.5c4 0 4 5.5 8 5.5M8 17.5c4 0 4-5.5 8-5.5"/></symbol><symbol id="i-stage" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="1.5"/><circle cx="7.5" cy="16.5" r="2.4" fill="currentColor"/><circle cx="15.5" cy="12" r="1.7" fill="currentColor"/><circle cx="11" cy="7" r="1.1" fill="currentColor"/></symbol><symbol id="i-secs" viewBox="0 0 24 24"><circle cx="12" cy="13" r="8"/><path d="M12 13V8M9.5 2.5h5M12 2.5V5"/></symbol><symbol id="i-decks" viewBox="0 0 24 24"><circle cx="7" cy="12" r="5"/><circle cx="17" cy="12" r="5"/><circle cx="7" cy="12" r="1" fill="currentColor"/><circle cx="17" cy="12" r="1" fill="currentColor"/><path d="M10 20h4"/></symbol><symbol id="i-xy" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 12h18M12 3v18" stroke-dasharray="2 2"/><circle cx="16" cy="8" r="2.5" fill="currentColor"/></symbol>
   <symbol id="i-undo" viewBox="0 0 24 24"><path d="M9 14L4 9l5-5"/><path d="M4 9h11a5 5 0 0 1 0 10h-3"/></symbol>
 </svg>
 <div id="app">
@@ -485,6 +517,7 @@ body.drw-wide aside{display:none!important}
   <div id="vu" title="VU"><canvas id="vuC"></canvas></div>
   <div class="grp">
     <button id="bUndo" title="Undo (Ctrl+Z)"><svg><use href="#i-undo"/></svg></button>
+    <button id="bMoreH" title="Plus de commandes" aria-expanded="false"><svg><use href="#i-dots"/></svg></button>
     <button id="bNew" title="New project"><svg><use href="#i-new"/></svg></button>
     <button id="bExport" title="Export WAV + credits"><svg><use href="#i-down"/></svg><span data-t="exportT">Export</span></button>
     <button id="bLang" title="Language">FR</button>
@@ -519,7 +552,7 @@ body.drw-wide aside{display:none!important}
   <span class="sp"></span>
   <span class="master"><button id="mFx" title="Mastering"><svg><use href="#i-master"/></svg><span>Master</span></button><select id="mTgt" title="Loudness"></select><button id="mMeas" title="Measure LUFS">LUFS</button><input id="mVol" type="range" min="0" max="1.2" step="0.01" title="Master volume"><select id="mPre" title="Mastering"></select><button id="mLim" class="on" title="Limiter"><span data-t="lim">Limiter</span></button></span>
 </footer>
-<aside id="side">
+<aside id="side"><div id="sgrip" role="separator" aria-orientation="horizontal" title="Glisser pour agrandir ou réduire"></div>
   <div class="gsearch"><svg><use href="#i-search"/></svg><input id="gsQ" type="search" data-tp="searchAll" placeholder="Search every sound…" enterkeyhint="search"></div>
   <div class="pane" id="p-gs"><div id="gsList"></div></div>
   <nav>
@@ -1728,12 +1761,29 @@ function sndRow(item){
 let drag=null;
 const headW=()=>document.querySelector(".thead")?.offsetWidth||150;
 function laneAt(x,y){return document.elementsFromPoint(x,y).find(n=>n.classList&&n.classList.contains("lane"))}
-function startDrag(e,item,row){
+/* au doigt : glisser fait défiler la liste ; un appui tenu (0,3 s) attrape le son pour le poser sur une piste ; une touche brève l'écoute */
+/* son pris au doigt : il reste en main jusqu'à ce qu'on touche une piste, à l'endroit voulu ; une seconde pression sur la ligne le repose */
+let PICK=null;
+function pickSound(item,row){if(PICK&&PICK.row===row){dropPick();return}dropPick();PICK={item,row};row.classList.add("held");document.body.classList.add("picking");try{navigator.vibrate&&navigator.vibrate(12)}catch(_){}toast((lang==="fr"?"Touchez une piste : ":"Tap a track: ")+item.name)}
+function dropPick(){if(PICK)PICK.row.classList.remove("held");PICK=null;document.body.classList.remove("picking")}
+async function placeItem(item,row,tr,at){row.classList.add("loading");let s;try{s=await ensureSound(item);s=await tempoFit(s,item)}catch(e){toast("✕")}row.classList.remove("loading");if(!s)return;
+  snapshot();if(!tr){tr=freeTrack(-1);if(!tr)return;rebuildChains()}const c={id:uid(),snd:s.id,start:at,off:0,len:s.buffer.duration,gain:1};tr.clips.push(c);state.sel=c.id;render();save();restartIfPlaying()}
+addEventListener("pointerdown",e=>{if(!PICK)return;const lane=e.target.closest&&e.target.closest(".lane");if(!lane){if(!e.target.closest(".snd"))dropPick();return}e.preventDefault();e.stopPropagation();
+  const tr=state.tracks.find(x=>x.id===lane.dataset.id),at=snapT(Math.max(0,(e.clientX-lane.getBoundingClientRect().left)/state.pps)),{item,row}=PICK;dropPick();placeItem(item,row,tr,at)},true);
+function touchHold(e,item,row){const x0=e.clientX,y0=e.clientY,id=e.pointerId;let held=false;
+  const t=setTimeout(()=>{held=true;cleanup();pickSound(item,row)},300);
+  const mv=ev=>{if(ev.pointerId===id&&Math.hypot(ev.clientX-x0,ev.clientY-y0)>9){clearTimeout(t);cleanup()}};
+  const up=ev=>{if(ev.pointerId!==id)return;clearTimeout(t);cleanup();if(!held&&ev.type==="pointerup")preview(item,row)};
+  const cleanup=()=>{removeEventListener("pointermove",mv);removeEventListener("pointerup",up);removeEventListener("pointercancel",up)};
+  addEventListener("pointermove",mv);addEventListener("pointerup",up);addEventListener("pointercancel",up)}
+addEventListener("touchmove",ev=>{if(drag)ev.preventDefault()},{passive:false});
+function startDrag(e,item,row,fromHold){
+  if(e.pointerType==="touch"&&!fromHold){touchHold(e,item,row);return}
   e.preventDefault();drag={x0:e.clientX,y0:e.clientY,moved:false,id:e.pointerId};
   const mv=ev=>{if(ev.pointerId!==drag.id)return;if(!drag.moved&&Math.hypot(ev.clientX-drag.x0,ev.clientY-drag.y0)>6){drag.moved=true;const g=$("#ghost");g.textContent=item.name;g.style.display="block"}
     if(drag.moved){const g=$("#ghost");g.style.left=ev.clientX+12+"px";g.style.top=ev.clientY+8+"px"}};
-  const up=async ev=>{if(ev.pointerId!==drag.id)return;removeEventListener("pointermove",mv);removeEventListener("pointerup",up);removeEventListener("pointercancel",up);
-    $("#ghost").style.display="none";const d=drag;drag=null;if(!d.moved){preview(item,row);return}
+  const up=async ev=>{if(ev.pointerId!==drag.id)return;removeEventListener("pointermove",mv);removeEventListener("pointerup",up);removeEventListener("pointercancel",up);row.classList.remove("held");
+    $("#ghost").style.display="none";const d=drag;drag=null;if(!d.moved){if(!fromHold)preview(item,row);return}
     const lane=laneAt(ev.clientX,ev.clientY);let tr,at;
     if(lane){tr=state.tracks.find(x=>x.id===lane.dataset.id);at=snapT(Math.max(0,(ev.clientX-lane.getBoundingClientRect().left)/state.pps))}
     else{const sc=$("#scroller").getBoundingClientRect();if(ev.clientX<sc.left||ev.clientX>sc.right||ev.clientY<sc.top||ev.clientY>sc.bottom)return;
@@ -1859,7 +1909,7 @@ function render(){
     const tog=(lbl,key,title)=>{const b=el("button",{class:tr[key]?"on":"",title},lbl);b.onclick=()=>{tr[key]=!tr[key];updTrack(tr);render();save()};return b};
     const arm=el("button",{class:"rec"+(state.armed===tr.id?" on":""),title:"Arm"},icon("mic"));arm.onclick=()=>{state.armed=state.armed===tr.id?null:tr.id;render()};
     const fx=el("button",{title:"FX",class:(fxOpen===tr.id?"on":"")+(tr.rack.length?" has":"")},icon("fx"));fx.onclick=()=>{fxOpen=fxOpen===tr.id?null:tr.id;renderFx();render()};
-    const au=el("button",{title:t("envelope"),class:tr.showAuto?"on":""},"A");au.onclick=e=>autoMenu(e,tr);
+    const au=el("button",{title:t("envelope"),class:"au"+(tr.showAuto?" on":"")},"A");au.onclick=e=>autoMenu(e,tr);
     const menu=el("button",{title:"…"},"⋯");menu.onclick=e=>trackMenu(e,tr);
     const vol=el("input",{type:"range",min:0,max:1.2,step:.01,title:"Volume"});vol.value=tr.vol;vol.oninput=()=>{tr.vol=+vol.value;updTrack(tr);save()};vol.ondblclick=()=>{tr.vol=.8;vol.value=.8;updTrack(tr);save()};
     const pan=el("input",{type:"range",min:-1,max:1,step:.01,title:"Pan",style:"width:45%"});pan.value=tr.pan;pan.oninput=()=>{tr.pan=+pan.value;updTrack(tr);save()};pan.ondblclick=()=>{tr.pan=0;pan.value=0;updTrack(tr)};
@@ -2180,7 +2230,10 @@ function clipMenu(x,y,tr,c){
   ]);
 }
 function paste(tr,at){if(!clipboard)return;edit(()=>{const n={...clipboard,id:uid(),start:at};tr.clips.push(n);state.sel=n.id})}
-function trackMenu(e,tr){const r=e.currentTarget.getBoundingClientRect();openMenu(r.left,r.bottom,[
+function trackMenu(e,tr){const r=e.currentTarget.getBoundingClientRect(),F=lang==="fr";openMenu(r.left,r.bottom,[
+  [(state.armed===tr.id?"● ":"○ ")+(F?"Armer pour enregistrer":"Arm for recording"),()=>{state.armed=state.armed===tr.id?null:tr.id;render()}],
+  [(F?"Enveloppes":"Envelopes")+" (A)",()=>autoMenu({currentTarget:e.currentTarget},tr)],
+  [(F?"Volume et pano : console":"Volume and pan: console"),()=>drawer("console")],
   [t("collapse"),()=>{tr.fold=!tr.fold;render();save()}],
   [t("bounce"),()=>bounceTrack(tr)],
   [t("dup"),()=>edit(()=>{const n=JSON.parse(JSON.stringify(tr));n.id=uid();n.name="";n.clips.forEach(c=>c.id=uid());n.rack.forEach(f=>f.id=uid());state.tracks.splice(state.tracks.indexOf(tr)+1,0,n);if(state.tracks.length>MAXT){const k=state.tracks.findLastIndex(x=>!x.clips.length);if(k>=0)state.tracks.splice(k,1)}renumber();rebuildChains()})],
@@ -2481,7 +2534,7 @@ function fit(){const vv=window.visualViewport,W=vv?vv.width:innerWidth,H=vv?vv.h
   const m=$("main");if(!m)return;const open=consoleOn||perfOn||mastrOn||(typeof seqOn!=="undefined"&&seqOn)||(typeof sceneOn!=="undefined"&&sceneOn)||(typeof decksOn!=="undefined"&&decksOn);m.classList.toggle("dr",open);
   /* écran bas (téléphone couché) : un tiroir ouvert prend toute la largeur, la bibliothèque se range */
   const wide=open&&!narrow&&H<=520;document.body.classList.toggle("drw-wide",wide);
-  R.setProperty("--side-w",narrow?"auto":wide?"0px":Math.round(clamp(W*(H<=520?.36:.25),240,400))+"px");R.setProperty("--side-h",narrow?Math.round(H*(land?.4:.3))+"px":"auto");
+  R.setProperty("--side-w",narrow?"auto":wide?"0px":Math.round(clamp(W*(H<=520?.36:.25),240,400))+"px");R.setProperty("--side-h",narrow?Math.round(H*(+localStorage.getItem("st.sideh."+(land?"l":"p"))||(land?.4:.3)))+"px":"auto");
   const mh=Math.max(120,m.clientHeight-($("#ruler")?.offsetHeight||0)),ratio=clamp(+localStorage.getItem("st.split."+(H<=520?"s":land?"l":"p"))||(H<=520?.74:land?.5:.66),.16,.84);
   const dh=Math.round(clamp(mh*ratio,110,mh-56));R.setProperty("--drawer",dh+"px");
   const ctl=document.querySelector(".thead .ctl"),need=ctl?[...ctl.children].reduce((a,c)=>a+c.offsetHeight,0)+3*(ctl.children.length-1)+12:60;
@@ -2929,6 +2982,15 @@ function frTitles(root){if(!root||!root.querySelectorAll||typeof TT_FR!=="object
   for(const n of list){const cur=n.getAttribute("title");if(lang==="fr"){const en=n.dataset.en||cur;if(TT_FR[en]&&cur!==TT_FR[en]){n.dataset.en=en;n.setAttribute("title",TT_FR[en])}}else if(n.dataset.en&&cur!==n.dataset.en)n.setAttribute("title",n.dataset.en)}}
 new MutationObserver(ms=>{if(lang!=="fr")return;for(const m of ms){if(m.type==="attributes")frTitles(m.target);else m.addedNodes.forEach(frTitles)}}).observe(document.body,{subtree:true,childList:true,attributes:true,attributeFilter:["title"]});
 frTitles(document.body);
+
+/* en-tête du téléphone : ⋯ montre ou range les commandes secondaires ; poignée de la bibliothèque : on la tire pour la grandir ou la réduire */
+$("#bMoreH").onclick=()=>{const h=$("header"),on=!h.classList.contains("more");h.classList.toggle("more",on);$("#bMoreH").setAttribute("aria-expanded",on);fit()};
+(()=>{const g=$("#sgrip");if(!g)return;g.addEventListener("pointerdown",e=>{e.preventDefault();g.setPointerCapture(e.pointerId);const H=(window.visualViewport||window).height||innerHeight,y0=e.clientY,h0=$("aside").getBoundingClientRect().height;
+  const mv=ev=>{const h=clamp(h0+(y0-ev.clientY),70,H*.75);document.documentElement.style.setProperty("--side-h",Math.round(h)+"px");try{localStorage.setItem("st.sideh."+(innerWidth>=innerHeight?"l":"p"),(h/H).toFixed(3))}catch(e){}};
+  const up=()=>{g.removeEventListener("pointermove",mv);g.removeEventListener("pointerup",up);fit()};g.addEventListener("pointermove",mv);g.addEventListener("pointerup",up)})})();
+
+/* la hauteur des pistes suit ce que la tête contient vraiment, mesuré après chaque rendu */
+try{new ResizeObserver(()=>{clearTimeout(fit.ro);fit.ro=setTimeout(fit,50)}).observe(document.querySelector("#trackList"))}catch(e){}
 </script>
 </body>
 </html>
