@@ -1,3 +1,4 @@
+2026-11-20-19h40|6c38ae6|collections, boîtes tribute to, fiche de terrain, libellés
 2026-11-20-19h34|d6aa355|calculs dans un Worker, plafonds relevés, pistes avant le kit
 2026-11-20-19h29|82439ad|son : continu, vraie crête, garde du rack, dub exporté, réinjection
 2026-11-20-19h24|a9c23cf|téléphone : couché à deux colonnes, barre du clip, 44 px, 11 px

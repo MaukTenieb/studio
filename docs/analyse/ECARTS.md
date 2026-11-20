@@ -6,6 +6,8 @@ Gravité choisie : la plus haute des gravités d'origine, baissée d'un cran qua
 
 ## Fait
 
+- 20 nov. 19 h 40 : E-17 ; E-19 ; E-51 ; E-90 ; E-71. Internet Archive : tri par pertinence dès qu'un mot est saisi ; entrée d'une collection en expression exacte, avec sujet ethnographique pour les familles de terrain (« berber » : chants d'anachid et récitation du Coran sortis de la tête de liste ; « gamelan » : 3 enregistrements de gamelan sur 5) ; Jazz sans country, chants de prison ni gospel ; Classique sans radio ancienne. Quinze boîtes « tribute to » sous les minuscules ι à ψ : Ennio Morricone, Bernard Herrmann, Jóhann Jóhannsson, Mica Levi, Trent Reznor & Atticus Ross, Angelo Badalamenti, Thomas Köner, Raison d'être, Atrium Carceri, Duke Ellington, Ornette Coleman, Sun Ra, Scientist, Mad Professor, Basic Channel ; chaque chaîne mesurée (crête −3,2 à −11 dBFS, continu ≤ −65 dBFS, zéro NaN). Fiche de terrain remplie à la pose depuis les métadonnées d'Internet Archive (lieu avec coordonnées, date, collecteur, langue, cote, licence, source), écrite dans les crédits avec l'adresse complète de la licence. Noms anglais des sons de kit sans kick, snare ni hat (bass drum, side drum, cymbals) ; réglages de l'Atelier en français ; « 1 bar ».
+
 - 20 nov. 19 h 34 : E-03 ; E-05 ; E-04 ; E-24. Paulstretch, gel, flou, grain, wavesets, séparation harmonique / percussive, WSOLA et analyse de hauteur tournent dans un Web Worker, avec barre d'avancement et touche d'arrêt (les traitements qui demandent l'audio du navigateur retombent sur le fil principal). Paulstretch ×64 de 8 s : 8,9 s au téléphone, image suivante en 80 ms pendant le calcul (contre 66 à 437 s de page figée) ; séparation de 8 s : 245 ms de blocage au plus, contre 4 763 ms. Plafonds : étirement ×256 et 1 200 s (20 min stéréo en 38,8 s), gel et grain 600 s. Sons distants entiers jusqu'à 15 min, au-delà coupe annoncée. Pistes affichées 0,25 s après l'ouverture, avant la synthèse du kit (contre 0,78 s sur la même machine au calme).
 
 - 20 nov. 19 h 29 : E-06 ; E-07 ; E-08 ; E-09 ; E-10 ; E-18 ; E-35 ; E-42. Courbes de saturation symétriques (continu des 33 chaînes : −240 dBFS, contre −24,5 à −49,1 ; export Noise : −74,4 dBFS, contre −12,8). Plafond d'export en vraie crête (sinus à fs/4 : +3,04 dBTP ramené à −1,09 dBTP mesuré par Python ×16). Garde de sortie du rack : trois larsens et un écho à 0,95 restent sous −0,8 dBFS de crête pendant 30 s (contre +24,6). Touche D enregistrée pendant la lecture et rejouée à l'export (échos du dub présents à −32,8 dBFS entre 4,5 et 6 s). Réglage de réinjection sur l'écho : à 5 s, −152,9 dB au réglage 0, −67,7 dB à 0,5, auto-oscillation bornée à 1,05. Cible de sonie : deux rendus au plus, relèvement borné à +6 dB (export de 8,7 s en 4,7 à 5,3 s). Queues : ping-pong compté deux fois, écho de bande 10 + 50 × dosage s, bus dub selon sa réinjection. Projet vide : message à l'export.
@@ -29,18 +31,6 @@ Gravité choisie : la plus haute des gravités d'origine, baissée d'un cran qua
   - Charge de la machine : existe quelle que soit la charge.
 
 ### Important
-
-- E-17 · important · Catégories et requêtes d'Internet Archive peu pertinentes (régions, Classique, Jazz).
-  - Experts : 3 (07-03, 06-04, 09-10, 07-12). Gravités d'origine : 07-03 important, 06-04 important, 09-10 important (partie requête), 07-12 détail.
-  - Preuve : Famille « Ethnographie par région » (ligne 1466) : 9 résultats pertinents sur 69 (13 %), 6 entrées vides sur 20, « papua new guinea singing » rend 0 chant de Papouasie sur 6 ; en tête de « berber », une récitation du Coran et deux albums d'anachid jihadistes (07). Classique : 20 feuilletons radio et 12 œuvres orchestrales sur 60 (06). Jazz : `subject:(jazz OR ragtime OR blues OR swing)` (ligne 1395) remonte blues, chants de prison et country (09). Tri par téléchargements (ligne 1411). Captures : [07-entrees-region-iphone](captures/07-entrees-region-iphone.webp), [06-ia-classique-iphone](captures/06-ia-classique-iphone.webp), [09-archive-jazz-pc1920](captures/09-archive-jazz-pc1920.webp).
-  - Correction : Tri par pertinence ; sujet obligatoire par famille (`subject:(ethnographic OR "field recording" OR "traditional music")`) ; requêtes de région entre guillemets ; listes d'items vérifiés à la main pour les régions ; Classique : `-subject:("old time radio" OR otr OR "radio drama" OR comedy) -collection:(oldtimeradio)` ; Jazz : `subject:(jazz) AND NOT subject:(country)` et sous-catégories free jazz, big band, swing, bebop ; entrées vides retirées.
-  - Charge de la machine : existe quelle que soit la charge.
-
-- E-19 · important · Étalons absents des boîtes d'artistes : film, dark ambient, jazz, dub.
-  - Experts : 3 (01-12, 04-08, 09-12). Gravités d'origine : 01-12 important, 04-08 important, 09-12 détail ; 02 (S1, sans numéro).
-  - Preuve : Film : 1 compositeur étalon sur 7 (lignes 2923-2925) (01). Dark ambient : Lustmord, Tim Hecker, Roly Porter ; Thomas Köner, Raison d'être, Atrium Carceri absents (lignes 2911-2913) (04). Jazz : 0 boîte sur 26 (09). Dub : Scientist, Mad Professor, Basic Channel absents (02, S1). Lettres libres mesurées dans `BOXES` : 16 minuscules (ι à ω) ; les majuscules Η à Μ servent déjà aux chaînes de power electronics. Capture : [01-boites](captures/01-boites.webp).
-  - Correction : Quinze boîtes « tribute to » sous les minuscules libres ι à ω : six pour le film (Ennio Morricone, Bernard Herrmann, Jóhann Jóhannsson, Mica Levi, Trent Reznor et Atticus Ross, Angelo Badalamenti), trois pour le dark ambient (Thomas Köner, Raison d'être, Atrium Carceri), trois pour le jazz (grand ensemble, souffleurs free, double quartette), trois pour le dub (Scientist, Mad Professor, Basic Channel). Chaque chaîne se valide à la mesure avant mise en ligne ; recherches en pictogrammes ou en français.
-  - Charge de la machine : existe quelle que soit la charge.
 
 - E-20 · important · Le gros bouton + du projet vide passe par-dessus les tiroirs et la ligne de temps.
   - Experts : 3 (10-10, 09-14, 06-08). Gravités d'origine : 10-10 important, 09-14 détail, 06-08 important (partie bouton +).
@@ -210,12 +200,6 @@ Gravité choisie : la plus haute des gravités d'origine, baissée d'un cran qua
   - Correction : Kit Orchestre de notes longues par pupitre (violons, altos, violoncelles, contrebasses, cors, bois, chœur) depuis des sources libres vérifiées ; une note par pad, transposition par demi-ton depuis le séquenceur (audio, zéro MIDI).
   - Charge de la machine : existe quelle que soit la charge.
 
-- E-51 · important · Fiche de terrain vide à la pose et champs absents (collecteur, licence, cote, lieu).
-  - Experts : 1 (07-04, 07-05). Gravités d'origine : 07-04 important, 07-05 important.
-  - Preuve : `placeItem` (ligne 1796) crée le clip sans `meta` : 9 champs vides sur 9 pour un item qui fournit créateur, date et coordonnées ; `META_K` (ligne 2961) sans collecteur, licence, cote, coordonnées, langue, groupe (07). Capture : [07-fiche-auto-pc1366](captures/07-fiche-auto-pc1366.webp).
-  - Correction : À la pose, remplir `c.meta` depuis `item.credit` et `archive.org/metadata` (coverage, date, creator, licenseurl, URL) ; ajouter `collector`, `license`, `source`, `geo`, `lang`, `group` et les écrire dans `creditsTxt`.
-  - Charge de la machine : existe quelle que soit la charge.
-
 - E-52 · important · Échelle réelle : cents ancrés sur La, vibrato lu comme plusieurs degrés, polyphonie non signalée.
   - Experts : 1 (07-06, 07-07, 07-08). Gravités d'origine : 07-06 important, 07-07 important, 07-08 important.
   - Preuve : Slendro joué sur ré : pics à 17, 255, 500, 731, 974 cents depuis La, gamme de référence décalée de 500 cents, `near` (ligne 2827) jamais affiché ; 3 degrés à ±50 cents → 9 pics ; bourdon + mélodie → f0 médiane 65,4 Hz, 2 degrés sur 4 manquants (07). Capture : [07-echelle-slendro_re-pc1366](captures/07-echelle-slendro_re-pc1366.webp).
@@ -301,12 +285,6 @@ Gravité choisie : la plus haute des gravités d'origine, baissée d'un cran qua
   - Charge de la machine : existe quelle que soit la charge.
 
 ### Détail
-
-- E-71 · détail · Libellés et requêtes en anglais dans l'interface française.
-  - Experts : 4 (04-12, 08-12, 07-11, 05-12). Gravités d'origine : 04-12 détail, 08-12 détail, 07-11 détail, 05-12 détail.
-  - Preuve : « Window s », « Length s », « Smooth », « Repeat·Omit·Reverse·Shuffle » (`AT_PN`, ligne 2103) (04, 08) ; « papua new guinea singing », « wax cylinder » (07) ; « 1 bars » (05). Capture : [08-pc-croisee-dialogue](captures/08-pc-croisee-dialogue.webp).
-  - Correction : Pictogrammes à la place des libellés (fenêtre, durée, cycle) ; nom français ou nom propre de la région, requête anglaise gardée en interne.
-  - Charge de la machine : existe quelle que soit la charge.
 
 - E-72 · détail · Pages fermées pendant les exports en série.
   - Experts : 3 (03-06, 04-05, 06-06). Gravités d'origine : 03-06, 04-05, 06-06 (partie plantages) : important → détail (charge).
@@ -414,12 +392,6 @@ Gravité choisie : la plus haute des gravités d'origine, baissée d'un cran qua
   - Experts : 1 (05-11). Gravités d'origine : 05-11 détail.
   - Preuve : Deux passe-bas à 0,48 × fréquence d'échantillonnage (lignes 815-817) (05, S10).
   - Correction : `tone` par défaut à 18 000 Hz et `post2` retiré pour le SP-1200.
-  - Charge de la machine : existe quelle que soit la charge.
-
-- E-90 · détail · La feuille de son de rangée affiche « Kick », « Snare », « Hat ».
-  - Experts : 1 (05-13). Gravités d'origine : 05-13 détail.
-  - Preuve : Capture [05-iphone-motif17](captures/05-iphone-motif17.webp) ; règle de PENSE-BETE.md (05).
-  - Correction : Nommer ces sons par ce qu'ils sont (« coup grave court », « bruit filtré bref ») ou par pictogramme.
   - Charge de la machine : existe quelle que soit la charge.
 
 - E-91 · détail · « 1200 » écrit au lieu de 0 dans l'échelle.
