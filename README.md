@@ -36,7 +36,7 @@ The built-in kit comes from Web Audio oscillators and noise, rendered offline at
 
 Internet Archive items stream straight from archive.org. The studio skips the 78rpm and bootleg collections, whose public-domain labels rest on uploader statements disputed in court.
 
-Freesound sounds stream through its official API. The studio shows CC0 and CC BY sounds only, and the export writes the credit line that CC BY requires. The file `worker.js` is a Cloudflare Worker that keeps the Freesound API key out of the public code. Without the worker, each user enters a personal key with the gear button, and the key stays in the user's browser.
+Freesound sounds come through the Openverse API (WordPress Foundation), which indexes the Freesound catalogue and answers without a key. The studio shows CC0 and CC BY sounds only, and the export writes the credit line that CC BY requires. A personal Freesound API key, entered with the gear button and kept in the user's browser, switches the search to the official Freesound API with full depth. The file `worker.js` holds an optional Cloudflare relay for a shared key.
 
 ## Code
 

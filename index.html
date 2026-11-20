@@ -295,12 +295,12 @@ dialog .col{display:flex;flex-direction:column;gap:6px}
 <script>
 "use strict";
 /* ================= config & i18n ================= */
-const FS_PROXY = "https://studio-relay.mauktenieb.workers.dev"; // Cloudflare worker (MaukTenieb/studio/worker.js)
+const FS_PROXY = ""; // optional Cloudflare relay (worker.js); keyless search goes through Openverse
 /* splicing-tape leader colours */
 const COLORS=["#b5412f","#c8a33b","#5e8240","#3e6f92","#d9d5c6","#8b5a34","#8e5c8a","#3f8a84"];
 const INK=c=>{const n=parseInt(c.slice(1),16),l=.299*(n>>16)+.587*(n>>8&255)+.114*(n&255);return l>140?"#1b1a17":"#f6f3ea"};
 const T={
- en:{track:"Track",import:"Import audio",keyHelp:"Personal Freesound API key. It stays in this browser.",noKey:"Freesound needs a key: gear button.",nores:"Nothing found.",exported:"Exported",mic:"Microphone refused.",confirmNew:"Erase the current project?",arm:"Arm a track (mic button) first.",fsErr:"Freesound unreachable.",drop:"Drag the sounds onto a track.",licence:"Licences shown: CC0 and CC BY. Credits go into the export.",
+ en:{track:"Track",import:"Import audio",keyHelp:"Personal Freesound API key. It stays in this browser.",nores:"Nothing found.",exported:"Exported",mic:"Microphone refused.",confirmNew:"Erase the current project?",arm:"Arm a track (mic button) first.",fsErr:"Freesound unreachable.",drop:"Drag the sounds onto a track.",licence:"Licences shown: CC0 and CC BY. Credits go into the export.",
   reverse:"Reverse",normalize:"Normalize",gainUp:"Gain +3 dB",gainDown:"Gain −3 dB",transpose:"Transpose…",stretch:"Speed (keeps pitch)…",loop:"Repeat ×…",mute:"Mute clip",denoise:"Denoise",copy:"Copy",paste:"Paste",dup:"Duplicate",split:"Split",del:"Delete",rename:"Rename…",fadeReset:"Remove fades",toSounds:"Bounce to my sounds",loopSel:"Loop this clip",atelier:"Workshop ▸",
   semis:"Semitones (−12 … +12)",speed:"Speed in % (50 … 200)",times:"How many repeats?",working:"Processing…",addFx:"+ effect",presets:"Chain preset",none:"—",lyrics:"Lyrics, notes…",tuner:"Tuner",exportT:"Export",wav:"WAV mix",mp3:"MP3 mix",stems:"WAV stems (one file per track)",countIn:"Count-in",monitor:"Monitoring (headphones)",master:"Master",autoV:"Volume automation",autoP:"Pan automation",autoHelp:"Click: add a point. Drag: move. Double-click: remove."},
  fr:{track:"Piste",import:"Importer de l'audio",keyHelp:"Clé personnelle de l'API Freesound. Elle reste dans ce navigateur.",noKey:"Freesound demande une clé : bouton engrenage.",nores:"Rien trouvé.",exported:"Exporté",mic:"Micro refusé.",confirmNew:"Effacer le projet en cours ?",arm:"Arme d'abord une piste (bouton micro).",fsErr:"Freesound injoignable.",drop:"Glisse les sons sur une piste.",licence:"Licences affichées : CC0 et CC BY. Les crédits partent avec l'export.",
@@ -797,14 +797,22 @@ function fsURL(q,page){
 const licName=l=>/publicdomain\/zero|Creative Commons 0/i.test(l)?"CC0":/by-nc/i.test(l)?"CC BY-NC":/by\//i.test(l)||/Attribution/i.test(l)?"CC BY":l;
 let fsPage=1,fsQuery="";
 async function fsSearch(q,more){
-  if(!FS_PROXY&&!fsKey()){$("#fsList").replaceChildren(el("div",{class:"note"},t("noKey")));return}
   if(!more){fsPage=1;fsQuery=q;$("#fsList").replaceChildren(el("div",{class:"note"},"…"))}
-  try{let r=await fetch(fsURL(fsQuery,fsPage)).catch(()=>null);if((!r||!r.ok)&&FS_PROXY&&!fsDirect&&fsKey()){fsDirect=true;r=await fetch(fsURL(fsQuery,fsPage))}if(!r||!r.ok)throw new Error(r?r.status:0);const j=await r.json();
+  try{let items=[],next=false;
+    if(fsKey()){ // personal Freesound key: direct API, full depth
+      const r=await fetch(`https://freesound.org/apiv2/search/text/?query=${encodeURIComponent(fsQuery)}&page=${fsPage}&page_size=30&fields=id,name,username,license,duration,previews,url&filter=${encodeURIComponent('license:("Creative Commons 0" OR "Attribution")')}&token=${encodeURIComponent(fsKey())}`);
+      if(!r.ok)throw new Error(r.status);const j=await r.json();next=!!j.next;
+      items=j.results.map(x=>({id:"fs:"+x.id,name:x.name,src:"freesound",remote:x.previews["preview-hq-mp3"],dur:x.duration,credit:{title:x.name,author:x.username,license:licName(x.license),url:x.url||`https://freesound.org/s/${x.id}/`}}));
+    }else{ // keyless: Freesound catalogue through the Openverse API
+      const r=await fetch(`https://api.openverse.org/v1/audio/?q=${encodeURIComponent(fsQuery)}&source=freesound&license=cc0,by&page_size=20&page=${fsPage}`);
+      if(!r.ok)throw new Error(r.status);const j=await r.json();next=fsPage<Math.min(j.page_count||0,12);
+      items=j.results.filter(x=>x.url).map(x=>{const id=(x.foreign_landing_url||"").match(/sounds\/(\d+)/);return{id:"fs:"+(id?id[1]:x.id),name:x.title,src:"freesound",remote:x.url,dur:(x.duration||0)/1000,credit:{title:x.title,author:x.creator,license:x.license==="cc0"?"CC0":"CC BY",url:x.foreign_landing_url}}});
+    }
     if(!more)$("#fsList").replaceChildren(el("div",{class:"note"},t("licence")));
     $("#fsList").querySelector(".more")?.remove();
-    if(!j.results.length&&!more){$("#fsList").append(el("div",{class:"note"},t("nores")));return}
-    for(const x of j.results)$("#fsList").append(sndRow({id:"fs:"+x.id,name:x.name,src:"freesound",remote:x.previews["preview-hq-mp3"],dur:x.duration,credit:{title:x.name,author:x.username,license:licName(x.license),url:x.url||`https://freesound.org/s/${x.id}/`}}));
-    if(j.next){fsPage++;$("#fsList").append(el("button",{class:"more",onclick:()=>fsSearch(fsQuery,true)},"+"))}
+    if(!items.length&&!more){$("#fsList").append(el("div",{class:"note"},t("nores")));return}
+    for(const it of items)$("#fsList").append(sndRow(it));
+    if(next){fsPage++;$("#fsList").append(el("button",{class:"more",onclick:()=>fsSearch(fsQuery,true)},"+"))}
   }catch(e){$("#fsList").replaceChildren(el("div",{class:"note"},t("fsErr")))}
 }
 function trimBuf(b,max){if(b.duration<=max)return b;return sliceBuf(b,0,max)}
