@@ -1,3 +1,4 @@
+2026-11-20-13h43|4852a5d|silence au repos
 2026-11-20-13h18|674cd60|après second passage du son
 2026-11-20-13h11|1ce79be|après second passage du code
 2026-11-20-13h06|80198fe|second passage des juges
