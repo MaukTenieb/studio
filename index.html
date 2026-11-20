@@ -372,6 +372,11 @@ footer:has(#abar.on) #abar{flex:1 1 auto;min-width:0}
   background:radial-gradient(circle at 40% 35%,#fff7dc,var(--c) 45%,color-mix(in srgb,var(--c) 40%,#000) 100%);box-shadow:0 0 calc(var(--s)*.5) var(--c),0 8px 14px rgba(0,0,0,.7)}
 #scene .obj.hit{outline:2px solid #ffe3a0;outline-offset:3px}
 #scene .x{position:absolute;right:8px;top:8px}
+#status{white-space:nowrap;overflow:hidden;min-width:0}
+#film{position:absolute;right:12px;top:calc(var(--rh,26px) + 10px);z-index:15;width:clamp(150px,30%,460px);aspect-ratio:16/9;background:#050404;border-radius:6px;padding:7px;box-shadow:0 0 0 1px #1d1915,0 10px 28px rgba(0,0,0,.7),inset 0 0 0 2px rgba(255,222,170,.06);background-image:linear-gradient(rgba(11,9,8,.55),rgba(11,9,8,.55)),url(img/metal.webp);background-size:cover;touch-action:none;cursor:grab}
+#film video{width:100%;height:100%;object-fit:contain;background:#000;border-radius:3px;display:block;pointer-events:none;filter:contrast(1.04) saturate(.92)}
+#film.big{width:clamp(240px,62%,980px)}#film .fb{position:absolute;top:-12px;display:flex;gap:4px;right:-6px}#film .fb button{min-width:30px;height:30px;padding:0;font-size:14px}
+#film .tc{position:absolute;left:12px;bottom:10px;font:600 12px/1 "Barlow Semi Condensed",sans-serif;color:#ffe3a0;background:rgba(0,0,0,.55);padding:2px 5px;border-radius:2px;pointer-events:none}
 #scene .fric{position:absolute;transform:translate(-50%,-160%);display:flex;gap:6px;z-index:200}#scene .fric button{font-size:20px;line-height:1;min-width:44px;min-height:44px}
 #scene .mode{position:absolute;right:8px;top:52px}
 #scene.nodes{background:linear-gradient(rgba(11,9,8,.55),rgba(11,9,8,.8)),url(img/metal.webp) center/cover}
@@ -533,7 +538,7 @@ footer:has(#abar.on) #abar{flex:1 1 auto;min-width:0}
   <div class="pane" id="p-txt"><textarea id="lyrics" data-tp="lyrics" placeholder="Lyrics, notes…"></textarea></div>
   <div class="pane" id="p-mine">
     <button id="bImport"><svg><use href="#i-file"/></svg><span data-t="import">Import audio</span></button>
-    <input type="file" id="fileIn" accept="audio/*" multiple hidden>
+    <input type="file" id="fileIn" accept="audio/*,video/*" multiple hidden>
     <div id="mineList"></div>
   </div>
 </aside>
@@ -566,10 +571,10 @@ const COLORS=Object.values(FAUNA_C);
 const trackColor=n=>FAUNA_C[n<18?SESSION_MASKS[n]:SESSION_MASKS2[(n-18)%18]];
 const INK=c=>{const n=parseInt(c.slice(1),16),l=.299*(n>>16)+.587*(n>>8&255)+.114*(n&255);return l>140?"#1b1a17":"#f6f3ea"};
 const T={
- en:{track:"Track",import:"Import audio",keyHelp:"Personal Freesound API key. It stays in this browser.",nores:"Nothing found.",exported:"Exported",mic:"Microphone refused.",confirmNew:"Erase the current project?",arm:"Arm a track (mic button) first.",fsErr:"Freesound unreachable.",drop:"Drag the sounds onto a track.",licence:"Licences shown: CC0 and CC BY. Credits go into the export.",
+ en:{track:"Track",import:"Import a sound or a film",keyHelp:"Personal Freesound API key. It stays in this browser.",nores:"Nothing found.",exported:"Exported",mic:"Microphone refused.",confirmNew:"Erase the current project?",arm:"Arm a track (mic button) first.",fsErr:"Freesound unreachable.",drop:"Drag the sounds onto a track.",licence:"Licences shown: CC0 and CC BY. Credits go into the export.",
   reverse:"Reverse",normalize:"Normalize",gainUp:"Gain +3 dB",gainDown:"Gain −3 dB",transpose:"Transpose…",stretch:"Speed (keeps pitch)…",loop:"Repeat ×…",mute:"Mute clip",denoise:"Denoise",copy:"Copy",paste:"Paste",dup:"Duplicate",split:"Split",del:"Delete",rename:"Rename…",fadeReset:"Remove fades",toSounds:"Bounce to my sounds",loopSel:"Loop this clip",atelier:"Workshop ▸",separate:"Separate ▸",fuse:"Fuse selection (Ctrl+J)",fused:"Fused",needTwo:"Select two clips or more (Shift+click or drag a box).",bounce:"Bounce with effects",sepOnsets:"Slice at attacks",sepSilence:"Remove silences",sepHpss:"Harmonic / percussive",sepBands:"Low / mid / high",sepMS:"Mid / side",splitDone:"Sliced",harm:"Harmonic",perc:"Percussive",low:"Low",mid:"Mid",high:"High",fbOn:"Flashback listens: the last 60 s stay in memory. F captures them.",fbGot:"Flashback captured",full:"32 tracks in use.",loopX2:"Repeat",slice:"Slice",more:"More",shift:"Shift",transposeS:"Transpose",semisS:"Semitones",speedS:"Speed",fadeIn:"Fade in",fadeOut:"Fade out",envelope:"Automation envelope",autoVol:"Volume",autoPan:"Pan",autoHide:"Hide the envelope",fades:"Fades",fuseS:"Fuse",atelierS:"Workshop",separateS:"Separate",searchAll:"Search every sound…",collections:"Collections",mine:"My sounds",collapse:"Fold / unfold",flash:"Flashback",
   semis:"Semitones (−12 … +12)",speed:"Speed in % (50 … 200)",times:"How many repeats?",working:"Processing…",addFx:"+ effect",presets:"Chain preset",none:"—",lyrics:"Lyrics, notes…",tuner:"Tuner",exportT:"Export",wav:"WAV mix",mp3:"MP3 mix",stems:"WAV stems (one file per track)",countIn:"Count-in",monitor:"Monitoring (headphones)",master:"Master",autoV:"Volume automation",autoP:"Pan automation",autoHelp:"Click: add a point. Drag: move. Double-click: remove."},
- fr:{track:"Piste",import:"Importer de l'audio",keyHelp:"Clé personnelle de l'API Freesound. Elle reste dans ce navigateur.",noKey:"Freesound demande une clé : bouton engrenage.",nores:"Rien trouvé.",exported:"Exporté",mic:"Micro refusé.",confirmNew:"Effacer le projet en cours ?",arm:"Arme d'abord une piste (bouton micro).",fsErr:"Freesound injoignable.",drop:"Glisse les sons sur une piste.",licence:"Licences affichées : CC0 et CC BY. Les crédits partent avec l'export.",
+ fr:{track:"Piste",import:"Importer un son ou un film",keyHelp:"Clé personnelle de l'API Freesound. Elle reste dans ce navigateur.",noKey:"Freesound demande une clé : bouton engrenage.",nores:"Rien trouvé.",exported:"Exporté",mic:"Micro refusé.",confirmNew:"Effacer le projet en cours ?",arm:"Arme d'abord une piste (bouton micro).",fsErr:"Freesound injoignable.",drop:"Glisse les sons sur une piste.",licence:"Licences affichées : CC0 et CC BY. Les crédits partent avec l'export.",
   reverse:"Inverser",normalize:"Normaliser",gainUp:"Gain +3 dB",gainDown:"Gain −3 dB",transpose:"Transposer…",stretch:"Vitesse (hauteur gardée)…",loop:"Répéter ×…",mute:"Couper le clip",denoise:"Débruiter",copy:"Copier",paste:"Coller",dup:"Dupliquer",split:"Couper en deux",del:"Supprimer",rename:"Renommer…",fadeReset:"Retirer les fondus",toSounds:"Figer dans mes sons",loopSel:"Boucler ce clip",atelier:"Atelier ▸",separate:"Séparer ▸",fuse:"Fusionner la sélection (Ctrl+J)",fused:"Fusion",needTwo:"Sélectionne au moins deux clips (Maj+clic ou cadre à la souris).",bounce:"Figer avec les effets",sepOnsets:"Découper aux attaques",sepSilence:"Retirer les silences",sepHpss:"Harmonique / percussif",sepBands:"Graves / médiums / aigus",sepMS:"Centre / côtés",splitDone:"Découpé",harm:"Harmonique",perc:"Percussif",low:"Graves",mid:"Médiums",high:"Aigus",fbOn:"Flashback écoute : les 60 dernières secondes restent en mémoire. F les capture.",fbGot:"Flashback capturé",full:"Les 32 pistes sont occupées.",loopX2:"Répéter",slice:"Trancher",more:"Plus",shift:"Décaler",transposeS:"Transposer",semisS:"Demi-tons",speedS:"Vitesse",fadeIn:"Entrée",fadeOut:"Sortie",envelope:"Enveloppe d'automation",autoVol:"Volume",autoPan:"Panoramique",autoHide:"Masquer l'enveloppe",fades:"Fondus",fuseS:"Fusionner",atelierS:"Atelier",separateS:"Séparer",searchAll:"Chercher dans tous les sons…",collections:"Collections",mine:"Mes sons",collapse:"Replier / déplier",flash:"Flashback",
   semis:"Demi-tons (−12 … +12)",speed:"Vitesse en % (50 … 200)",times:"Combien de répétitions ?",working:"Calcul…",addFx:"+ effet",presets:"Preset de chaîne",none:"—",lyrics:"Paroles, notes…",tuner:"Accordeur",exportT:"Export",wav:"Mix WAV",mp3:"Mix MP3",stems:"Pistes séparées WAV (un fichier par piste)",countIn:"Décompte",monitor:"Écoute de contrôle (casque)",master:"Master",autoV:"Automation du volume",autoP:"Automation du panoramique",autoHelp:"Clic : ajoute un point. Glisser : déplace. Double-clic : retire."}
 };
@@ -965,6 +970,7 @@ let dbp=null;
 function db(){return dbp||(dbp=new Promise((res,rej)=>{const r=indexedDB.open("studio",1);r.onupgradeneeded=()=>{r.result.createObjectStore("snd");r.result.createObjectStore("proj")};r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error)}))}
 async function dbPut(store,key,val){const d=await db();return new Promise((res,rej)=>{const tx=d.transaction(store,"readwrite");tx.objectStore(store).put(val,key);tx.oncomplete=res;tx.onerror=()=>rej(tx.error)})}
 async function dbGet(store,key){const d=await db();return new Promise((res,rej)=>{const r=d.transaction(store).objectStore(store).get(key);r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error)})}
+async function dbDel(store,key){const d=await db();return new Promise((res,rej)=>{const tx=d.transaction(store,"readwrite");tx.objectStore(store).delete(key);tx.oncomplete=res;tx.onerror=()=>rej(tx.error)})}
 async function dbAll(store){const d=await db();return new Promise((res,rej)=>{const out=[];const r=d.transaction(store).objectStore(store).openCursor();r.onsuccess=()=>{const c=r.result;if(c){out.push(c.value);c.continue()}else res(out)};r.onerror=()=>rej(r.error)})}
 async function storeSound(s){if(s.src==="kit")return;const b=s.buffer;const chans=[];for(let i=0;i<b.numberOfChannels;i++)chans.push(b.getChannelData(i).slice());try{await dbPut("snd",s.id,{id:s.id,name:s.name,src:s.src,credit:s.credit||null,sr:b.sampleRate,chans})}catch(e){console.warn(e)}}
 let saveH;
@@ -2224,7 +2230,7 @@ function acf(b,sr){let rms=0;for(const v of b)rms+=v*v;rms=Math.sqrt(rms/b.lengt
   if(best<=0)return -1;const x1=c[best-1]||0,x2=c[best],x3=c[best+1]||0,a=(x1+x3-2*x2)/2,bb=(x3-x1)/2;return sr/(a?best-bb/(2*a):best)}
 
 /* ================= wiring ================= */
-function frame(now){try{figDraw(now||performance.now())}catch(e){}if(playing)try{fxAutoApply(displayPos())}catch(e){}try{consoleMeters();animateAuto()}catch(e){}
+function frame(now){try{figDraw(now||performance.now())}catch(e){}try{filmSync()}catch(e){}if(playing)try{fxAutoApply(displayPos())}catch(e){}try{consoleMeters();animateAuto()}catch(e){}
   document.querySelectorAll("video.kam").forEach(v=>{if(playing&&v.paused)v.play().catch(()=>{});else if(!playing&&!v.paused)v.pause()});
   if(playing){placeHead();const p=displayPos(),sc=$("#scroller"),x=p*state.pps;if(!drag&&(x<sc.scrollLeft||x>sc.scrollLeft+sc.clientWidth-headW()-20))sc.scrollLeft=Math.max(0,x-40)}
   if(analyser){const d=new Float32Array(analyser.fftSize);analyser.getFloatTimeDomainData(d);let m=0,q=0;for(const v of d){q+=v*v;m=Math.max(m,Math.abs(v))}const rms=Math.sqrt(q/d.length),db=20*Math.log10(rms+1e-9)+3;const tgt=clamp((Math.pow(10,db/20)-.1)/(1.4125-.1),0,1.05);vuN+=(tgt-vuN)*.14;if(m>.98)vuPk=performance.now();drawVU(vuN,performance.now()-vuPk<600)}else drawVU(0,false)
@@ -2268,10 +2274,10 @@ $("#keyCancel").onclick=()=>$("#dKey").close();
 
 $("#bImport").onclick=()=>$("#fileIn").click();
 $("#fileIn").onchange=e=>importFiles([...e.target.files]);
-async function importFiles(files){for(const f of files){try{const b=await audio().decodeAudioData(await f.arrayBuffer());const s=addSound({id:"file:"+uid(),name:f.name.replace(/\.[^.]+$/,""),buffer:b,src:"file"});await storeSound(s)}catch(e){console.warn(e)}}renderMine();document.querySelector('aside nav button[data-p="mine"]').click();toast(t("drop"))}
+async function importFiles(files){for(const f of files){if(/^video\//.test(f.type)||/\.(mp4|webm|mov|m4v|mkv|ogv)$/i.test(f.name)){await filmLoad(f,true);continue}try{const b=await audio().decodeAudioData(await f.arrayBuffer());const s=addSound({id:"file:"+uid(),name:f.name.replace(/\.[^.]+$/,""),buffer:b,src:"file"});await storeSound(s)}catch(e){console.warn(e)}}renderMine();document.querySelector('aside nav button[data-p="mine"]').click();toast(t("drop"))}
 addEventListener("dragover",e=>{e.preventDefault();$("#drop").style.display="block"});
 addEventListener("dragleave",e=>{if(!e.relatedTarget)$("#drop").style.display="none"});
-addEventListener("drop",e=>{e.preventDefault();$("#drop").style.display="none";const f=[...e.dataTransfer.files].filter(x=>x.type.startsWith("audio")||/\.(wav|mp3|ogg|flac|m4a|aif+)$/i.test(x.name));if(f.length)importFiles(f)});
+addEventListener("drop",e=>{e.preventDefault();$("#drop").style.display="none";const f=[...e.dataTransfer.files].filter(x=>x.type.startsWith("audio")||x.type.startsWith("video")||/\.(wav|mp3|ogg|flac|m4a|aif+|mp4|webm|mov|m4v|mkv|ogv)$/i.test(x.name));if(f.length)importFiles(f)});
 addEventListener("keydown",e=>{const tg=e.target.tagName;if((tg==="INPUT"&&e.target.type!=="range")||tg==="TEXTAREA"||tg==="SELECT")return;const k=e.key.toLowerCase(),mod=e.ctrlKey||e.metaKey;
   if(e.code==="Space"){e.preventDefault();$("#bPlay").click()}
   else if(k==="delete"||k==="backspace"){e.preventDefault();delSel()}
@@ -2313,7 +2319,7 @@ addEventListener("pointerdown",()=>audio(),{once:true,capture:true});
   if(all.length&&all.every(c=>demo.has(c.snd))){state.tracks.forEach(tr=>{tr.clips=[];tr.rack=[]});state.loop=false}
   if(!state.tracks.length)fillTracks();
   state.tracks.forEach(tr=>{if(/^(Kick|Snare|Hat|Drone|Track \d+|Piste \d+|Harmonic|Percussive|Harmonique|Percussif|Low|Mid|High|Graves|Médiums|Aigus|Side)$/.test(tr.name))tr.name=""});fillTracks();
-  syncUI();render();requestAnimationFrame(frame);kamLoad();
+  syncUI();render();requestAnimationFrame(frame);kamLoad();filmRestore();
   if(navigator.storage&&navigator.storage.persist)navigator.storage.persist().catch(()=>{});
 })();
 
@@ -2505,7 +2511,7 @@ function cmdList(){const F=lang==="fr",tr=curTrack(),tn=tr?tr.name:"";const A=[]
   add(F?"Repérer les coupes des vidéos":"Mark video cuts","vidéo video coupes cuts plans scene kamorhogo",markVideoCuts);
   add(F?"Dérive":"Drift","emergence lorenz evolve",driftToggle);add(F?"Garder la dérive":"Keep drift","keep",driftKeep);
   add("Export WAV","exporter mix",()=>doExport("wav"));add("Export MP3","exporter",()=>doExport("mp3"));add(F?"Export des pistes séparées":"Export stems","stems",()=>doExport("stems"));
-  add(F?"Nouvelle piste":"New track","add piste",()=>{const t=freeTrack(-1);if(t){rebuildChains();render();save()}});add(F?"Importer un fichier audio":"Import audio file","upload",clk("bImport"));add(F?"Nouveau projet":"New project","new",clk("bNew"));add(F?"Langue FR / EN":"Language FR / EN","lang",clk("bLang"));
+  add(F?"Nouvelle piste":"New track","add piste",()=>{const t=freeTrack(-1);if(t){rebuildChains();render();save()}});add(F?"Importer un son ou un film":"Import a sound or a film","upload video film image ost musique de film",clk("bImport"));add(F?"Nouveau projet":"New project","new",clk("bNew"));add(F?"Langue FR / EN":"Language FR / EN","lang",clk("bLang"));
   for(const k of Object.keys(MASTERS))if(k!=="Neutral")add((F?"Mastering : ":"Mastering: ")+k,"master preset",()=>{state.masterPreset=k;$("#mPre").value=k;rebuildMaster();save()});
   for(const [v,n] of TARGETS)add((F?"Sonie : ":"Loudness: ")+n,"lufs target cible",()=>{state.target=v==="off"?"off":+v;$("#mTgt").value=String(v);save()});
   for(const [k,d] of Object.entries(FX))add((F?"Effet ":"Effect ")+d.n+" → "+tn,"fx effet rack add "+k,()=>{const t=curTrack();if(!t)return;snapshot();t.rack.push({id:uid(),type:k,on:true,p:{...d.p}});rebuildChains();fxOpen=t.id;renderFx();render();save()},tn);
@@ -2626,10 +2632,16 @@ addEventListener("keydown",e=>{if(e.altKey&&/^[1-5]$/.test(e.key)){e.preventDefa
 async function videoCuts(url,step=.2){const v=document.createElement("video");v.muted=true;v.playsInline=true;v.src=url;v.preload="auto";v.style.cssText="position:fixed;left:-200px;top:0;width:32px;height:18px;opacity:0;pointer-events:none";document.body.append(v);await new Promise(r=>{v.onloadeddata=r;v.onerror=r;setTimeout(r,4000)});const D=v.duration||0;if(!D)return[];
   const cv=document.createElement("canvas");cv.width=32;cv.height=18;const g=cv.getContext("2d",{willReadFrequently:true});let prev=null;const cuts=[];
   /* lecture accélérée : chaque image décodée est comparée à la précédente (plus sûr qu'un déplacement image par image) */
-  v.playbackRate=clamp(D/12,1,8);const diff=t=>{g.drawImage(v,0,0,32,18);const d=g.getImageData(0,0,32,18).data;if(prev){let m=0;for(let i=0;i<d.length;i+=4)m+=Math.abs(d[i]-prev[i])+Math.abs(d[i+1]-prev[i+1])+Math.abs(d[i+2]-prev[i+2]);m/=(d.length/4)*3*255;if(m>.18&&(!cuts.length||t-cuts[cuts.length-1]>.5))cuts.push(+t.toFixed(2))}prev=d};
+  v.playbackRate=clamp(D/4,2,16);const diff=t=>{g.drawImage(v,0,0,32,18);const d=g.getImageData(0,0,32,18).data;if(prev){let m=0;for(let i=0;i<d.length;i+=4)m+=Math.abs(d[i]-prev[i])+Math.abs(d[i+1]-prev[i+1])+Math.abs(d[i+2]-prev[i+2]);m/=(d.length/4)*3*255;if(m>.18&&(!cuts.length||t-cuts[cuts.length-1]>.5))cuts.push(+t.toFixed(2))}prev=d};
   await new Promise(res=>{const done=()=>res();v.onended=done;setTimeout(done,(D/v.playbackRate+4)*1000);
     if(v.requestVideoFrameCallback){const cb=(n,meta)=>{diff(meta.mediaTime);if(!v.ended)v.requestVideoFrameCallback(cb)};v.requestVideoFrameCallback(cb)}else v.ontimeupdate=()=>diff(v.currentTime);
-    v.play().catch(done)});v.pause();v.remove();return cuts}
+    v.play().catch(done)});v.pause();
+  /* affinage : chaque coupe repérée en lecture rapide est rejouée à vitesse normale pour la caler sur l'image exacte */
+  const fine=[];if(v.requestVideoFrameCallback&&v.playbackRate>1){v.playbackRate=1;for(const c of cuts){const a=Math.max(0,c-.04*16-.1);prev=null;let hit=null;
+      await new Promise(res=>{v.currentTime=a;v.onseeked=()=>{v.onseeked=null;const stop=setTimeout(res,1500);const cb=(n,meta)=>{const t=meta.mediaTime;g.drawImage(v,0,0,32,18);const d=g.getImageData(0,0,32,18).data;
+        if(prev){let m=0;for(let i=0;i<d.length;i+=4)m+=Math.abs(d[i]-prev[i])+Math.abs(d[i+1]-prev[i+1])+Math.abs(d[i+2]-prev[i+2]);m/=(d.length/4)*3*255;if(m>.18&&hit===null)hit=+t.toFixed(3)}prev=d;
+        if(hit!==null||t>c+.12){clearTimeout(stop);v.pause();res()}else v.requestVideoFrameCallback(cb)};v.requestVideoFrameCallback(cb);v.play().catch(()=>{clearTimeout(stop);res()})}});fine.push(hit??c)}}
+  v.remove();return fine.length?fine:cuts}
 async function markVideoCuts(){const items=(KAM.items||[]).filter(i=>i.kind==="vid");let n=0;state.notes=state.notes||[];status(t("working"));
   for(const tr of state.tracks)for(const c of tr.clips){const it=items.find(i=>i.id===c.snd);if(!it)continue;const cuts=await videoCuts(it.url);cuts.forEach(x=>{if(x<c.off||x>c.off+c.len)return;state.notes.push({t:c.start+x-c.off,x:"✂ "+it.name});n++})}
   state.notes.sort((a,b)=>a.t-b.t);drawRuler();save();status();toast("✂ "+n)}
@@ -2693,9 +2705,9 @@ function renderNodes(box){cancelAnimationFrame(ndRaf);const W=box.clientWidth,H=
 /* calage sur l'image : le tempo se règle pour que les temps forts tombent sur les coupes et les notes de terrain */
 function fitTempo(only){const N=only?[only]:(state.notes||[]).filter(n=>n.t>.2);const F=lang==="fr";if(!N.length){status(F?"Aucune coupe ni note sur la règle":"No cut or note on the ruler");return}
   let best=state.bpm,bs=-1;const cur=state.bpm;
-  for(let b=60;b<=190;b+=.01){const sp=60/b;let sc=0;for(const n of N){const k=n.t/sp,d=Math.abs(k-Math.round(k))*sp,down=Math.round(k)%4===0?2:1;sc+=down*Math.exp(-Math.pow(d/.012,2))}sc-=Math.abs(b-cur)*1e-4;if(sc>bs){bs=sc;best=b}}
+  for(let b=60;b<=190;b+=.01){const sp=60/b;let sc=0;for(const n of N){const k=n.t/sp,d=Math.abs(k-Math.round(k))*sp,down=Math.round(k)%4===0?2:1;sc+=down*Math.exp(-Math.pow(d/.025,2))}sc-=Math.abs(b-cur)*1e-4;if(sc>bs){bs=sc;best=b}}
   best=Math.round(best*100)/100;snapshot();state.bpm=best;$("#bpm").value=best;render();save();restartIfPlaying();
-  const sp=60/best,hit=N.filter(n=>{const k=n.t/sp;return Math.abs(k-Math.round(k))*sp<.012}).length;
+  const sp=60/best,hit=N.filter(n=>{const k=n.t/sp;return Math.abs(k-Math.round(k))*sp<.045}).length;
   status((F?"Tempo ":"Tempo ")+best+" — "+hit+"/"+N.length+(F?" repères sur un temps":" marks on a beat"));return{bpm:best,hit,n:N.length}}
 $("#rulerC").addEventListener("click",e=>{if(!e.altKey)return;const r=$("#rulerC").getBoundingClientRect(),t=(e.clientX-r.left+$("#scroller").scrollLeft)/state.pps;const n=(state.notes||[]).find(n=>Math.abs(n.t-t)*state.pps<10);if(n)fitTempo(n)});
 
@@ -2817,6 +2829,30 @@ function loupe(sel,tab){if(tab)loupeTab=tab;try{localStorage.setItem("st.loupe",
   const T=[["spec","◩",F?"Spectre : gommer, réparer":"Spectrum: erase, repair"],["scale","♪",F?"Échelle réelle en cents":"Actual scale in cents"],["field","✎",F?"Fiche de terrain":"Field sheet"]];
   const title=sh.querySelector(":scope>b");const bar=el("div",{class:"lt"},el("b",{},c.name||lib.get(c.snd)?.name||""),...T.map(([k,g,ttl])=>{const b=el("button",{class:k===loupeTab?"on":"",title:ttl},g);b.onclick=()=>loupe(sel,k);return b}));
   if(title)title.replaceWith(bar);else sh.prepend(bar)}
+
+/* film : une vidéo importée passe sur un écran au-dessus des pistes, calée sur la tête de lecture ; son son va sur une piste, ses coupes deviennent des repères, le tempo peut se caler sur l'image */
+const FILM={url:null,v:null,box:null,off:0,last:-1,name:""};
+async function filmLoad(file,fresh){const F=lang==="fr";if(FILM.url)URL.revokeObjectURL(FILM.url);FILM.url=URL.createObjectURL(file);FILM.name=file.name||"film";FILM.off=fresh?0:(state.filmOff||0);state.filmOff=FILM.off;
+  try{await dbPut("proj","film",{id:"film",blob:file,name:FILM.name})}catch(e){}
+  filmScreen();if(!fresh){return}
+  status(t("working"));
+  try{const b=await audio().decodeAudioData(await file.arrayBuffer());const sd=addSound({id:"film:"+uid(),name:FILM.name.replace(/\.[^.]+$/,""),buffer:b,src:"file"});await storeSound(sd);
+    let tr=state.tracks.slice(18).find(t=>!t.clips.length)||freeTrack(0);if(tr)edit(()=>{tr.clips.push({id:uid(),snd:sd.id,start:FILM.off,off:0,len:b.duration,gain:1,name:FILM.name})})}catch(e){}
+  try{const cuts=await videoCuts(FILM.url);state.notes=(state.notes||[]).filter(n=>!n.film);cuts.forEach((c,i)=>state.notes.push({t:c+FILM.off,x:(F?"plan ":"shot ")+(i+2),film:1}));state.notes.sort((a,b)=>a.t-b.t);drawRuler();save();
+    toast((F?"Film posé · ":"Film placed · ")+cuts.length+(F?" coupes":" cuts"))}catch(e){toast(F?"Film posé":"Film placed")}finally{status()}}
+async function filmRestore(){try{const r=await dbGet("proj","film");if(r&&r.blob)filmLoad(r.blob,false)}catch(e){}}
+function filmScreen(){const F=lang==="fr";if(FILM.box)FILM.box.remove();const v=el("video",{muted:"",playsinline:"",preload:"auto",src:FILM.url});v.muted=true;FILM.v=v;FILM.last=-1;
+  const tc=el("span",{class:"tc"},"0:00");const big=el("button",{title:F?"Agrandir":"Enlarge"},"⤢"),hide=el("button",{title:F?"Retirer le film":"Remove the film"},"×");
+  const box=el("div",{id:"film",title:FILM.name},v,tc,el("div",{class:"fb"},big,hide));FILM.box=box;FILM.tc=tc;$("main").append(box);
+  big.onclick=e=>{e.stopPropagation();box.classList.toggle("big")};
+  hide.onclick=async e=>{e.stopPropagation();box.remove();FILM.box=null;FILM.v=null;URL.revokeObjectURL(FILM.url);FILM.url=null;state.notes=(state.notes||[]).filter(n=>!n.film);drawRuler();save();try{await dbDel("proj","film")}catch(e){}};
+  box.addEventListener("pointerdown",e=>{if(e.target.closest("button"))return;e.preventDefault();box.setPointerCapture(e.pointerId);const m=$("main").getBoundingClientRect(),r=box.getBoundingClientRect(),dx=e.clientX-r.left,dy=e.clientY-r.top;
+    const mv=ev=>{box.style.left=clamp(ev.clientX-m.left-dx,0,m.width-r.width)+"px";box.style.top=clamp(ev.clientY-m.top-dy,0,m.height-r.height)+"px";box.style.right="auto"};
+    const up=()=>{box.removeEventListener("pointermove",mv);box.removeEventListener("pointerup",up)};box.addEventListener("pointermove",mv);box.addEventListener("pointerup",up)})}
+function filmSync(){const v=FILM.v;if(!v||!v.duration)return;const t=clamp(displayPos()-FILM.off,0,v.duration-.02);
+  if(playing){if(v.paused){v.currentTime=t;v.play().catch(()=>{})}else if(Math.abs(v.currentTime-t)>.12)v.currentTime=t}
+  else{if(!v.paused)v.pause();if(Math.abs(t-FILM.last)>.03){v.currentTime=t;FILM.last=t}}
+  if(FILM.tc){const s=Math.floor(t);FILM.tc.textContent=Math.floor(s/60)+":"+String(s%60).padStart(2,"0")+"."+Math.floor((t%1)*10)}}
 </script>
 </body>
 </html>

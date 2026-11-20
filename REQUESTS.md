@@ -79,6 +79,9 @@ Critères de qualité appliqués à chaque lot : direction artistique, réalisme
   - noms des effets en français quand le studio parle français.
 - Sauvegardes datées et jouables : https://mauktenieb.github.io/studio/versions/
 
+- Musique de film (20 nov., 6 h 29 : « OST ») : on importe une vidéo (bouton d'import ou glisser-déposer). Elle passe sur un écran au-dessus des pistes, qu'on déplace ou agrandit, calée sur la tête de lecture. Son son va sur la première piste libre à partir de 19, ses coupes deviennent des repères « plan n » sur la règle, réglés sur l'image exacte. Le tempo se cale ensuite sur ces coupes. Le film revient à la réouverture du studio.
+- Chants de Papouasie et ethnographie par région ; sous-grave dosé (les sessions façon Lustmord et Roly Porter ne saturent plus).
+
 ## À faire
 
 ## Écarté, avec raison

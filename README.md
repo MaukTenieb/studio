@@ -108,3 +108,5 @@ Chaque clip reçoit une fiche de terrain : lieu, date, musiciens, fonction, sais
 Sur la scène, deux objets posés l'un sur l'autre se repoussent, chacun creusant le spectre de l'autre, ou se fondent en se modulant l'un l'autre.
 
 La loupe d'un clip réunit son spectre, qu'on gomme ou répare, son échelle réelle en cents et sa fiche de terrain. Les boîtes d'artistes sont des étiquettes Dymo sur les étagères. La dérive apprend de ce qu'on garde : chaque état gardé devient une branche du projet et oriente les dérives suivantes. Les sauvegardes datées restent jouables sur https://mauktenieb.github.io/studio/versions/
+
+Pour une musique de film, on importe la vidéo : elle passe sur un écran au-dessus des pistes, calée sur la tête de lecture. Son son va sur une piste, ses coupes deviennent des repères sur la règle, et le tempo se cale sur l'image.
