@@ -32,6 +32,7 @@ Critères de qualité appliqués à chaque lot : direction artistique, réalisme
 - Palette de commandes (Ctrl+K, « / » ou la touche dédiée) : transport, tiroirs, export, masterings, sonie, effets et chaînes sur la piste choisie, boîtes à bruit, recherche de sons.
 - Pompage en un clic (grave seul, calé sur le temps, limiteur de sécurité) ; repliement d'onde ; chaînes « brise-voix » et « scie suédoise ».
 - Générateurs de bruits : blanc, rose, brun, interférences radio, oscillateurs qui dérivent.
+- Séquenceur génératif : longueur propre à chaque rangée (polymétrie), probabilité de déclenchement, décalage en millisecondes, remplissage euclidien, swing général ; l'écriture en clips réalise une variation.
 - Collection Arsenal : 8 familles, 133 entrées tirées des annexes.
 - DA de la kave Korhogo, photographique : acier bruni du flanc de borne, jonc chromé, plaque MAUK TENIEB, étiquettes Dymo, écrans à phosphore photographiés, disque photographié pour le Scratch, capuchons rétroéclairés, cave voûtée, étagères de bandes, deux photographies de groupe de la Fauna à l'ouverture.
 - Proportions continues : chaque aire (pistes, bibliothèque, tiroir du bas) suit le format de l'écran ; poignée de partage entre pistes et tiroir ; téléphone couché avec bibliothèque à droite.
@@ -47,7 +48,6 @@ Critères de qualité appliqués à chaque lot : direction artistique, réalisme
 - Poste de mix de Musik : deux platines son et vidéo, fondu croisé.
 - Recherche par tonalité dans les packs.
 - Annexes du 20 nov. 2026, 5 h 08 (outils natifs souhaités par genre, lus avec esprit critique) :
-  - Séquenceur : swing et micro-décalage en millisecondes par rangée, probabilités de déclenchement, remplissage euclidien, longueur propre à chaque rangée (polymétrie).
   - Timeline en secondes, sans tempo (musique concrète).
   - Export par lots des tranches détectées, normalisées, nommées selon UCS.
   - Notes de terrain sur la timeline (texte, traduction, accordage).
