@@ -6,6 +6,8 @@ Gravité choisie : la plus haute des gravités d'origine, baissée d'un cran qua
 
 ## Fait
 
+- 20 nov. 21 h 32 : E-52 ; E-53 ; E-54 ; E-57 ; E-58 ; E-84 ; E-91 ; E-92 ; E-93 ; E-94 ; E-95 ; E-96. Échelle réelle : médiane de 140 ms puis moyenne en cents sur 180 ms (trois notes avec vibrato de ±30 cents à 6 Hz : 3 pics au lieu de 17), pics fusionnés sous 50 cents, tonique au choix (pic le plus fort par défaut), La de 415 à 466 Hz, intervalles successifs, écart de chaque pic à la gamme, signal « plusieurs voix probables », courbe de hauteur dans le temps, export texte (temps, Hz, cents), gamme mesurée gardée comme référence, gammes ajoutées (24 tons égaux, 53 commas, thaïe à 7 pas, hijaz, saba) ; 1200 ramené à 0. Morphing par interpolation linéaire des amplitudes. Wavesets : passages par zéro et plan par canal (0 saut sur le canal droit, contre 852). Gel spectral : recouvrement de 4 et fréquence vraie de chaque case (écart de niveau 0 dB, contre 6,97). Synthèse croisée : phases de la porteuse gardées. WSOLA : une attaque déjà jouée cède la place à la suite naturelle. Doppler : retard lissé par une constante unique de 30 ms. Loupe : graduations 50 Hz à 10 kHz et secondes, lecture temps, Hz, dB sous le pointeur. Atelier : touche ▶ qui traite et joue en boucle les 4 premières secondes.
+
 - 20 nov. 21 h 24 : E-27 ; E-28 ; E-34 ; E-36 ; E-37 ; E-38 ; E-39 ; E-40 ; E-73 ; E-81 ; E-82 ; E-89. Pistes séparées : 16 bits avec dither TPDF, 24 bits ou 32 bits flottants, 44,1 ou 48 kHz, en-tête BWF avec TimeReference, toutes de même longueur, 2-pop 1 kHz d'une image à −2 s au choix (fichiers relus par libsndfile : PCM_16, PCM_24, FLOAT, time_reference lue) ; sonomètre du pied : LUFS intégré, LRA (EBU Tech 3342), vraie crête en dBTP, pastille rouge quand le continu dépasse −60 dBFS ; temps de l'écho dub de 1/16 à 1 mesure sur la tranche Master ; sirène jouée en direct sur un pad (X 300-1 200 Hz, Y vibrato 1-12 Hz) envoyée au bus dub, sirène et laser posés à −18 LUFS ; boîtes dub : passe-haut sur deux pistes, sirène et ressort posés, console ouverte ; filtre ◖ ◗ par tranche (passe-bas à gauche, passe-haut à droite) ; larsen (insertkoin/musik-fx.js) : silence à 0,4, accrochage à 0,5 (−28,6 dB), −7,4 dB à 1 ; rattrapage de niveau de 20 chaînes sur 33 (écart ramené à ±3 dB sur bruit rose) ; rendu calé sur la grille (premier échantillon à 0 au lieu de 128) ; ressort du bus dub à graine fixe ; pads Écho et Réverb : seule l'entrée se ferme au relâchement, la queue reste ; SP-1200 sans filtre de sortie ajouté. Loi de panoramique −3 dB gardée pour les sources mono : c'est la loi des consoles et des stations de travail.
 
 - 20 nov. 21 h 18 : E-29 ; E-30 ; E-31 ; E-32 ; E-33 ; E-76 ; E-77 ; E-78 ; E-79 ; E-80. Film : recalage de l'image au-delà de 40 ms, écart fin rattrapé par la vitesse 0,98-1,02 ; code temporel hh:mm:ss:ii et nombre de coupes sur l'écran du film (« 00:00:04:12  ✂ 4 ») ; touches image précédente et suivante ; touche métronome : les 3 meilleurs tempos avec leur nombre de coupes sur un temps (119,95 : 4/4) ; appui long sur un repère de la règle : tempo calé sur ce repère ; touche de départ du film (−30 à +120 s, repères déplacés avec lui) ; export film + mix en WebM ; fondus enchaînés marqués ◐ (fondu rouge-bleu d'une seconde : repère à 2,19 s) ; avancement de la détection dans la barre de calcul ; au téléphone, film dans une bande de 24 % au-dessus de la règle, sans recouvrement. La carte de tempo par section reste hors de ce lot : un seul tempo par projet.
@@ -56,24 +58,6 @@ Gravité choisie : la plus haute des gravités d'origine, baissée d'un cran qua
   - Correction : Kit Orchestre de notes longues par pupitre (violons, altos, violoncelles, contrebasses, cors, bois, chœur) depuis des sources libres vérifiées ; une note par pad, transposition par demi-ton depuis le séquenceur (audio, zéro MIDI).
   - Charge de la machine : existe quelle que soit la charge.
 
-- E-52 · important · Échelle réelle : cents ancrés sur La, vibrato lu comme plusieurs degrés, polyphonie non signalée.
-  - Experts : 1 (07-06, 07-07, 07-08). Gravités d'origine : 07-06 important, 07-07 important, 07-08 important.
-  - Preuve : Slendro joué sur ré : pics à 17, 255, 500, 731, 974 cents depuis La, gamme de référence décalée de 500 cents, `near` (ligne 2827) jamais affiché ; 3 degrés à ±50 cents → 9 pics ; bourdon + mélodie → f0 médiane 65,4 Hz, 2 degrés sur 4 manquants (07). Capture : [07-echelle-slendro_re-pc1366](captures/07-echelle-slendro_re-pc1366.webp).
-  - Correction : 1. Sélecteur de tonique (pic le plus fort par défaut), cents depuis la tonique, ligne des intervalles successifs, écart de chaque pic à la gamme choisie, La réglable de 415 à 466 Hz. 2. Médiane de 100 à 150 ms sur la courbe f0 avant l'histogramme ; fusion des pics à 50 cents. 3. Clarté YIN mesurée et pictogramme « plusieurs voix » au-dessus d'un seuil.
-  - Charge de la machine : existe quelle que soit la charge.
-
-- E-53 · important · Le morphing annule deux spectres disjoints.
-  - Experts : 1 (08-03). Gravités d'origine : 08-03 important.
-  - Preuve : Moyenne géométrique `A^(1−t)·B^t` (ligne 2062) : creux de 48,6 dB au milieu d'un morphing 440 → 880 Hz (08, S8).
-  - Correction : Interpolation linéaire des amplitudes, ou enveloppe interpolée et pics glissés d'un spectre à l'autre.
-  - Charge de la machine : existe quelle que soit la charge.
-
-- E-54 · important · Wavesets faux en stéréo.
-  - Experts : 1 (08-04). Gravités d'origine : 08-04 important.
-  - Preuve : Passages par zéro du seul canal gauche (`x0=b.getChannelData(0)`, ligne 2079) : 852 sauts sur le canal droit (08, S9). Capture : [08-pc1920-wavesets-dialogue](captures/08-pc1920-wavesets-dialogue.webp).
-  - Correction : Passages par zéro calculés sur chaque canal, plan propre à chaque canal.
-  - Charge de la machine : existe quelle que soit la charge.
-
 - E-55 · important · Analyse-resynthèse par partiels absente.
   - Experts : 1 (08-05). Gravités d'origine : 08-05 important.
   - Preuve : 0 occurrence de « partial », « resynth », « additive » hors du nom « Additive choir » (08, S11).
@@ -84,18 +68,6 @@ Gravité choisie : la plus haute des gravités d'origine, baissée d'un cran qua
   - Experts : 1 (08-06). Gravités d'origine : 08-06 important.
   - Preuve : `createStereoPanner` (ligne 1026) : écart de temps entre les oreilles de 0 échantillon, ni hauteur, ni arrière, ni HRTF (08, S10). Capture : [08-pc1366-scene](captures/08-pc1366-scene.webp).
   - Correction : `PannerNode` en `panningModel:"HRTF"` (x = pan × 3 m, z = −profondeur × 14 m), axe de hauteur, export ambisonique d'ordre 1 (4 canaux).
-  - Charge de la machine : existe quelle que soit la charge.
-
-- E-57 · important · Doppler éloigné de la physique.
-  - Experts : 1 (08-07). Gravités d'origine : 08-07 important.
-  - Preuve : Glissé de 0 à 14 m : −219 cents pour −322 attendus à 70 m/s ; −79 pour −35 à 7 m/s (08, S10, `apply` ligne 2719).
-  - Correction : Trajectoire du doigt échantillonnée, retard lissé par une constante unique de 30 ms (`setValueCurveAtTime`), retard calculé depuis la position seule.
-  - Charge de la machine : existe quelle que soit la charge.
-
-- E-58 · important · Loupe spectrale sans graduation ni lecture sous le pointeur.
-  - Experts : 1 (08-08). Gravités d'origine : 08-08 important.
-  - Preuve : Échelle log exacte (raies à 44 % et 56 % de la hauteur), zéro graduation en Hz ou en temps (08, S2). Capture : [08-pc-loupe-spectre](captures/08-pc-loupe-spectre.webp).
-  - Correction : Graduations 50 Hz à 10 kHz à gauche, secondes en bas ; Hz, dB et temps sous le doigt ou la souris.
   - Charge de la machine : existe quelle que soit la charge.
 
 - E-63 · important · Proportions différentes d'un format à l'autre.
@@ -117,48 +89,6 @@ Gravité choisie : la plus haute des gravités d'origine, baissée d'un cran qua
   - Preuve : Trois rendus d'affilée : « Target closed » (03) ; page fermée pendant l'export de 644 s à charge 41-50 (04) ; 2 plantages au 3ᵉ export de 70 s (06) ; navigateur fermé deux fois (05) ; OOM de Chromium dans `dmesg` (04).
   - Correction : Libérer les tampons entre deux exports ; sauvegarde du projet avant tout export de plus de 5 min ; rendu par segments (écart des 5 rendus).
   - Charge de la machine : dépend de la charge. Tous les plantages se produisent à charge 41 à 108 sur 2 cœurs et 8 Go partagés par dix navigateurs : gravité baissée d'un cran (important → détail).
-
-- E-84 · détail · Le gel spectral fluctue de 6,8 dB.
-  - Experts : 1 (04-11). Gravités d'origine : 04-11 détail.
-  - Preuve : Écart-type 1,14 dB, plage 6,8 dB sur 60 s (04, S10).
-  - Correction : Recouvrement de 4 et phases qui avancent d'une trame à l'autre.
-  - Charge de la machine : existe quelle que soit la charge.
-
-- E-91 · détail · « 1200 » écrit au lieu de 0 dans l'échelle.
-  - Experts : 1 (07-10). Gravités d'origine : 07-10 détail.
-  - Preuve : Rast et pelog : dernier pic « 1200 » (07, S7).
-  - Correction : `Math.round(...) % 1200` dans `scaleSheet` et `fieldSheet`.
-  - Charge de la machine : existe quelle que soit la charge.
-
-- E-92 · détail · Gammes de référence limitées et idéalisées.
-  - Experts : 1 (07-13). Gravités d'origine : 07-13 détail.
-  - Preuve : 7 gammes, slendro à pas égaux de 240 cents (ligne 2811) (07).
-  - Correction : Hijaz, saba, 53 commas, gamme thaïe à 7 pas égaux, 24 tons égaux ; gamme mesurée d'un clip enregistrable comme référence.
-  - Charge de la machine : existe quelle que soit la charge.
-
-- E-93 · détail · Courbe de hauteur et export des mesures absents.
-  - Experts : 1 (07-14). Gravités d'origine : 07-14 détail.
-  - Preuve : Écran ♪ limité à l'histogramme (07).
-  - Correction : Courbe f0 dans le temps ; export texte (temps, Hz, cents) joint aux crédits.
-  - Charge de la machine : existe quelle que soit la charge.
-
-- E-94 · détail · La synthèse croisée perd 10,2 dB de contraste harmonique.
-  - Experts : 1 (08-13). Gravités d'origine : 08-13 détail.
-  - Preuve : Phases aléatoires de `synthRandom` (ligne 2037) (08, S8).
-  - Correction : Garder les phases de la porteuse, appliquer le rapport des enveloppes.
-  - Charge de la machine : existe quelle que soit la charge.
-
-- E-95 · détail · L'étirement WSOLA à 50 % multiplie les clics.
-  - Experts : 1 (08-14). Gravités d'origine : 08-14 détail.
-  - Preuve : 8 clics à l'entrée, 22 à la sortie au-dessus de 0,3 (`wsola`, ligne 1158) (08 ; mesure citée dans l'écart, sans scénario détaillé).
-  - Correction : Trames d'attaque copiées une fois, étirement entre deux attaques.
-  - Charge de la machine : existe quelle que soit la charge.
-
-- E-96 · détail · Zéro écoute avant validation dans l'Atelier.
-  - Experts : 1 (08-15). Gravités d'origine : 08-15 détail.
-  - Preuve : Dialogues S5 à S9 (08).
-  - Correction : Touche ▶ qui calcule les 4 premières secondes et les joue en boucle.
-  - Charge de la machine : existe quelle que soit la charge.
 
 - E-97 · détail · Zéro traitement spectral en temps réel dans le rack.
   - Experts : 1 (08-16). Gravités d'origine : 08-16 détail.
