@@ -55,10 +55,17 @@ Critères de qualité appliqués à chaque lot : direction artistique, réalisme
 
 ## À faire
 
-- Annexes du 20 nov. 2026, 5 h 08 (outils natifs souhaités par genre, lus avec esprit critique) :
-  - Espaces de travail par étape (composition, mixage, mastering), vue des circuits en nœuds, données spectrales sur les formes d'onde, spatialisation 3D avec Doppler, détection des coupes vidéo, micro-accordage (maqâm, raga, gamelan) et mesure de hauteur au cent près.
-  - Banques des huit univers (power electronics, dark ambient, hip-hop et IDM, sound design, dub, orchestre, monde et micro-intervalles, ethnographie de terrain) en recherche directe dans Freesound et Wikimedia Commons.
-- Annexe du 20 nov. 2026, 5 h 14, un brouillon de DAW imaginaire (lu avec esprit critique, sans reprendre aucun de ses noms) :
-  - Écartés : GESTURE-NET (remplace le MIDI, sans objet ici) ; séparateur sémantique par IA profonde (hors de portée du navigateur ; le studio garde attaques, harmonique / percussif, bandes, milieu / côtés).
-  - Écartés : articulations MIDI, MPE, keyswitches (règle « zéro MIDI ») ; abandon du skeuomorphisme (la DA photographique de la kave prime) ; collaboration en temps réel (le studio tourne sans serveur, sur GitHub Pages).
-- Vignettes vidéo de KamOrhogo sur les pistes 19 à 32 : contrôle du rendu.
+- Espaces de travail par étape (composition, enregistrement, édition, mixage, mastering) : une touche qui ouvre le tiroir et le panneau de chaque étape.
+- Vue des circuits en nœuds (pistes, effets, envois dub, scène, master), à la demande.
+- Spatialisation 3D sur la scène, avec effet Doppler quand un objet se déplace vite.
+- Détection des coupes dans les vidéos de KamOrhogo, posées comme repères sur la règle.
+- Micro-accordage (maqâm, raga, gamelan) des clips et mesure de hauteur au cent près.
+- Vignettes vidéo de KamOrhogo sur les pistes 19 à 32 : contrôle du rendu avec de vraies vidéos.
+
+## Écarté, avec raison
+
+- GESTURE-NET, articulations MIDI, MPE, keyswitches : règle « zéro MIDI ».
+- Séparateur sémantique par IA profonde : hors de portée du navigateur ; le studio garde attaques, harmonique / percussif, bandes, milieu / côtés.
+- Abandon du skeuomorphisme : la DA photographique de la kave prime.
+- Collaboration en temps réel : le studio tourne sans serveur, sur GitHub Pages ; les branches de projet en tiennent lieu.
+- Noms tirés des annexes (aucun nom inventé).
