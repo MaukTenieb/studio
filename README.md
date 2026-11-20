@@ -31,6 +31,12 @@ https://mauktenieb.github.io/studio/
 - Automatic saving of the project and its sounds in the browser (IndexedDB).
 - Undo on every edit.
 
+## Touch and mouse
+
+The console (sliders pictogram, bottom left) lays the 32 tracks out as channel strips with long faders, pan knobs, mute, solo, effects and level meters, plus the master strip with AutoMix, which brings every track to the same loudness. Several faders move at once under several fingers. A tap on a clip opens its action bar: split, duplicate, repeat, fades, reverse, gain, fuse, workshop, separate, delete. A double tap opens its full menu. Two fingers pinch the timeline to zoom. A double tap on a fader, a slider or a knob resets it. During playback, automation moves the faders and pan sliders. The track menu folds a track to a thin strip.
+
+One search field at the top of the side panel looks through the kit, the collections, the user's sounds, Freesound, Wikimedia Commons, Jamendo and Internet Archive at once.
+
 ## Keys
 
 Space plays and stops. R records. L toggles the loop. M toggles the metronome. S splits. D duplicates. Ctrl+C and Ctrl+V copy and paste. Arrows nudge the selected clip (Shift: a sixteenth). Delete removes the selected clip. Ctrl+Z undoes. Ctrl+wheel, + and − zoom. Right click or long press on a clip opens its menu.
