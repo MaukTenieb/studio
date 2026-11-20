@@ -283,6 +283,6 @@ Mauk Tenieb valide l'analyse et retire l'enregistrement au micro. Les correction
 
 - Écarts corrigés : 93 sur 93.
 - Écarts restants dans « À faire » : 0.
-- Points gardés en partie, avec leur raison dans la ligne « Fait » : carte de tempo par section (un seul tempo par projet), vérification des titres dans MusicBrainz (hors d'atteinte de la session), chœur du kit Orchestre (absent de VSCO 2 CE), bande magnétique photographiée sous les clips (image à produire), loi de panoramique −3 dB gardée pour les sources mono, largeur de tête de piste en pixels.
+- Points gardés en partie, avec leur raison dans la ligne « Fait » : chœur du kit Orchestre (zéro chœur enregistré sous CC0 dans sept sources examinées), vérification MusicBrainz en ligne (code en place, serveur hors d'atteinte de la session de test), bande magnétique photographiée sous les clips (image à produire), loi de panoramique −3 dB gardée pour les sources mono, largeur de tête de piste en pixels.
 - Demande ajoutée en cours de route (21 h 24) : le séquenceur s'ouvre sur la Console de Musik, figurines posées et déplacées dans le banc à œillets ; la grille devient l'écran Page R à phosphore vert.
 - Contrôle final, iPhone 13 debout et couché : 0 % de cibles sous 44 px, 0 à 3,8 % de textes sous 11 px, zéro erreur de page sur les quatre formats.
