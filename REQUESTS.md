@@ -23,8 +23,14 @@ Critères de qualité appliqués à chaque lot : direction artistique, réalisme
 - Kits d'artistes : catalogue Korhogo sur Internet Archive (Mauk Tenieb, C7H5N3O6, dogXim, Ts'ui Pên, Auvergne) et trente preneurs de son de Freesound.
 - Barre de recherche sur tous les kits, collections et sons.
 - Effets de Musik repris (gross beat, granulizer, tranches à l'envers, octaver, écho de bande, larsen, résonateur métal) et kits Α à Ζ.
+- Power electronics : six kits de plus, Η à Μ, et onze boîtes à bruit synthétisées d'après les dispositifs déclarés (micro-contact sur tôle, ressort, boulons, table de mixage sans entrée, fuzz, larsen, anneau, écho hurlant, mur de bruit, synthé croisé).
+- Dérive : écosystème de réglages qui évolue pendant la lecture (attracteurs de Lorenz couplés au niveau des pistes), touche « garder » qui fait de l'état entendu le nouveau point de départ, touche « retour ».
+- Boucles calées sur le tempo du projet au dépôt ; filtre « au tempo du projet » dans les packs.
+- Barre d'actions des clips en bas sur téléphone ; libellés trop longs en téléprompteur.
 - DA de la kave Korhogo, photographique : acier bruni du flanc de borne, jonc chromé, plaque MAUK TENIEB, étiquettes Dymo, écrans à phosphore photographiés, disque photographié pour le Scratch, capuchons rétroéclairés, cave voûtée, étagères de bandes, deux photographies de groupe de la Fauna à l'ouverture.
 - Proportions continues : chaque aire (pistes, bibliothèque, tiroir du bas) suit le format de l'écran ; poignée de partage entre pistes et tiroir ; téléphone couché avec bibliothèque à droite.
+
+- Demande du 20 nov. 2026, 4 h 59 : complet, magnifique, clair, innovant, capable de tout, exhaustif, surprenant, singulier, simple, auto-amélioré et émergent par le jeu de ses paramètres, fidèle à toutes les demandes, meilleur que BandLab, riche de tout Internet Archive et Freesound, doté des boîtes et kits de power electronics et de tout ce qu'a Musik. Chantier permanent.
 
 ## À trancher par Mauk Tenieb
 
@@ -32,7 +38,7 @@ Critères de qualité appliqués à chaque lot : direction artistique, réalisme
 
 ## À faire
 
-- Boucles calées sur le tempo du projet au dépôt, comme dans BandLab : lecture du tempo dans le nom du son, étirement automatique.
-- Recherche par tempo et par tonalité dans les packs.
-- Contrôle de chaque panneau secondaire (rack d'effets, feuille de réglages, dialogues) sur téléphone debout et couché.
+- Séquenceur à pas de Musik (15, 17, 19 ou 21 pas) qui écrit des clips audio.
+- Poste de mix de Musik : deux platines son et vidéo, fondu croisé.
+- Recherche par tonalité dans les packs.
 - Vignettes vidéo de KamOrhogo sur les pistes 19 à 32 : contrôle du rendu.
