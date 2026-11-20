@@ -873,17 +873,17 @@ function buildChain(c,tr,dest){
   const mute=c.createGain();mute.gain.value=audible(tr)?1:0;
   /* scène : la profondeur éloigne la piste (air qui absorbe les aigus, volume, réverbération partagée de la salle) */
   const dLp=c.createBiquadFilter(),dG=c.createGain(),dSend=c.createGain();dLp.type="lowpass";
-  const dep=tr.depth||0;dLp.frequency.value=20000*Math.pow(.17,dep);dG.gain.value=1-dep*.62;dSend.gain.value=dep*.75;
+  const air=c.createDelay(.1);air.delayTime.value=airDelay(tr);const dep=tr.depth||0;dLp.frequency.value=20000*Math.pow(.17,dep);dG.gain.value=1-dep*.62;dSend.gain.value=dep*.75;
   /* chaleur : saturation douce après le fader ; transparente à faible niveau, elle chauffe quand on pousse */
   if(!c._heat){const n=2048,cv=new Float32Array(n);for(let i=0;i<n;i++){const x=(i/(n-1)*2-1)*2;cv[i]=Math.tanh(x)/2}c._heat=cv}
   const heat=c.createWaveShaper(),hp=c.createGain(),hu=c.createGain();heat.curve=c._heat;heat.oversample="2x";hp.gain.value=.5;hu.gain.value=2;
-  node.connect(vol).connect(hp).connect(heat).connect(hu).connect(auto).connect(pan).connect(dLp).connect(dG).connect(mute).connect(dest);
+  node.connect(vol).connect(hp).connect(heat).connect(hu).connect(auto).connect(pan).connect(dLp).connect(air).connect(dG).connect(mute).connect(dest);
   if(!c._scene)c._scene=new Map();let bus=c._scene.get(dest);if(!bus){const g=c.createGain(),cv=c.createConvolver();cv.buffer=makeRoomIR(c,ROOMS[13]||ROOMS[ROOMS.length-1],1.2,1);g.connect(cv).connect(dest);bus=g;c._scene.set(dest,bus)}
   mute.connect(dSend).connect(bus);
   /* envoi dub momentané (console) : la piste part vers le bus écho + ressort tant qu'on appuie */
   const dub=c.createGain();dub.gain.value=0;mute.connect(dub);if(!(c instanceof OfflineAudioContext))dub.connect(dubBus(c,dest));
   const an=c.createAnalyser?c.createAnalyser():null;if(an&&!(c instanceof OfflineAudioContext)){an.fftSize=512;mute.connect(an)}
-  return{input,vol,auto,pan,mute,an,dLp,dG,dSend,dub,fx:new Map(fxs)};
+  return{input,vol,auto,pan,mute,an,dLp,air,dG,dSend,dub,fx:new Map(fxs)};
 }
 
 /* ================= state ================= */
@@ -895,6 +895,8 @@ function renumber(){state.tracks.forEach((tr,i)=>{if(/^\d\d$/.test(tr.name)||!tr
 function fillTracks(){while(state.tracks.length<MAXT)state.tracks.push(newTrack());renumber()}
 /* first empty track after index i, or a new one while under 32 */
 function freeTrack(i){for(let k=i+1;k<state.tracks.length;k++)if(!state.tracks[k].clips.length)return state.tracks[k];if(state.tracks.length<MAXT){const n=newTrack();state.tracks.push(n);renumber();return n}return null}
+/* distance réelle de l'objet sur la scène (6 m de large, 14 m de profondeur) : le son met le temps de l'air à arriver ; un déplacement rapide fait l'effet Doppler */
+function airDelay(tr){return Math.hypot((tr.pan||0)*6,(tr.depth||0)*14)/343}
 function newTrack(name){const n=state.tracks.length;return{id:uid(),name:name||num(n+1),color:trackColor(n),vol:.8,pan:0,mute:false,solo:false,rack:[],auto:{vol:[],pan:[]},showAuto:null,clips:[]}}
 function fixTrack(tr){tr.rack=tr.rack||[];tr.auto=tr.auto||{vol:[],pan:[]};delete tr.fx;return tr}
 const spb=()=>60/state.bpm;const bar=()=>spb()*4;
@@ -2484,12 +2486,12 @@ function renderScene(){const box=$("#scene");box.classList.toggle("on",sceneOn);
   if(sceneMode==="nodes")return renderNodes(box);
   const W=box.clientWidth,H=box.clientHeight,list=state.tracks.filter(t=>t.clips.length);const close=el("button",{class:"x",title:lang==="fr"?"Fermer":"Close"},"✕");close.onclick=()=>drawer("scene");
   const place=(o,tr)=>{const d=tr.depth||0,sz=Math.round(clamp(Math.min(W,H)*.13*(1-d*.55),22,84));o.style.setProperty("--s",sz+"px");o.style.width=o.style.height=sz+"px";o.style.fontSize=Math.max(10,sz*.32)+"px";o.style.left=`calc(${(tr.pan+1)/2*86+7}% + ${(o._fan||0)*sz*.62}px)`;o.style.top=(92-d*80)+"%";o.style.zIndex=String(100-Math.round(d*90));o.style.filter=`saturate(${1-d*.5}) brightness(${1-d*.35})`};
-  const apply=tr=>{const ch=chains.get(tr.id);if(!ch||!ctx)return;const T=ctx.currentTime,d=tr.depth||0;ch.pan.pan.setTargetAtTime(tr.pan,T,.03);if(ch.dLp){ch.dLp.frequency.setTargetAtTime(20000*Math.pow(.17,d),T,.05);ch.dG.gain.setTargetAtTime(1-d*.62,T,.05);ch.dSend.gain.setTargetAtTime(d*.75,T,.05)}};
+  const apply=tr=>{const ch=chains.get(tr.id);if(!ch||!ctx)return;const T=ctx.currentTime,d=tr.depth||0;ch.pan.pan.setTargetAtTime(tr.pan,T,.03);if(ch.air)ch.air.delayTime.setTargetAtTime(airDelay(tr),T,.035);if(ch.dLp){ch.dLp.frequency.setTargetAtTime(20000*Math.pow(.17,d),T,.05);ch.dG.gain.setTargetAtTime(1-d*.62,T,.05);ch.dSend.gain.setTargetAtTime(d*.75,T,.05)}};
   const objs=list.map(tr=>{const o=el("div",{class:"obj",style:`--c:${tr.color}`,title:tr.name},tr.name);place(o,tr);
     o.addEventListener("pointerdown",e=>{e.preventDefault();o.setPointerCapture(e.pointerId);snapshot();const r=box.getBoundingClientRect();
-      const mv=ev=>{tr.pan=clamp(((ev.clientX-r.left)/r.width*100-7)/86*2-1,-1,1);tr.depth=clamp((92-(ev.clientY-r.top)/r.height*100)/80,0,1);place(o,tr);apply(tr);
+      let lt=performance.now(),la=airDelay(tr);const mv=ev=>{const now=performance.now();tr.pan=clamp(((ev.clientX-r.left)/r.width*100-7)/86*2-1,-1,1);tr.depth=clamp((92-(ev.clientY-r.top)/r.height*100)/80,0,1);place(o,tr);apply(tr);{const na=airDelay(tr),v=(na-la)/Math.max(.008,(now-lt)/1000);lt=now;la=na;const k=clamp(v*8,-1,1);o.style.boxShadow=Math.abs(k)<.05?"":`0 0 calc(var(--s)*${.5+Math.abs(k)}) ${k<0?"#7fd8ff":"#ff5a3a"},0 8px 14px rgba(0,0,0,.7)`;o.title=tr.name+(Math.abs(v)>.002?` · Doppler ${Math.round(-1200*Math.log2(1+v))} c`:"")}
         objs.forEach(([p,t])=>p.classList.toggle("hit",t!==tr&&Math.hypot((t.pan-tr.pan)*.5,(t.depth||0)-tr.depth)<.06))};
-      const up=()=>{o.removeEventListener("pointermove",mv);o.removeEventListener("pointerup",up);o.removeEventListener("pointercancel",up);save();render()};
+      const up=()=>{o.style.boxShadow="";o.title=tr.name;o.removeEventListener("pointermove",mv);o.removeEventListener("pointerup",up);o.removeEventListener("pointercancel",up);save();render()};
       o.addEventListener("pointermove",mv);o.addEventListener("pointerup",up);o.addEventListener("pointercancel",up)});return[o,tr]});
   /* objets au même endroit : éventail visuel, le son garde sa place */
   const grp=new Map();objs.forEach(([o,t])=>{const k=t.pan.toFixed(2)+"|"+(t.depth||0).toFixed(2);if(!grp.has(k))grp.set(k,[]);grp.get(k).push([o,t])});grp.forEach(g=>{if(g.length<2)return;g.forEach(([o,t],i)=>{o._fan=i-(g.length-1)/2;place(o,t)})});
