@@ -1508,7 +1508,7 @@ function renderActionBar(){
   const one=sel.length===1?sel[0]:null,B=(ic,lbl,fn,dis)=>{const b=el("button",{title:lbl,class:dis?"dis":""},icon(ic),el("span",{},lbl));b.onclick=()=>{if(!dis)fn()};return b};
   const m=regionMore(sel),at=()=>{const r=bar.getBoundingClientRect();return[r.left+r.width/2,r.top-10]};
   const main=[B("del",t("del"),delSel),B("dup",t("copy"),()=>{const[,c]=sel[0];clipboard={...c};dupSel()}),B("loop","Loop",()=>edit(()=>{for(const[tr,c]of sel)tr.clips.push({...c,id:uid(),start:c.start+c.len})})),B("cut",t("slice"),splitSel)];
-  const more=[B("down",lang==="fr"?"Tranches":"Slices",()=>exportSlices(sel),!one),B("shift",t("shift"),m.shift),B("gain","Gain",m.gain),B("tune",t("transposeS"),m.transpose,!one),B("stretch","Timestretch",m.stretch,!one),B("fade",t("fades"),m.fade),B("denoise",t("denoise"),m.denoise,!one),B("rev",t("reverse"),m.reverse),
+  const more=[B("tune",lang==="fr"?"Échelle":"Scale",()=>scaleSheet(sel),!one),B("down",lang==="fr"?"Tranches":"Slices",()=>exportSlices(sel),!one),B("shift",t("shift"),m.shift),B("gain","Gain",m.gain),B("tune",t("transposeS"),m.transpose,!one),B("stretch","Timestretch",m.stretch,!one),B("fade",t("fades"),m.fade),B("denoise",t("denoise"),m.denoise,!one),B("rev",t("reverse"),m.reverse),
     B("fuse",t("fuseS"),fuse,sel.length<2),B("lab",t("atelierS"),()=>{const[x,y]=at();atelier(one[0],one[1],x,y)},!one),B("split2",t("separateS"),()=>{const[x,y]=at();sepMenu(one[0],one[1],x,y)},!one)];
   const tog=el("button",{title:t("more"),class:abarMore?"on":""},el("b",{style:"font-size:1.3em;line-height:1"},"⋯"),el("span",{},t("more")));tog.onclick=()=>{abarMore=!abarMore;renderActionBar()};
   bar.replaceChildren(...(abarMore?more:main),tog);
@@ -2555,6 +2555,27 @@ async function videoCuts(url,step=.2){const v=document.createElement("video");v.
 async function markVideoCuts(){const items=(KAM.items||[]).filter(i=>i.kind==="vid");let n=0;state.notes=state.notes||[];status(t("working"));
   for(const tr of state.tracks)for(const c of tr.clips){const it=items.find(i=>i.id===c.snd);if(!it)continue;const cuts=await videoCuts(it.url);cuts.forEach(x=>{if(x<c.off||x>c.off+c.len)return;state.notes.push({t:c.start+x-c.off,x:"✂ "+it.name});n++})}
   state.notes.sort((a,b)=>a.t-b.t);drawRuler();save();status();toast("✂ "+n)}
+
+/* échelle réelle d'un clip : suivi de hauteur (YIN) toutes les 20 ms, histogramme des hauteurs en cents (0–1200), comparaison aux gammes de référence */
+const SCALES={"12-TET":[0,100,200,300,400,500,600,700,800,900,1000,1100],"Just":[0,112,204,316,386,498,590,702,814,884,996,1088],"Rast":[0,200,350,500,700,900,1050],"Bayati":[0,150,300,500,700,800,1000],"Slendro":[0,240,480,720,960],"Pelog":[0,120,270,540,670,780,950],"Raga Bhairav":[0,112,386,498,702,814,1088]};
+function yinTrack(b,from,len){const sr=b.sampleRate,d=b.getChannelData(0),W=Math.floor(sr*.04),hop=Math.floor(sr*.02),tmin=Math.floor(sr/1000),tmax=Math.floor(sr/55),out=[];
+  for(let a=Math.floor(from*sr);a+W+tmax<Math.min(d.length,Math.floor((from+len)*sr));a+=hop){let e=0;for(let i=0;i<W;i++)e+=d[a+i]*d[a+i];if(e/W<1e-5)continue;
+    const df=new Float32Array(tmax+1);for(let t=tmin;t<=tmax;t++){let q=0;for(let i=0;i<W;i+=2){const x=d[a+i]-d[a+i+t];q+=x*x}df[t]=q}
+    let run=0,best=-1;for(let t=tmin;t<=tmax;t++){run+=df[t];const n=df[t]*(t-tmin+1)/(run||1);if(n<.15){best=t;while(t+1<=tmax&&df[t+1]<df[t]){t++;best=t}break}}
+    if(best>0){let t=best;if(t>tmin&&t<tmax){const a1=df[t-1],b1=df[t],c1=df[t+1],dn=a1-2*b1+c1;if(dn>0)t+=.5*(a1-c1)/dn}out.push(sr/t)}}return out}
+function scaleSheet(sel){const[tr,c]=sel[0]||[];const s=c&&lib.get(c.snd);if(!s)return;const f0=yinTrack(s.buffer,c.off,c.len);const sh=$("#sheet");
+  if(!f0.length){toast(lang==="fr"?"Aucune hauteur nette":"No clear pitch");return}
+  const ref=+localStorage.getItem("st.ref")||440,cents=f0.map(f=>((1200*Math.log2(f/ref)%1200)+1200)%1200),H=new Float32Array(120);cents.forEach(x=>H[Math.floor(x/10)%120]++);
+  const sm=H.map((v,i)=>(H[(i+119)%120]+2*v+H[(i+1)%120])/4),mx=Math.max(...sm),peaks=[];sm.forEach((v,i)=>{if(v>mx*.18&&v>=sm[(i+119)%120]&&v>=sm[(i+1)%120]){const c0=i*10+5,w=cents.map(x=>((x-c0+1800)%1200)-600).filter(x=>Math.abs(x)<25);peaks.push(Math.round((c0+(w.length?w.reduce((p,q)=>p+q,0)/w.length:0)+1200)%1200))}});
+  const cv=el("canvas",{style:"width:100%;height:120px"}),sc=el("select",{},...Object.keys(SCALES).map(k=>el("option",{value:k},k)));sc.value=localStorage.getItem("st.scale")||"12-TET";
+  const draw=()=>{const W=cv.width=cv.clientWidth*2,Hh=cv.height=240,g=cv.getContext("2d");g.clearRect(0,0,W,Hh);g.fillStyle="rgba(0,0,0,.35)";g.fillRect(0,0,W,Hh);
+    SCALES[sc.value].forEach(x=>{g.fillStyle="rgba(79,195,247,.55)";g.fillRect(x/1200*W,0,2,Hh)});
+    for(let i=0;i<120;i++){const h=sm[i]/mx*(Hh-40);g.fillStyle=tr.color;g.fillRect(i/120*W,Hh-h,W/120-1,h)}
+    g.fillStyle="#ffe3a0";g.font="22px 'Barlow Semi Condensed',sans-serif";peaks.forEach(p=>g.fillText(p+" c",p/1200*W+3,26))};
+  sc.onchange=()=>{localStorage.setItem("st.scale",sc.value);draw()};
+  const near=peaks.map(p=>{let best=1e9;SCALES[sc.value].forEach(x=>{const d=Math.min(Math.abs(p-x),1200-Math.abs(p-x));if(d<best)best=d});return best});
+  sh.replaceChildren(el("b",{},(lang==="fr"?"Échelle réelle — ":"Actual scale — ")+s.name),cv,el("div",{class:"row"},sc,el("span",{},(lang==="fr"?"La = ":"A = ")+ref+" Hz · "+f0.length+(lang==="fr"?" mesures":" frames")),el("button",{onclick:()=>{sh.classList.remove("on");sh.replaceChildren()}},"✓")),
+    el("small",{},(lang==="fr"?"Pics (cents) : ":"Peaks (cents): ")+peaks.join(", ")));sh.classList.add("on");requestAnimationFrame(draw)}
 </script>
 </body>
 </html>
