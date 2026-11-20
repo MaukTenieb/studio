@@ -1172,7 +1172,7 @@ function buildChain(c,tr,dest){
   return{input,vol,auto,pan,p3,mute,an,dLp,air,dG,dSend,dub,flt,fx:new Map(fxs)};
 }
 function p3pos(p,tr){const x=(tr.pan||0)*3,z=-(.5+(tr.depth||0)*14),y=tr.h||0;if(p.positionX){p.positionX.value=x;p.positionY.value=y;p.positionZ.value=z}else p.setPosition(x,y,z)}
-function fltSet(f,v,now){const lp=v<0,fr=Math.abs(v)<.02?(lp?20000:20):lp?20000*Math.pow(200/20000,-v):20*Math.pow(5000/20,v);f.type=lp||Math.abs(v)<.02?"lowpass":"highpass";if(Math.abs(v)<.02){f.type="allpass";f.frequency.value=1000;return}f.Q.value=.9;if(now==null)f.frequency.value=fr;else f.frequency.setTargetAtTime(fr,now,.02)}
+function fltSet(f,v,now){const lp=v<0,fr=Math.abs(v)<.02?(lp?20000:20):lp?20000*Math.pow(200/20000,-v):20*Math.pow(5000/20,v);f.type=lp||Math.abs(v)<.02?"lowpass":"highpass";if(Math.abs(v)<.02){f.type="peaking";f.gain.value=0;f.frequency.value=1000;return}f.Q.value=.9;if(now==null)f.frequency.value=fr;else f.frequency.setTargetAtTime(fr,now,.02)}
 
 /* ================= state ================= */
 const lib=new Map();
