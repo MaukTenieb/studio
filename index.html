@@ -676,7 +676,7 @@ const FX={
   make(c,p){const k=c.createDynamicsCompressor(),g=c.createGain();k.connect(g);const set=p=>{k.threshold.value=p.thr;k.ratio.value=p.ratio;k.attack.value=p.att;k.release.value=p.rel;g.gain.value=Math.pow(10,p.gain/20)};set(p);return{in:k,out:g,set}}},
  dist:{n:"Distortion",p:{drive:.5,tone:4000,mix:1},r:{drive:[0,1,.01],tone:[300,12000,10,1],mix:[0,1,.01]},
   make(c,p){const i=c.createGain(),w=c.createWaveShaper(),f=c.createBiquadFilter(),wet=c.createGain(),dry=c.createGain(),o=c.createGain();w.oversample="4x";f.type="lowpass";i.connect(w).connect(f).connect(wet).connect(o);i.connect(dry).connect(o);
-   const set=p=>{w.curve=driveCurve(p.drive);f.frequency.value=p.tone;wet.gain.value=p.mix*(1-p.drive*.5);dry.gain.value=1-p.mix};set(p);return{in:i,out:o,set}}},
+   const set=p=>{const cv=driveCurve(p.drive);w.curve=cv;f.frequency.value=p.tone;wet.gain.value=p.mix/curveGain(cv);dry.gain.value=1-p.mix};set(p);return{in:i,out:o,set}}},
  crush:{n:"Bitcrusher",p:{bits:6,down:8,mix:1},r:{bits:[1,16,1],down:[1,40,1],mix:[0,1,.01]},
   make(c,p){const i=c.createGain(),o=c.createGain(),wet=c.createGain(),dry=c.createGain();let w=null;
    if(c._crush){w=new AudioWorkletNode(c,"crusher",{outputChannelCount:[2]});i.connect(w).connect(wet).connect(o)}i.connect(dry).connect(o);
@@ -704,7 +704,7 @@ const FX={
  filter:{n:"Filter",p:{type:0,freq:1200,q:1},r:{type:[0,2,1],freq:[30,18000,1,1],q:[.1,20,.1]},
   make(c,p){const f=c.createBiquadFilter();const set=p=>{f.type=["lowpass","highpass","bandpass"][p.type|0];f.frequency.value=p.freq;f.Q.value=p.q};set(p);return{in:f,out:f,set}}},
  delay:{n:"Delay",p:{time:.75,fb:.4,mix:.35,pp:0,tone:5000},r:{time:[.125,2,.125],fb:[0,.95,.01],mix:[0,1,.01],pp:[0,1,1],tone:[500,16000,10,1]},
-  make(c,p){const i=c.createGain(),o=c.createGain(),wet=c.createGain(),dL=c.createDelay(4),dR=c.createDelay(4),fb=c.createGain(),tone=c.createBiquadFilter(),m=c.createChannelMerger(2),x=c.createGain();tone.type="lowpass";
+  make(c,p){const i=c.createGain(),o=c.createGain(),wet=c.createGain(),dL=c.createDelay(4),dR=c.createDelay(4),fb=c.createGain(),tone=c.createBiquadFilter(),m=c.createChannelMerger(2),x=c.createGain();tone.type="lowpass";tone.Q.value=-3.0103;
    i.connect(o);i.connect(tone);tone.connect(dL);dL.connect(m,0,0);dL.connect(dR);dR.connect(m,0,1);dR.connect(fb).connect(tone);m.connect(wet).connect(o);
    const set=p=>{const s=syncT(p.time);dL.delayTime.value=p.pp?s:s;dR.delayTime.value=p.pp?s:0.0001;fb.gain.value=p.fb;wet.gain.value=p.mix;tone.frequency.value=p.tone};set(p);return{in:i,out:o,set}}},
  reverb:{n:"Reverb",p:{size:2.4,pre:.02,mix:.35,damp:6000},r:{size:[.3,8,.1],pre:[0,.2,.005],mix:[0,1,.01],damp:[800,16000,10,1]},
@@ -718,7 +718,7 @@ const FX={
    const cs=c.createBufferSource(),hs=c.createBufferSource();cs.buffer=cb;hs.buffer=hb;cs.loop=hs.loop=true;const cg=c.createGain(),hg=c.createGain(),cf=c.createBiquadFilter();cf.type="highpass";cf.frequency.value=900;cs.connect(cf).connect(cg).connect(o);hs.connect(hg).connect(o);cs.start();hs.start();
    const set=p=>{cg.gain.value=p.crackle*.5;hg.gain.value=p.hiss*.05;lg.gain.value=.0012*p.wow;hp.frequency.value=20+p.age*180;lp.frequency.value=18000-p.age*14000};set(p);return{in:i,out:o,set}}},
  am:{n:"AM radio",p:{band:.6,noise:.25,drift:.3,drive:.3},r:{band:[0,1,.01],noise:[0,1,.01],drift:[0,1,.01],drive:[0,1,.01]},
-  make(c,p){const i=c.createGain(),o=c.createGain(),bp=c.createBiquadFilter(),w=c.createWaveShaper(),am=c.createGain(),l=c.createOscillator(),lg=c.createGain();bp.type="bandpass";w.curve=driveCurve(.3);
+  make(c,p){const i=c.createGain(),o=c.createGain(),bp=c.createBiquadFilter(),w=c.createWaveShaper(),am=c.createGain(),l=c.createOscillator(),lg=c.createGain();bp.type="bandpass";w.curve=driveCurve(.3);o.gain.value=1/curveGain(w.curve);
    l.frequency.value=.23;l.connect(lg).connect(am.gain);l.start();i.connect(bp).connect(w).connect(am).connect(o);
    const n=c.sampleRate*3,nb=c.createBuffer(1,n,c.sampleRate),x=nb.getChannelData(0);for(let k=0;k<n;k++)x[k]=(Math.random()*2-1)*(1+.5*Math.sin(k/c.sampleRate*2*Math.PI*50));const ns=c.createBufferSource();ns.buffer=nb;ns.loop=true;const nf=c.createBiquadFilter();nf.type="bandpass";nf.frequency.value=2500;nf.Q.value=.6;const ng=c.createGain();ns.connect(nf).connect(ng).connect(o);ns.start();
    const set=p=>{bp.frequency.value=1200;bp.Q.value=.5+p.band*2.5;w.curve=driveCurve(p.drive);ng.gain.value=p.noise*.12;lg.gain.value=p.drift*.45;am.gain.value=1-p.drift*.45};set(p);return{in:i,out:o,set}}},
@@ -784,7 +784,7 @@ Object.assign(PARAM_NAMES,{hold:"Hold",mono:"Mono lows",amt:"Amount"});
 /* repliement d'onde et pompage calé sur le temps (sidechain en un clic : grave seul) */
 FX.fold={n:"Wavefolder",p:{amt:.5,mix:1},r:{amt:[0,1,.01],mix:[0,1,.01]},
   make(c,p){const i=c.createGain(),o=c.createGain(),wet=c.createGain(),dry=c.createGain(),pre=c.createGain(),w=c.createWaveShaper();w.oversample="4x";i.connect(pre).connect(w).connect(wet).connect(o);i.connect(dry).connect(o);let last=-1;
-   const set=p=>{if(p.amt!==last){last=p.amt;const n=4096,cv=new Float32Array(n),k=1+p.amt*7;for(let j=0;j<n;j++){const x=(j/(n-1)*2-1)*k;cv[j]=Math.sin(x*Math.PI/2)}w.curve=cv}pre.gain.value=1;wet.gain.value=p.mix;dry.gain.value=1-p.mix};set(p);return{in:i,out:o,set}}};
+   const set=p=>{if(p.amt!==last){last=p.amt;const n=4096,cv=new Float32Array(n),k=1+p.amt*7;for(let j=0;j<n;j++){const x=(j/(n-1)*2-1)*k;cv[j]=Math.sin(x*Math.PI/2)}w.curve=cv;w._g=curveGain(cv)}pre.gain.value=1;wet.gain.value=p.mix/w._g;dry.gain.value=1-p.mix};set(p);return{in:i,out:o,set}}};
 FX.pump={n:"Pump (sidechain)",p:{depth:.8,rate:1,low:150},r:{depth:[0,1,.01],rate:[.25,2,.25],low:[60,400,10]},
   make(c,p){const i=c.createGain(),o=c.createGain(),lo=lr4(c,"lowpass",p.low),hi=lr4(c,"highpass",p.low),g=c.createGain(),osc=c.createOscillator(),sh=c.createWaveShaper(),dep=c.createGain(),off=c.createConstantSource();
    const n=1024,cv=new Float32Array(n);for(let j=0;j<n;j++){const ph=j/(n-1);cv[j]=-Math.pow(1-ph,2.2)}sh.curve=cv;osc.type="sawtooth";osc.connect(sh).connect(dep).connect(g.gain);g.gain.value=1;osc.start();
@@ -870,6 +870,8 @@ function audio(){
   return ctx;
 }
 /* saturation douce de pente 1 : borne une boucle sans la faire gagner */
+/* gain d'une courbe de saturation pour un signal moyen (sinus de crête 0,3) : sert à garder le niveau constant quand la saturation monte */
+function curveGain(cv,amp=.3){const n=cv.length;let a=0,b=0;for(let k=0;k<256;k++){const x=amp*Math.sin(2*Math.PI*k/256),j=Math.round((x+1)/2*(n-1)),y=cv[Math.max(0,Math.min(n-1,j))];a+=y*y;b+=x*x}return Math.sqrt(a/b)||1}
 function softClip(){const n=2049,c=new Float32Array(n);for(let i=0;i<n;i++){const x=i/(n-1)*2-1;c[i]=Math.tanh(x)}return c}
 function lr4(c,type,f){const a=c.createBiquadFilter(),b=c.createBiquadFilter();a.type=b.type=type;a.frequency.value=b.frequency.value=f;a.Q.value=b.Q.value=-3.0103;a.connect(b);return{in:a,out:b}}
 function tapeCurve(amt){const n=2048,c=new Float32Array(n),k=1+amt*6;for(let i=0;i<n;i++){const x=i/n*2-1;c[i]=Math.tanh(k*x)/Math.tanh(k)}return c}
@@ -1220,7 +1222,7 @@ const offChains=new Map();
 function tailSec(only){let t=3;const racks=[state.masterRack,...(only?[only]:state.tracks).map(x=>x.rack)];
   for(const rk of racks)for(const f of rk){if(!f.on)continue;const p=f.p||{};
     if(f.type==="cave")t=Math.max(t,6*(p.hold||1));else if(f.type==="silo")t=Math.max(t,9*(p.hold||1));else if(f.type==="cathedral")t=Math.max(t,10*(p.hold||1));
-    else if(f.type==="reverb")t=Math.max(t,(p.size||2)+1);else if(f.type==="delay"&&p.fb>0)t=Math.max(t,(p.time||.5)*spb()*Math.log(.001)/Math.log(Math.min(.98,p.fb)));
+    else if(f.type==="reverb"||f.type==="room")t=Math.max(t,(p.size||2)*2+1);else if(f.type==="delay"&&p.fb>0)t=Math.max(t,(p.time||.5)*spb()*Math.log(1e-4)/Math.log(Math.min(.98,p.fb)));
     else if(f.type==="mz_fdbk"||f.type==="mz_tape")t=Math.max(t,10);else if(f.type==="comb")t=Math.max(t,4)}
   return Math.min(60,t)}
 async function renderOffline(onlyTrack,trimDb=0){
@@ -2499,7 +2501,7 @@ addEventListener("resize",()=>{clearTimeout(tele.r);tele.r=setTimeout(()=>tele(d
 /* Dérive : écosystème de réglages. Pendant la lecture, chaque piste porte un attracteur de Lorenz ; son niveau sonore accélère sa dérive et pousse la piste voisine.
    Les réglages des effets et le panoramique tournent autour des valeurs choisies, dans un rayon borné ; « garder » fait de l'état entendu le nouveau point de départ, « retour » ramène au point de départ. */
 /* la dérive laisse fixes les réglages qui cliquent ou recalculent une réponse impulsionnelle (durées d'écho, tailles, pièces, tenues) */
-const DRIFT_SKIP_K=new Set(["time","size","room","hold","pre","type","repeats","slice"]),DRIFT_SKIP_T=new Set(["reverb","room","cave","silo","cathedral"]);
+const DRIFT_SKIP_K=new Set(["time","size","room","hold","pre","type","repeats","slice","gain","low","mid","high"]),DRIFT_SKIP_T=new Set(["reverb","room","cave","silo","cathedral","comb"]);
 const DRIFT={on:false,depth:.28,L:new Map(),cur:new Map(),h:0,pref:(()=>{try{return JSON.parse(localStorage.getItem("st.driftPref")||"{}")}catch(e){return{}}})(),n:+localStorage.getItem("st.driftN")||0};
 /* apprentissage : chaque état gardé pousse la dérive vers sa direction, chaque retour l'en éloigne (moyenne glissante par effet et par réglage) */
 function driftLearn(sign){let m=0;state.tracks.forEach(tr=>tr.rack.forEach(f=>{const np=DRIFT.cur.get(f.id),r=FX[f.type]&&FX[f.type].r;if(!np||!r)return;for(const k of Object.keys(r)){const[a,b]=r[k];if(typeof np[k]!=="number"||b===a)continue;const lg=r[k][3]&&a>0,d=lg?Math.log(np[k]/f.p[k])/Math.log(b/a):(np[k]-f.p[k])/(b-a),key=f.type+"."+k,o=DRIFT.pref[key]||0;DRIFT.pref[key]=clamp(o*.8+sign*d*.6,-.5,.5);m++}}));
@@ -2614,7 +2616,7 @@ function renderScene(){const box=$("#scene");box.classList.toggle("on",sceneOn);
   if(sceneMode==="nodes")return renderNodes(box);
   const W=box.clientWidth,H=box.clientHeight,list=state.tracks.filter(t=>t.clips.length);const close=el("button",{class:"x",title:lang==="fr"?"Fermer":"Close"},"✕");close.onclick=()=>drawer("scene");
   const place=(o,tr)=>{const d=tr.depth||0,sz=Math.round(clamp(Math.min(W,H)*.13*(1-d*.55),22,84));o.style.setProperty("--s",sz+"px");o.style.width=o.style.height=sz+"px";o.style.fontSize=Math.max(10,sz*.32)+"px";o.style.left=`calc(${(tr.pan+1)/2*86+7}% + ${(o._fan||0)*sz*.62}px)`;o.style.top=(92-d*80)+"%";o.style.zIndex=String(100-Math.round(d*90));o.style.filter=`saturate(${1-d*.5}) brightness(${1-d*.35})`};
-  const apply=tr=>{const ch=chains.get(tr.id);if(!ch||!ctx)return;const T=ctx.currentTime,d=tr.depth||0;ch.pan.pan.setTargetAtTime(tr.pan,T,.03);if(ch.air)ch.air.delayTime.setTargetAtTime(airDelay(tr),T,.18);if(ch.dLp){ch.dLp.frequency.setTargetAtTime(20000*Math.pow(.17,d),T,.05);ch.dG.gain.setTargetAtTime(1-d*.62,T,.05);ch.dSend.gain.setTargetAtTime(d*.75,T,.05)}};
+  const apply=tr=>{const ch=chains.get(tr.id);if(!ch||!ctx)return;const T=ctx.currentTime,d=tr.depth||0;ch.pan.pan.setTargetAtTime(tr.pan,T,.03);if(ch.air){const P=ch.air.delayTime,tg=airDelay(tr),cur=P.value,dur=Math.max(.05,Math.abs(tg-cur)/.1);P.cancelScheduledValues(T);P.setValueAtTime(cur,T);P.linearRampToValueAtTime(tg,T+dur)}if(ch.dLp){ch.dLp.frequency.setTargetAtTime(20000*Math.pow(.17,d),T,.05);ch.dG.gain.setTargetAtTime(1-d*.62,T,.05);ch.dSend.gain.setTargetAtTime(d*.75,T,.05)}};
   const objs=list.map(tr=>{const o=el("div",{class:"obj",style:`--c:${tr.color}`,title:tr.name},tr.name);place(o,tr);
     o.addEventListener("pointerdown",e=>{e.preventDefault();o.setPointerCapture(e.pointerId);snapshot();const r=box.getBoundingClientRect();
       let lt=performance.now(),la=airDelay(tr);const mv=ev=>{const now=performance.now();tr.pan=clamp(((ev.clientX-r.left)/r.width*100-7)/86*2-1,-1,1);tr.depth=clamp((92-(ev.clientY-r.top)/r.height*100)/80,0,1);place(o,tr);apply(tr);{const na=airDelay(tr),v=(na-la)/Math.max(.008,(now-lt)/1000);lt=now;la=na;const k=clamp(v*8,-1,1);o.style.boxShadow=Math.abs(k)<.05?"":`0 0 calc(var(--s)*${.5+Math.abs(k)}) ${k<0?"#7fd8ff":"#ff5a3a"},0 8px 14px rgba(0,0,0,.7)`;o.title=tr.name+(Math.abs(v)>.002?` · Doppler ${Math.round(-1200*Math.log2(1+v))} c`:"")}
