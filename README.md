@@ -1,8 +1,8 @@
-# Studio
+# StudioRhogo
 
-![Studio](img/social.jpg)
+![StudioRhogo](img/social.jpg)
 
-Studio is a multitrack audio workstation that runs in the browser, in a single HTML file.
+StudioRhogo is a multitrack audio workstation that runs in the browser, in a single HTML file.
 
 https://mauktenieb.github.io/studio/
 
@@ -81,7 +81,7 @@ Plain HTML, CSS and JavaScript, Web Audio API, zero dependencies. MIT licence.
 
 ## Français
 
-Studio est une station audio multipiste qui tourne dans le navigateur, en un seul fichier HTML : pistes, clips, rack d'effets, automation, fondus, inversion, transposition, timestretch, master, accordeur, enregistrement au micro, kit synthétisé par le navigateur, recherche en direct dans Freesound (sons CC0 et CC BY) et dans Internet Archive (domaine public, CC0, CC BY, CC BY-SA), import de fichiers audio, export WAV, MP3 ou pistes séparées avec le fichier des crédits, sauvegarde automatique dans le navigateur.
+StudioRhogo est une station audio multipiste qui tourne dans le navigateur, en un seul fichier HTML : pistes, clips, rack d'effets, automation, fondus, inversion, transposition, timestretch, master, accordeur, enregistrement au micro, kit synthétisé par le navigateur, recherche en direct dans Freesound (sons CC0 et CC BY) et dans Internet Archive (domaine public, CC0, CC BY, CC BY-SA), import de fichiers audio, export WAV, MP3 ou pistes séparées avec le fichier des crédits, sauvegarde automatique dans le navigateur.
 
 Le pictogramme des pads, à côté de la console, ouvre deux pads XY sur le bus master. Le doigt ou la souris règle deux paramètres à la fois, en direct ; lever le doigt relâche l'effet, le bouton de verrou le garde actif. Modes : Enveloppe × Hauteur (X transpose de −12 à +12 demi-tons, Y découpe une enveloppe de volume calée sur le tempo), Scratch (le mouvement horizontal de la main fait avancer et reculer la mémoire tampon comme un disque sous la main, Y ouvre le timbre), Filtre, Gate, Stutter, Arrêt de bande, Écho, Réverb, Crush et Flanger. Deux doigts jouent les deux pads ensemble.
 

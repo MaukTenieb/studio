@@ -3,10 +3,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Studio</title>
+<title>StudioRhogo</title>
 <link rel="icon" type="image/png" sizes="32x32" href="img/icon-32.png">
 <link rel="apple-touch-icon" href="img/icon-180.png">
-<meta property="og:title" content="Studio">
+<meta property="og:title" content="StudioRhogo">
 <meta property="og:description" content="Multitrack audio studio in the browser.">
 <meta property="og:image" content="https://mauktenieb.github.io/studio/img/social.jpg">
 <meta name="twitter:card" content="summary_large_image">
@@ -1547,7 +1547,7 @@ async function zipBlob(files){const enc=new TextEncoder(),parts=[],cen=[];let of
 function wavBlob(b,bits=16,tref=0){const nc=b.numberOfChannels,n=b.length,by=bits===16?2:bits===24?3:4,fl=bits===32,bx=602,hd=12+8+16+8+bx+8,ab=new ArrayBuffer(hd+n*nc*by),v=new DataView(ab);
   const w=(o,s)=>{for(let i=0;i<s.length;i++)v.setUint8(o+i,s.charCodeAt(i))};
   w(0,"RIFF");v.setUint32(4,hd-8+n*nc*by,true);w(8,"WAVE");w(12,"fmt ");v.setUint32(16,16,true);v.setUint16(20,fl?3:1,true);v.setUint16(22,nc,true);v.setUint32(24,b.sampleRate,true);v.setUint32(28,b.sampleRate*nc*by,true);v.setUint16(32,nc*by,true);v.setUint16(34,bits,true);
-  w(36,"bext");v.setUint32(40,bx,true);w(44,"Studio - Mauk Tenieb");w(44+256,"Studio");const d=new Date();w(44+256+32+32,d.toISOString().slice(0,10));w(44+256+32+32+10,d.toTimeString().slice(0,8));v.setUint32(44+256+32+32+18,tref>>>0,true);v.setUint32(44+256+32+32+22,Math.floor(tref/4294967296),true);v.setUint16(44+256+32+32+26,1,true);
+  w(36,"bext");v.setUint32(40,bx,true);w(44,"StudioRhogo - Mauk Tenieb");w(44+256,"StudioRhogo");const d=new Date();w(44+256+32+32,d.toISOString().slice(0,10));w(44+256+32+32+10,d.toTimeString().slice(0,8));v.setUint32(44+256+32+32+18,tref>>>0,true);v.setUint32(44+256+32+32+22,Math.floor(tref/4294967296),true);v.setUint16(44+256+32+32+26,1,true);
   w(44+bx,"data");v.setUint32(48+bx,n*nc*by,true);
   const ch=[];for(let c=0;c<nc;c++)ch.push(b.getChannelData(c));let o=hd;
   for(let i=0;i<n;i++)for(let c=0;c<nc;c++){let s=ch[c][i];if(fl){v.setFloat32(o,s,true);o+=4;continue}
