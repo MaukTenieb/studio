@@ -483,9 +483,12 @@ footer .lbl{font-size:max(12px,.8em)!important}
   .snd{min-height:44px!important}
 }
 @media (pointer:coarse) and (max-width:1100px){
-  #console .strip{display:grid;grid-template-columns:auto auto;grid-template-rows:auto auto 1fr;grid-auto-flow:column;align-items:start;justify-items:center;width:auto;column-gap:6px;row-gap:4px}
-  #console .strip .sn,#console .strip .dbv{display:none}
-  #console .strip .fz{grid-column:2;grid-row:1/-1;min-height:0;height:100%}
+  #console .strip{display:grid;grid-template-columns:44px 44px 44px auto;grid-template-rows:auto 44px 1fr auto;grid-template-areas:"sn sn sn sn" "s1 s1 s1 fz" "s2 pk fl fz" "s2 pk fl dv";align-items:start;justify-items:center;width:auto;column-gap:4px;row-gap:3px}
+  #console .strip .sn{grid-area:sn;justify-self:stretch;text-align:center;font-size:11.5px;line-height:1.2;overflow:hidden;white-space:nowrap}
+  #console .strip>.sb:not(:has(.dubb)){grid-area:s1;display:flex;gap:0}#console .strip>.sb:has(.dubb){grid-area:s2}#console .strip .knob.pan{grid-area:pk}#console .strip .knob.flt{grid-area:fl}
+  #console .strip .knob{width:44px;min-width:0}#console .strip .knob span,#console .strip .knob i{font-size:11.5px!important;line-height:1.1}
+  #console .strip .dbv{grid-area:dv;font-size:11.5px}
+  #console .strip .fz{grid-area:fz;min-height:0;height:100%}
   #console .strip .sb button{min-width:44px!important;min-height:44px!important}
 }
 @media (orientation:landscape) and (max-height:520px){
@@ -493,7 +496,6 @@ footer .lbl{font-size:max(12px,.8em)!important}
   aside{grid-row:2/4!important;grid-column:2!important;width:var(--side-w)!important;height:auto!important;border-top:0!important;border-left:2px solid #1d1915!important}
   footer{grid-row:3!important;grid-column:1!important}
   #sgrip{display:none!important}
-  .dk .tv{display:none}
 }
 #console .master-strip{position:sticky;right:0;z-index:3;box-shadow:-8px 0 14px rgba(0,0,0,.6)}
 .sq-cells b.x{background-image:radial-gradient(circle at 80% 20%,#ffe3a0 0 3px,transparent 4px)}
@@ -556,6 +558,17 @@ body.fxopen #abar{display:none!important}
 .ms-rot .tk::after{content:"";position:absolute;bottom:0;left:-2px;width:6px;height:6px;border-radius:50%;background:#3a3026}.ms-rot .tk.on::after{background:#ffa726;box-shadow:0 0 6px #ffa726}
 .ms-p.dy{background:linear-gradient(#1c1a18,#0d0c0b 55%,#171513)!important;color:#efe6d4;letter-spacing:.12em;text-transform:uppercase;border-radius:2px!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.08),0 2px 3px rgba(0,0,0,.8)!important}
 .ms-p.dy b{text-shadow:0 -1px 0 rgba(0,0,0,.8),0 1px 0 rgba(255,255,255,.18)}
+/* platines au doigt : disque et écran côte à côte, commandes dessous, tout visible debout comme couché */
+@media (pointer:coarse){.dk{display:grid!important;grid-template-columns:auto minmax(0,1fr);grid-template-rows:minmax(0,1fr) 44px;gap:6px;height:calc(var(--drawer,42vh) - 20px);min-height:0}
+  .dk .rec{grid-column:1;grid-row:1;height:100%;width:auto;max-width:none;aspect-ratio:1;align-self:stretch;flex:none}
+  .dk .tv{grid-column:2;grid-row:1;height:100%;min-width:0;flex:none}
+  .dk .row{grid-column:1/-1;grid-row:2}}
+@media (pointer:coarse) and (orientation:portrait){.dk{grid-template-columns:minmax(0,1fr)!important;grid-template-rows:minmax(0,.8fr) minmax(0,1fr) 44px!important}
+  .dk .tv{grid-column:1!important;grid-row:1!important}.dk .rec{grid-column:1!important;grid-row:2!important;justify-self:center}.dk .row{grid-column:1!important;grid-row:3!important}}
+/* console à l'ordinateur : le filtre de tranche prend sa place sans pousser la valeur en dB hors du tiroir */
+@media (pointer:fine){#console .strip{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:auto auto auto auto minmax(0,1fr) auto;grid-template-areas:"sn sn" "s1 s1" "s2 s2" "pk fl" "fz fz" "dv dv";justify-items:center;row-gap:3px}
+  #console .strip .sn{grid-area:sn;justify-self:stretch}#console .strip>.sb:not(:has(.dubb)){grid-area:s1}#console .strip>.sb:has(.dubb){grid-area:s2}#console .strip .knob.pan{grid-area:pk}#console .strip .knob.flt{grid-area:fl}#console .strip .fz{grid-area:fz;min-height:0;height:100%}#console .strip .dbv{grid-area:dv}
+  #console .strip .knob{transform:scale(.82);transform-origin:50% 0;margin-bottom:-10px}}
 #busy{position:fixed;left:50%;bottom:calc(var(--u)*2.2);transform:translateX(-50%);z-index:60;display:none;align-items:center;gap:10px;padding:6px 8px 6px 14px;border-radius:4px;background:linear-gradient(rgba(11,9,8,.55),rgba(11,9,8,.85)),url(img/metal.webp) center/cover;box-shadow:0 8px 20px rgba(0,0,0,.65);color:#ffe3a0;font-size:max(12px,1em)}
 #busy.on{display:flex}#busy i{display:block;width:clamp(90px,22vw,200px);height:6px;border-radius:3px;background:#0c0a08;box-shadow:inset 0 1px 2px #000;overflow:hidden}#busy b{display:block;height:100%;width:0;background:#ffa726}
 #busy .bl{white-space:nowrap;font-variant-numeric:tabular-nums}
