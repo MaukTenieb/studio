@@ -52,6 +52,7 @@ Critères de qualité appliqués à chaque lot : direction artistique, réalisme
 - Demande du 20 nov. 2026, 4 h 59 : complet, magnifique, clair, innovant, capable de tout, exhaustif, surprenant, singulier, simple, auto-amélioré et émergent par le jeu de ses paramètres, fidèle à toutes les demandes, meilleur que BandLab, riche de tout Internet Archive et Freesound, doté des boîtes et kits de power electronics et de tout ce qu'a Musik. Chantier permanent.
 
 - Échelle réelle d'un clip (menu du clip, touche « Échelle ») : hauteur suivie toutes les 20 ms, histogramme de 0 à 1 200 cents, pics nommés au cent près, comparés au tempérament égal, à la gamme juste, aux maqâms rast et bayati, au slendro, au pelog et au raga bhairav.
+- Branchements : dans le tiroir Scène, une touche bascule vers le plan des circuits. Chaque piste suit son rack d'effets jusqu'au master, puis le rack du master et la sortie. Les envois vers la scène et le dub apparaissent. Toucher une piste la coupe ; toucher un effet le contourne ; appuyer sur la pastille orange envoie la piste au dub. Les liaisons s'épaississent avec le niveau du son.
 
 ## À trancher par Mauk Tenieb
 
@@ -59,7 +60,6 @@ Critères de qualité appliqués à chaque lot : direction artistique, réalisme
 
 ## À faire
 
-- Vue des circuits en nœuds (pistes, effets, envois dub, scène, master), à la demande.
 - Spatialisation 3D sur la scène, avec effet Doppler quand un objet se déplace vite.
 - Vignettes vidéo de KamOrhogo sur les pistes 19 à 32 : contrôle du rendu avec de vraies vidéos.
 

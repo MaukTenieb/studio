@@ -358,6 +358,15 @@ footer:has(#abar.on) #abar{flex:1 1 auto;min-width:0}
   background:radial-gradient(circle at 40% 35%,#fff7dc,var(--c) 45%,color-mix(in srgb,var(--c) 40%,#000) 100%);box-shadow:0 0 calc(var(--s)*.5) var(--c),0 8px 14px rgba(0,0,0,.7)}
 #scene .obj.hit{outline:2px solid #ffe3a0;outline-offset:3px}
 #scene .x{position:absolute;right:8px;top:8px}
+#scene .mode{position:absolute;right:8px;top:52px}
+#scene.nodes{background:linear-gradient(rgba(11,9,8,.55),rgba(11,9,8,.8)),url(img/metal.webp) center/cover}
+#scene svg.nd{position:absolute;inset:0;width:100%;height:100%}
+#scene .nd text{font:600 12px "Barlow Semi Condensed",sans-serif;fill:#f4e6c8;pointer-events:none}
+#scene .nd .n{cursor:pointer}
+#scene .nd .n rect{stroke:#0b0908;stroke-width:1.5}
+#scene .nd .n.off rect{opacity:.35}
+#scene .nd path{fill:none;stroke-linecap:round}
+#scene .nd .port{cursor:pointer}
 .dubb{flex:1;width:100%;height:calc(var(--u)*.72)!important;font-weight:700;letter-spacing:.1em}
 .dubb.on{background:radial-gradient(circle,#ffe3a0,#ffa726 60%,#7a3c0a)!important;color:#1a1006!important;box-shadow:0 0 10px #ffa726}
 .dubl{display:flex;flex-direction:column;align-items:center;gap:2px;font-size:.8em;color:var(--legend-dim)}.dubl input{width:calc(var(--u)*1.6)}
@@ -418,7 +427,7 @@ footer:has(#abar.on) #abar{flex:1 1 auto;min-width:0}
   <symbol id="i-tune" viewBox="0 0 24 24"><path d="M9 18V5l11-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="17" cy="16" r="3"/></symbol>
   <symbol id="i-stretch" viewBox="0 0 24 24"><path d="M3 12h18M7 8l-4 4 4 4M17 8l4 4-4 4M12 5v14"/></symbol>
   <symbol id="i-denoise" viewBox="0 0 24 24"><path d="M3 12h3l2-5 3 10 2-6 2 3h6"/><path d="M4 4l16 16"/></symbol>
-  <symbol id="i-master" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="2.4" fill="currentColor"/><path d="M6.6 9.2a6.2 6.2 0 0 1 3.4-3.1M17.4 14.8a6.2 6.2 0 0 1-3.4 3.1"/></symbol><symbol id="i-drift" viewBox="0 0 24 24"><path d="M12 12c0-1.7 1.3-3 3-3s3 1.3 3 3-1.8 5-6 5-7-3-7-7 3.5-8 8-8 9 3.6 9 9"/><circle cx="12" cy="12" r="1.3" fill="currentColor"/></symbol><symbol id="i-keep" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></symbol><symbol id="i-steps" viewBox="0 0 24 24"><rect x="3" y="5" width="4" height="4" fill="currentColor"/><rect x="10" y="5" width="4" height="4"/><rect x="17" y="5" width="4" height="4" fill="currentColor"/><rect x="3" y="14" width="4" height="4"/><rect x="10" y="14" width="4" height="4" fill="currentColor"/><rect x="17" y="14" width="4" height="4"/></symbol><symbol id="i-dice" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="3"/><circle cx="9" cy="9" r="1.4" fill="currentColor"/><circle cx="15" cy="15" r="1.4" fill="currentColor"/><circle cx="15" cy="9" r="1.4" fill="currentColor"/><circle cx="9" cy="15" r="1.4" fill="currentColor"/></symbol><symbol id="i-cmd" viewBox="0 0 24 24"><path d="M9 6a3 3 0 1 0-3 3h12a3 3 0 1 0-3-3v12a3 3 0 1 0 3-3H6a3 3 0 1 0 3 3z"/></symbol><symbol id="i-stage" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="1.5"/><circle cx="7.5" cy="16.5" r="2.4" fill="currentColor"/><circle cx="15.5" cy="12" r="1.7" fill="currentColor"/><circle cx="11" cy="7" r="1.1" fill="currentColor"/></symbol><symbol id="i-secs" viewBox="0 0 24 24"><circle cx="12" cy="13" r="8"/><path d="M12 13V8M9.5 2.5h5M12 2.5V5"/></symbol><symbol id="i-decks" viewBox="0 0 24 24"><circle cx="7" cy="12" r="5"/><circle cx="17" cy="12" r="5"/><circle cx="7" cy="12" r="1" fill="currentColor"/><circle cx="17" cy="12" r="1" fill="currentColor"/><path d="M10 20h4"/></symbol><symbol id="i-xy" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 12h18M12 3v18" stroke-dasharray="2 2"/><circle cx="16" cy="8" r="2.5" fill="currentColor"/></symbol>
+  <symbol id="i-master" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="2.4" fill="currentColor"/><path d="M6.6 9.2a6.2 6.2 0 0 1 3.4-3.1M17.4 14.8a6.2 6.2 0 0 1-3.4 3.1"/></symbol><symbol id="i-drift" viewBox="0 0 24 24"><path d="M12 12c0-1.7 1.3-3 3-3s3 1.3 3 3-1.8 5-6 5-7-3-7-7 3.5-8 8-8 9 3.6 9 9"/><circle cx="12" cy="12" r="1.3" fill="currentColor"/></symbol><symbol id="i-keep" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></symbol><symbol id="i-steps" viewBox="0 0 24 24"><rect x="3" y="5" width="4" height="4" fill="currentColor"/><rect x="10" y="5" width="4" height="4"/><rect x="17" y="5" width="4" height="4" fill="currentColor"/><rect x="3" y="14" width="4" height="4"/><rect x="10" y="14" width="4" height="4" fill="currentColor"/><rect x="17" y="14" width="4" height="4"/></symbol><symbol id="i-dice" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="3"/><circle cx="9" cy="9" r="1.4" fill="currentColor"/><circle cx="15" cy="15" r="1.4" fill="currentColor"/><circle cx="15" cy="9" r="1.4" fill="currentColor"/><circle cx="9" cy="15" r="1.4" fill="currentColor"/></symbol><symbol id="i-cmd" viewBox="0 0 24 24"><path d="M9 6a3 3 0 1 0-3 3h12a3 3 0 1 0-3-3v12a3 3 0 1 0 3-3H6a3 3 0 1 0 3 3z"/></symbol><symbol id="i-nodes" viewBox="0 0 24 24"><rect x="2" y="4" width="6" height="5" rx="1"/><rect x="2" y="15" width="6" height="5" rx="1"/><rect x="16" y="9.5" width="6" height="5" rx="1"/><path d="M8 6.5c4 0 4 5.5 8 5.5M8 17.5c4 0 4-5.5 8-5.5"/></symbol><symbol id="i-stage" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="1.5"/><circle cx="7.5" cy="16.5" r="2.4" fill="currentColor"/><circle cx="15.5" cy="12" r="1.7" fill="currentColor"/><circle cx="11" cy="7" r="1.1" fill="currentColor"/></symbol><symbol id="i-secs" viewBox="0 0 24 24"><circle cx="12" cy="13" r="8"/><path d="M12 13V8M9.5 2.5h5M12 2.5V5"/></symbol><symbol id="i-decks" viewBox="0 0 24 24"><circle cx="7" cy="12" r="5"/><circle cx="17" cy="12" r="5"/><circle cx="7" cy="12" r="1" fill="currentColor"/><circle cx="17" cy="12" r="1" fill="currentColor"/><path d="M10 20h4"/></symbol><symbol id="i-xy" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 12h18M12 3v18" stroke-dasharray="2 2"/><circle cx="16" cy="8" r="2.5" fill="currentColor"/></symbol>
   <symbol id="i-undo" viewBox="0 0 24 24"><path d="M9 14L4 9l5-5"/><path d="M4 9h11a5 5 0 0 1 0 10h-3"/></symbol>
 </svg>
 <div id="app">
@@ -2469,7 +2478,10 @@ async function exportSlices(sel){const[tr,c]=sel[0]||[];const s=c&&lib.get(c.snd
 
 /* ================= scène : chaque piste qui contient du son devient un objet ; on le déplace, le mix suit ================= */
 let sceneOn=false;
-function renderScene(){const box=$("#scene");box.classList.toggle("on",sceneOn);$("#bScene").classList.toggle("on",sceneOn);if(!sceneOn){box.replaceChildren();return}
+let sceneMode=localStorage.getItem("st.sceneMode")||"stage";
+function sceneModeBtn(){const b=el("button",{class:"mode",title:sceneMode==="stage"?(lang==="fr"?"Branchements":"Routing"):(lang==="fr"?"Scène":"Stage")},icon(sceneMode==="stage"?"nodes":"stage"));b.onclick=()=>{sceneMode=sceneMode==="stage"?"nodes":"stage";localStorage.setItem("st.sceneMode",sceneMode);renderScene()};return b}
+function renderScene(){const box=$("#scene");box.classList.toggle("on",sceneOn);box.classList.toggle("nodes",sceneOn&&sceneMode==="nodes");$("#bScene").classList.toggle("on",sceneOn);if(!sceneOn){box.replaceChildren();return}
+  if(sceneMode==="nodes")return renderNodes(box);
   const W=box.clientWidth,H=box.clientHeight,list=state.tracks.filter(t=>t.clips.length);const close=el("button",{class:"x",title:lang==="fr"?"Fermer":"Close"},"✕");close.onclick=()=>drawer("scene");
   const place=(o,tr)=>{const d=tr.depth||0,sz=Math.round(clamp(Math.min(W,H)*.13*(1-d*.55),22,84));o.style.setProperty("--s",sz+"px");o.style.width=o.style.height=sz+"px";o.style.fontSize=Math.max(10,sz*.32)+"px";o.style.left=`calc(${(tr.pan+1)/2*86+7}% + ${(o._fan||0)*sz*.62}px)`;o.style.top=(92-d*80)+"%";o.style.zIndex=String(100-Math.round(d*90));o.style.filter=`saturate(${1-d*.5}) brightness(${1-d*.35})`};
   const apply=tr=>{const ch=chains.get(tr.id);if(!ch||!ctx)return;const T=ctx.currentTime,d=tr.depth||0;ch.pan.pan.setTargetAtTime(tr.pan,T,.03);if(ch.dLp){ch.dLp.frequency.setTargetAtTime(20000*Math.pow(.17,d),T,.05);ch.dG.gain.setTargetAtTime(1-d*.62,T,.05);ch.dSend.gain.setTargetAtTime(d*.75,T,.05)}};
@@ -2482,7 +2494,7 @@ function renderScene(){const box=$("#scene");box.classList.toggle("on",sceneOn);
   /* objets au même endroit : éventail visuel, le son garde sa place */
   const grp=new Map();objs.forEach(([o,t])=>{const k=t.pan.toFixed(2)+"|"+(t.depth||0).toFixed(2);if(!grp.has(k))grp.set(k,[]);grp.get(k).push([o,t])});grp.forEach(g=>{if(g.length<2)return;g.forEach(([o,t],i)=>{o._fan=i-(g.length-1)/2;place(o,t)})});
   objs.forEach(([o])=>o.addEventListener("pointerdown",()=>{o._fan=0},{capture:true}));
-  box.replaceChildren(...objs.map(x=>x[0]),close);if(!list.length)box.append(el("div",{class:"note",style:"position:absolute;left:50%;top:50%;transform:translate(-50%,-50%)"},"…"))}
+  box.replaceChildren(...objs.map(x=>x[0]),close,sceneModeBtn());if(!list.length)box.append(el("div",{class:"note",style:"position:absolute;left:50%;top:50%;transform:translate(-50%,-50%)"},"…"))}
 $("#bScene").onclick=()=>drawer("scene");
 addEventListener("resize",()=>{if(sceneOn)renderScene()});
 
@@ -2576,6 +2588,41 @@ function scaleSheet(sel){const[tr,c]=sel[0]||[];const s=c&&lib.get(c.snd);if(!s)
   const near=peaks.map(p=>{let best=1e9;SCALES[sc.value].forEach(x=>{const d=Math.min(Math.abs(p-x),1200-Math.abs(p-x));if(d<best)best=d});return best});
   sh.replaceChildren(el("b",{},(lang==="fr"?"Échelle réelle — ":"Actual scale — ")+s.name),cv,el("div",{class:"row"},sc,el("span",{},(lang==="fr"?"La = ":"A = ")+ref+" Hz · "+f0.length+(lang==="fr"?" mesures":" frames")),el("button",{onclick:()=>{sh.classList.remove("on");sh.replaceChildren()}},"✓")),
     el("small",{},(lang==="fr"?"Pics (cents) : ":"Peaks (cents): ")+peaks.join(", ")));sh.classList.add("on");requestAnimationFrame(draw)}
+
+/* branchements : le chemin de chaque piste, de ses effets aux envois et au master, en un plan qu'on touche */
+let ndRaf=0;
+function renderNodes(box){cancelAnimationFrame(ndRaf);const W=box.clientWidth,H=box.clientHeight,fr=lang==="fr",NS="http://www.w3.org/2000/svg";
+  const S=(tag,a,...k)=>{const e=document.createElementNS(NS,tag);for(const x in a)e.setAttribute(x,a[x]);k.forEach(c=>e.append(c));return e};
+  const list=state.tracks.filter(t=>t.clips.length||t.rack.length);const close=el("button",{class:"x",title:fr?"Fermer":"Close"},"✕");close.onclick=()=>drawer("scene");
+  const svg=S("svg",{class:"nd",viewBox:`0 0 ${W} ${H}`});const gE=S("g",{}),gN=S("g",{});svg.append(gE,gN);
+  const maxFx=Math.max(0,...list.map(t=>t.rack.length)),mr=state.masterRack.filter(f=>FX[f.type]),cols=2+Math.min(maxFx,4)+1+1+Math.min(mr.length,3)+1;
+  const cw=(W-60)/cols,nw=Math.max(Math.min(cw*.82,130),Math.min(cw*.92,46)),rowH=Math.max(22,Math.min(46,(H-30)/Math.max(list.length,1))),nh=Math.min(rowH*.78,30),x0=14;
+  const edges=[];const edge=(a,b,col,tr,kind)=>{const p=S("path",{d:`M${a[0]},${a[1]} C${(a[0]+b[0])/2},${a[1]} ${(a[0]+b[0])/2},${b[1]} ${b[0]},${b[1]}`,stroke:col,"stroke-width":2,opacity:.55});gE.append(p);edges.push([p,tr,kind]);return p};
+  const lum=c=>{if(!/^#[0-9a-f]{6}$/i.test(c))return 0;const v=[1,3,5].map(i=>parseInt(c.slice(i,i+2),16)/255);return .2126*v[0]+.7152*v[1]+.0722*v[2]};let clipN=0;
+  const node=(x,y,w,label,col,on,cb,ttl)=>{const id="ndc"+(++clipN),tw=label.length*6.4,txt=S("text",{x:6,y:nh/2+4,style:lum(col)>.45?"fill:#0b0908":""},label);
+    if(tw>w-10){const o=tw-(w-12),d=Math.max(3,o/14);txt.append(S("animate",{attributeName:"x",values:`6;6;${6-o};${6-o};6`,keyTimes:"0;.2;.6;.8;1",dur:(d*2+2)+"s",repeatCount:"indefinite"}))}
+    const g=S("g",{class:"n"+(on?"":" off"),transform:`translate(${x},${y-nh/2})`},S("title",{},ttl||label),S("clipPath",{id},S("rect",{width:w,height:nh,rx:3})),S("rect",{width:w,height:nh,rx:3,fill:col}),S("g",{"clip-path":`url(#${id})`},txt));if(cb)g.addEventListener("click",cb);gN.append(g);return g};
+  const busX=x0+cw*(1+Math.min(maxFx,4)+1),mX=busX+cw,midY=H/2,bus=[[fr?"Scène":"Stage",midY-nh*1.6,"#4fc3f7"],["Dub",midY+nh*1.6,"#ffa726"]];
+  const busIn=bus.map(([n,y,c])=>{node(busX,y,nw,n,"rgba(40,32,24,.9)",true,null,n).querySelector("rect").setAttribute("stroke",c);return[busX,y]});
+  const mIn=[mX,midY];
+  list.forEach((tr,i)=>{const y=15+rowH*(i+.5);
+    node(x0,y,nw,tr.name,tr.color,!tr.mute,()=>{snapshot();tr.mute=!tr.mute;rebuildChains();restartIfPlaying&&restartIfPlaying();render();save();renderNodes(box)},(fr?"Couper / rétablir ":"Mute / unmute ")+tr.name);
+    let px=[x0+nw,y];const shown=tr.rack.filter(f=>FX[f.type]).slice(0,4);
+    shown.forEach((f,j)=>{const x=x0+cw*(1+j);edge(px,[x,y],tr.color,tr,"in");node(x,y,nw,FX[f.type].n,"rgba(58,46,34,.95)",f.on,()=>{snapshot();f.on=!f.on;rebuildChains();restartIfPlaying&&restartIfPlaying();save();renderNodes(box)},(fr?"Activer / contourner ":"Enable / bypass ")+FX[f.type].n);px=[x+nw,y]});
+    if(tr.rack.length>4){const x=x0+cw*5;node(x,y,cw*.5,"+"+(tr.rack.length-4),"rgba(58,46,34,.95)",true,()=>{fxOpen=tr.id;renderFx();render()})}
+    edge(px,mIn,tr.color,tr,"main");
+    if((tr.depth||0)>.02){const p=edge(px,busIn[0],"#4fc3f7",tr,"scene");p.setAttribute("stroke-dasharray","4 5");p.setAttribute("stroke-width",1+2.5*tr.depth)}
+    const port=S("circle",{class:"port",cx:px[0]+8,cy:y+nh/2-2,r:Math.max(5,nh*.22),fill:"#3a2a18",stroke:"#ffa726","stroke-width":1.5},S("title",{},fr?"Envoi dub, tant qu'on appuie":"Dub send, while held"));gN.append(port);
+    const dl=edge([px[0]+8,y+nh/2-2],busIn[1],"#ffa726",tr,"dub");dl.setAttribute("opacity",0);
+    const on=v=>{const ch=chains.get(tr.id);if(ch&&ch.dub&&ctx)ch.dub.gain.setTargetAtTime(v,ctx.currentTime,.006);dl.setAttribute("opacity",v?.95:0);port.setAttribute("fill",v?"#ffa726":"#3a2a18")};
+    port.addEventListener("pointerdown",e=>{e.preventDefault();port.setPointerCapture(e.pointerId);on(1)});["pointerup","pointercancel"].forEach(k=>port.addEventListener(k,()=>on(0)))});
+  bus.forEach(([n,y,c])=>edge([busX+nw,y],mIn,c,null,"bus"));
+  node(mX,midY,nw,"Master","#e8a33d",true,()=>drawer("mastr"),fr?"Ouvrir le mastering":"Open mastering");let px=[mX+nw,midY];
+  mr.slice(0,3).forEach((f,j)=>{const x=mX+cw*(1+j);edge(px,[x,midY],"#e8a33d",null,"m");node(x,midY,nw,FX[f.type].n,"rgba(58,46,34,.95)",f.on,()=>{snapshot();f.on=!f.on;rebuildMaster();save();renderNodes(box)});px=[x+nw,midY]});
+  const oX=Math.min(W-nw*.7-10,px[0]+cw*.18);edge(px,[oX,midY],"#e8a33d",null,"m");node(oX,midY,nw*.7,fr?"Sortie":"Out","#7a6a50",true,null);
+  box.replaceChildren(svg,close,sceneModeBtn());if(!list.length)box.append(el("div",{class:"note",style:"position:absolute;left:50%;top:50%;transform:translate(-50%,-50%)"},fr?"Posez un son sur une piste":"Drop a sound on a track"));
+  const lv=new Map();const tick=()=>{if(!sceneOn||sceneMode!=="nodes")return;edges.forEach(([p,tr,k])=>{if(!tr||k==="dub")return;let m=lv.get(tr.id);if(m===undefined){const ch=chains.get(tr.id);m=0;if(ch&&ch.an&&playing){const d=ch.mbuf||(ch.mbuf=new Float32Array(ch.an.fftSize));ch.an.getFloatTimeDomainData(d);for(const v of d)m=Math.max(m,Math.abs(v))}lv.set(tr.id,m)}
+    if(k!=="scene"){p.setAttribute("opacity",tr.mute?.15:.4+.6*Math.min(1,m*1.5));p.setAttribute("stroke-width",2+4*Math.min(1,m))}});lv.clear();ndRaf=requestAnimationFrame(tick)};tick()}
 </script>
 </body>
 </html>

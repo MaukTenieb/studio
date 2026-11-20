@@ -20,6 +20,7 @@ https://mauktenieb.github.io/studio/
 - Loudness targets measured in LUFS after ITU-R BS.1770 (K-weighting, gating): −9 club, −11 CD, −14 streaming, −16 Apple and podcast, −23 EBU R128, −24 ATSC A/85; the export iterates until the mix lands on the target, with the peak held under the preset ceiling.
 - Room reverbs modelled from early reflections and frequency-dependent decay: closet, bathroom, kitchen, bedroom, living room, vocal booth, studio, classroom, car, stairwell, parking garage, club, theatre, concert hall, church, cathedral, cave, tunnel, plate, spring.
 - Tempo, metronome, count-in, snap to the sixteenth, loop region drawn on the ruler, chromatic tuner, lyrics pad.
+- Routing view, inside the Stage drawer: each track through its effects to the master, the master rack and the output, with the stage and dub sends. Tap a track to mute it, an effect to bypass it, hold the orange port to send to the dub. Links thicken with the signal level.
 - Actual scale of a clip: pitch tracked every 20 ms, a 0–1200 cent histogram with peaks named to the cent, compared with equal temperament, just intonation, maqam rast and bayati, slendro, pelog and raga bhairav.
 - Microphone recording onto the armed track, with optional input monitoring.
 - Live search in Internet Archive, restricted to public domain, CC0, CC BY and CC BY-SA items, with seventeen listening categories: field recordings, city, forest, animals, factory, vehicles, firearms, voices, languages, ethnography, traditional music, chants, jazz, classical, concerts, oral history, sound effects. Freesound gets sixteen quick searches on the same themes.
@@ -85,3 +86,5 @@ L'interface prend les matières d'une kave Korhogo : plaques d'acier bruni, flan
 Le bouton Master ouvre un tiroir de mastering à la manière de BandLab Mastering : écoute A/B à sonie égale, intensité sur onze niveaux, égaliseur trois bandes, cible de sonie, mastering de référence, export d'une ou de plusieurs sorties. Chaque aire suit l'écran ; une poignée partage les pistes et le tiroir.
 
 La touche Échelle du menu d'un clip montre l'échelle réellement jouée : la hauteur est suivie toutes les 20 ms, rangée dans un histogramme de 0 à 1 200 cents, et chaque pic reçoit sa valeur au cent près. Un sélecteur superpose une gamme de référence : tempérament égal, gamme juste, maqâm rast, maqâm bayati, slendro, pelog, raga bhairav.
+
+Dans le tiroir Scène, une touche ouvre le plan des branchements : chaque piste traverse ses effets jusqu'au master, puis le rack du master et la sortie, avec les envois vers la scène et le dub. Toucher une piste la coupe, toucher un effet le contourne, appuyer sur la pastille orange envoie la piste au dub. Les liaisons s'épaississent avec le niveau.
