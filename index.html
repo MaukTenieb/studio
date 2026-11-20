@@ -205,8 +205,12 @@ dialog .col{display:flex;flex-direction:column;gap:6px}
 #sheet{display:none;position:absolute;left:50%;bottom:8px;transform:translateX(-50%);z-index:20;width:min(94%,460px);background:linear-gradient(var(--panel-hi),var(--panel-lo));border:1px solid #1d1915;border-radius:6px;padding:12px 14px;box-shadow:0 12px 30px rgba(0,0,0,.5);flex-direction:column;gap:6px}
 #sheet.on{display:flex}
 @keyframes boxTp{0%,15%{transform:none}85%,100%{transform:translateX(var(--o))}}
+.clip.meta::after{content:"";position:absolute;right:4px;top:4px;width:8px;height:8px;border-radius:50%;background:#ffe3a0;box-shadow:0 0 6px #ffa726}
+#sheet .fs{display:grid;grid-template-columns:auto 1fr;gap:5px 8px;align-items:center}#sheet .fs input,#sheet .fs textarea{width:100%;min-width:0;background:#0b0908;color:var(--legend);border:1px solid #3a2f25;border-radius:3px;padding:5px 6px;font:inherit}
 .box{padding:6px 4px 8px;border-bottom:1px solid rgba(255,222,170,.08)}.box .bh{display:flex;align-items:center;gap:8px}.box .gl{font:700 22px/1 "Barlow Semi Condensed",serif;color:#ffe3a0;min-width:1.2em;text-align:center}.box .tt{flex:1;min-width:0;white-space:nowrap;overflow:hidden;color:var(--legend)}.box .bh button{flex:none}.box .bf{display:block;color:var(--legend-dim);margin:2px 0 4px 2em}
 #sheet.wide{width:min(96%,1100px)}
+#sheet{max-height:calc(100% - 16px);overflow:auto}
+@media (max-height:520px){#sheet .fs{grid-template-columns:auto 1fr auto 1fr}#sheet .fs textarea{height:2.2em}}
 #sheet canvas.spe{width:100%;height:min(46vh,340px);touch-action:none;cursor:crosshair;border-radius:3px;background:#070606}
 #sheet b{font-weight:600}
 #sheet label{display:flex;flex-direction:column;gap:2px;color:var(--legend-dim)}
@@ -1180,7 +1184,7 @@ async function renderOffline(onlyTrack,trimDb=0){
 }
 function trimTail(b){let last=0;for(let c=0;c<b.numberOfChannels;c++){const d=b.getChannelData(c);for(let i=d.length-1;i>last;i--)if(Math.abs(d[i])>1e-4){last=i;break}}const n=Math.min(b.length,last+Math.floor(b.sampleRate*.05));const o=new AudioBuffer({numberOfChannels:b.numberOfChannels,length:Math.max(1,n),sampleRate:b.sampleRate});for(let c=0;c<b.numberOfChannels;c++)o.copyToChannel(b.getChannelData(c).subarray(0,n),c);return o}
 const stamp=()=>"studio-"+new Date().toISOString().slice(0,16).replace(/[:T]/g,"-");
-function creditsTxt(used){const cred=[...used].filter(s=>s.credit);if(!cred.length)return null;return(lang==="fr"?"Sons utilisés":"Sounds used")+"\n\n"+cred.map(s=>`"${s.credit.title}" — ${s.credit.author} — ${s.credit.license} — ${s.credit.url}`).join("\n")+"\n"}
+function creditsTxt(used){const cred=[...used].filter(s=>s.credit);const F=lang==="fr";const sheets=state.tracks.flatMap(t=>t.clips.filter(c=>c.meta).map(c=>`${t.name} · ${fmtT(c.start)} — ${metaLine(c.meta)}`));if(!cred.length&&!sheets.length)return null;return(cred.length?(F?"Sons utilisés":"Sounds used")+"\n\n"+cred.map(s=>`"${s.credit.title}" — ${s.credit.author} — ${s.credit.license} — ${s.credit.url}`).join("\n")+"\n":"")+(sheets.length?"\n"+(F?"Fiches de terrain":"Field sheets")+"\n\n"+sheets.join("\n")+"\n":"")}
 async function masteredRender(){
   let trim=0,r=await renderOffline(null,0);if(!r)return null;const m=scaledM(state.masterPreset,state.mInt,state.mEq);
   if(state.target!=="off"&&state.target!=null){for(let k=0;k<4;k++){const l=await lufsOf(r.b);const diff=+state.target-l;if(!isFinite(l)||Math.abs(diff)<.15)break;trim+=diff;r=await renderOffline(null,trim)}}
@@ -1559,7 +1563,7 @@ function renderActionBar(){
   const one=sel.length===1?sel[0]:null,B=(ic,lbl,fn,dis)=>{const b=el("button",{title:lbl,class:dis?"dis":""},icon(ic),el("span",{},lbl));b.onclick=()=>{if(!dis)fn()};return b};
   const m=regionMore(sel),at=()=>{const r=bar.getBoundingClientRect();return[r.left+r.width/2,r.top-10]};
   const main=[B("del",t("del"),delSel),B("dup",t("copy"),()=>{const[,c]=sel[0];clipboard={...c};dupSel()}),B("loop","Loop",()=>edit(()=>{for(const[tr,c]of sel)tr.clips.push({...c,id:uid(),start:c.start+c.len})})),B("cut",t("slice"),splitSel)];
-  const more=[B("erase",lang==="fr"?"Gomme spectrale":"Spectral eraser",()=>eraseSheet(sel),!one),B("tune",lang==="fr"?"Échelle":"Scale",()=>scaleSheet(sel),!one),B("down",lang==="fr"?"Tranches":"Slices",()=>exportSlices(sel),!one),B("shift",t("shift"),m.shift),B("gain","Gain",m.gain),B("tune",t("transposeS"),m.transpose,!one),B("stretch","Timestretch",m.stretch,!one),B("fade",t("fades"),m.fade),B("denoise",t("denoise"),m.denoise,!one),B("rev",t("reverse"),m.reverse),
+  const more=[B("field",lang==="fr"?"Fiche de terrain":"Field sheet",()=>fieldSheet(sel),!one),B("erase",lang==="fr"?"Gomme spectrale":"Spectral eraser",()=>eraseSheet(sel),!one),B("tune",lang==="fr"?"Échelle":"Scale",()=>scaleSheet(sel),!one),B("down",lang==="fr"?"Tranches":"Slices",()=>exportSlices(sel),!one),B("shift",t("shift"),m.shift),B("gain","Gain",m.gain),B("tune",t("transposeS"),m.transpose,!one),B("stretch","Timestretch",m.stretch,!one),B("fade",t("fades"),m.fade),B("denoise",t("denoise"),m.denoise,!one),B("rev",t("reverse"),m.reverse),
     B("fuse",t("fuseS"),fuse,sel.length<2),B("lab",t("atelierS"),()=>{const[x,y]=at();atelier(one[0],one[1],x,y)},!one),B("split2",t("separateS"),()=>{const[x,y]=at();sepMenu(one[0],one[1],x,y)},!one)];
   const tog=el("button",{title:t("more"),class:abarMore?"on":""},el("b",{style:"font-size:1.3em;line-height:1"},"⋯"),el("span",{},t("more")));tog.onclick=()=>{abarMore=!abarMore;renderActionBar()};
   bar.replaceChildren(...(abarMore?more:main),tog);
@@ -1802,7 +1806,7 @@ function specOf(s,rev){const key=rev?"_specR":"_spec";if(s[key]!==undefined)retu
   return s[key]={F,B,v:out,max:mx}}
 function clipEl(tr,c){
   const s=lib.get(c.snd);const w=Math.max(4,c.len*state.pps);
-  const e=el("div",{"data-id":c.id,class:"clip"+(state.sel===c.id||multi.has(c.id)?" sel":"")+(c.mute?" muted":""),style:`left:${c.start*state.pps}px;width:${w}px;--ink:${INK(tr.color)}`});
+  const e=el("div",{"data-id":c.id,...(c.meta?{title:metaLine(c.meta)}:{}),class:"clip"+(c.meta?" meta":"")+(state.sel===c.id||multi.has(c.id)?" sel":"")+(c.mute?" muted":""),style:`left:${c.start*state.pps}px;width:${w}px;--ink:${INK(tr.color)}`});
   e.append(el("b",{},(c.rev?"◂ ":"")+(c.name||(s?s.name:"?"))+(c.gain&&Math.abs(c.gain-1)>.01?` ${(20*Math.log10(c.gain)).toFixed(1)}dB`:"")));
   if(s){const pk=c.rev?reversed(s).peaks:s.peaks,dur=s.buffer.duration,o0=c.rev?dur-(c.off+c.len):c.off;
     const cv=document.createElement("canvas");const H=60;cv.width=Math.min(4000,Math.ceil(w));cv.height=H;const g=cv.getContext("2d");g.fillStyle=INK(tr.color);g.globalAlpha=.72;
@@ -2626,7 +2630,7 @@ function yinTrack(b,from,len){const sr=b.sampleRate,d=b.getChannelData(0),W=Math
 function scaleSheet(sel){const[tr,c]=sel[0]||[];const s=c&&lib.get(c.snd);if(!s)return;const f0=yinTrack(s.buffer,c.off,c.len);const sh=$("#sheet");
   if(!f0.length){toast(lang==="fr"?"Aucune hauteur nette":"No clear pitch");return}
   const ref=+localStorage.getItem("st.ref")||440,cents=f0.map(f=>((1200*Math.log2(f/ref)%1200)+1200)%1200),H=new Float32Array(120);cents.forEach(x=>H[Math.floor(x/10)%120]++);
-  const sm=H.map((v,i)=>(H[(i+119)%120]+2*v+H[(i+1)%120])/4),mx=Math.max(...sm),peaks=[];sm.forEach((v,i)=>{if(v>mx*.18&&v>=sm[(i+119)%120]&&v>=sm[(i+1)%120]){const c0=i*10+5,w=cents.map(x=>((x-c0+1800)%1200)-600).filter(x=>Math.abs(x)<25);peaks.push(Math.round((c0+(w.length?w.reduce((p,q)=>p+q,0)/w.length:0)+1200)%1200))}});
+  const sm=H.map((v,i)=>(H[(i+119)%120]+2*v+H[(i+1)%120])/4),mx=Math.max(...sm),peaks=[];sm.forEach((v,i)=>{if(v>mx*.18&&v>=sm[(i+119)%120]&&v>=sm[(i+1)%120]){const c0=i*10+5,w=cents.map(x=>((x-c0+1800)%1200)-600).filter(x=>Math.abs(x)<25);peaks.push(Math.round((c0+(w.length?w.reduce((p,q)=>p+q,0)/w.length:0)+1200)%1200))}});{const u=dedupC(peaks);peaks.length=0;peaks.push(...u)}
   const cv=el("canvas",{style:"width:100%;height:120px"}),sc=el("select",{},...Object.keys(SCALES).map(k=>el("option",{value:k},k)));sc.value=localStorage.getItem("st.scale")||"12-TET";
   const draw=()=>{const W=cv.width=cv.clientWidth*2,Hh=cv.height=240,g=cv.getContext("2d");g.clearRect(0,0,W,Hh);g.fillStyle="rgba(0,0,0,.35)";g.fillRect(0,0,W,Hh);
     SCALES[sc.value].forEach(x=>{g.fillStyle="rgba(79,195,247,.55)";g.fillRect(x/1200*W,0,2,Hh)});
@@ -2761,6 +2765,21 @@ function boxDrawer(){const F=lang==="fr",d=el("details",{class:"kitg"},el("summa
       gd.append(el("div",{class:"box"},el("div",{class:"bh"},el("b",{class:"gl"},B.l),el("span",{class:"tt"},"tribute to "+B.t),go),el("small",{class:"bf"},fx+(B.bpm?" · "+B.bpm+" bpm":B.free?(F?" · en secondes":" · in seconds"):"")),chips))});
     d.append(gd)});
   d.addEventListener("toggle",()=>requestAnimationFrame(()=>d.querySelectorAll(".box .tt").forEach(t=>{if(t._tp||t.scrollWidth<=t.clientWidth+1)return;t._tp=1;const o=t.scrollWidth-t.clientWidth;const sp=el("span",{style:`display:inline-block;animation:boxTp ${Math.max(4,o/12)}s ease-in-out infinite alternate;--o:-${o}px`},t.textContent);t.replaceChildren(sp)})),true);return d}
+
+/* fiche de terrain d'un clip : lieu, date, musiciens, fonction, saison, lutherie, accordage mesuré en cents, texte et traduction ; elle suit le clip et part dans le fichier des crédits */
+const META_K=[["place","Lieu","Place"],["date","Date","Date"],["who","Musiciens, ensemble","Musicians, ensemble"],["func","Fonction, rite, occasion","Function, rite, occasion"],["season","Saison","Season"],["inst","Instruments, lutherie","Instruments, making"],["tuning","Accordage (cents)","Tuning (cents)"],["text","Texte chanté","Sung text"],["trans","Traduction","Translation"]];
+function dedupC(a){const o=[];[...a].sort((x,y)=>x-y).forEach(x=>{if(!o.some(y=>Math.min(Math.abs(x-y),1200-Math.abs(x-y))<20))o.push(x)});return o}
+function metaLine(m){return META_K.filter(([k])=>m[k]).map(([k,fr,en])=>(lang==="fr"?fr:en)+" : "+m[k]).join(" · ")}
+function fmtT(t){const m=Math.floor(t/60);return m+":"+String(Math.floor(t%60)).padStart(2,"0")}
+function fieldSheet(sel){const[tr,c]=sel[0]||[];if(!c)return;const F=lang==="fr",sh=$("#sheet"),m={...(c.meta||{})},ins={};
+  const grid=el("div",{class:"fs"},...META_K.flatMap(([k,fr,en])=>{const i=el(k==="text"||k==="trans"?"textarea":"input",{rows:"2",placeholder:F?fr:en});i.value=m[k]||"";ins[k]=i;return[el("small",{},F?fr:en),i]}));
+  const meas=el("button",{title:F?"Mesurer l'accordage du clip":"Measure the clip's tuning"},icon("tune"));meas.onclick=()=>{const s=lib.get(c.snd);if(!s)return;const f0=yinTrack(s.buffer,c.off,c.len);if(!f0.length){toast(F?"Aucune hauteur nette":"No clear pitch");return}
+    const ref=+localStorage.getItem("st.ref")||440,cents=f0.map(f=>((1200*Math.log2(f/ref)%1200)+1200)%1200),H=new Float32Array(120);cents.forEach(x=>H[Math.floor(x/10)%120]++);const sm=H.map((v,i)=>(H[(i+119)%120]+2*v+H[(i+1)%120])/4),mx=Math.max(...sm),pk=[];
+    sm.forEach((v,i)=>{if(v>mx*.18&&v>=sm[(i+119)%120]&&v>=sm[(i+1)%120]){const c0=i*10+5,w=cents.map(x=>((x-c0+1800)%1200)-600).filter(x=>Math.abs(x)<25);pk.push(Math.round((c0+(w.length?w.reduce((p,q)=>p+q,0)/w.length:0)+1200)%1200))}});
+    ins.tuning.value=dedupC(pk).join(", ")+" (La "+ref+" Hz)"};
+  const close=()=>{sh.classList.remove("on","wide");sh.replaceChildren()};
+  const ok=()=>{const nm={};META_K.forEach(([k])=>{const v=ins[k].value.trim();if(v)nm[k]=v});edit(()=>{if(Object.keys(nm).length)c.meta=nm;else delete c.meta});close()};
+  sh.classList.add("wide");sh.replaceChildren(el("b",{},(F?"Fiche de terrain — ":"Field sheet — ")+(c.name||lib.get(c.snd)?.name||"")),grid,el("div",{class:"row"},meas,el("button",{onclick:close},"×"),el("button",{class:"on",onclick:ok},"✓")));sh.classList.add("on")}
 </script>
 </body>
 </html>

@@ -21,6 +21,7 @@ https://mauktenieb.github.io/studio/
 - Room reverbs modelled from early reflections and frequency-dependent decay: closet, bathroom, kitchen, bedroom, living room, vocal booth, studio, classroom, car, stairwell, parking garage, club, theatre, concert hall, church, cathedral, cave, tunnel, plate, spring.
 - Tempo, metronome, count-in, snap to the sixteenth, loop region drawn on the ruler, chromatic tuner, lyrics pad.
 - Sampler colours (SP-1200, MPC60, ASR-10, S950), sub octave with mono lows, large spaces (cave, silo, cathedral) with a hold up to one minute, dub siren and analog laser noise boxes.
+- Field sheet per clip (place, date, musicians, function, season, instruments, measured tuning in cents, sung text, translation), exported with the credits.
 - Artist boxes: 26 Greek-letter boxes, each a tribute to an artist named by the annexes or by Musik; one tap sets track racks, master chain, tempo or seconds, swing, sequencer, dub feedback, then offers sounds to search and gestures for the selected clip. Freesound's Broad Sound Taxonomy and Internet Archive's large free collections (78 rpm records, old radio, broadcasts, read books, rites, NASA, Free Music Archive).
 - Tempo fitted to video cuts and field notes; spectral eraser and repair on boxes drawn over the spectrogram.
 - Stage in real distances (6 m wide, 14 m deep): each object's sound takes the time of the air to arrive, so a fast move bends its pitch (Doppler). The object reddens moving away, turns blue coming closer.
@@ -100,3 +101,5 @@ Le rack reçoit la couleur des échantillonneurs SP-1200, MPC60, ASR-10 et S950,
 Le tempo peut se caler sur les coupes vidéo et les notes de terrain : les temps forts tombent sur l'image. La gomme spectrale du menu d'un clip efface ou répare les zones encadrées sur son spectrogramme.
 
 L'onglet Kit ouvre 26 boîtes d'artistes, sous lettres grecques, chacune « tribute to » un artiste : power electronics, dark ambient, hip-hop, IDM, sound design, dub, musique à l'image, instruments du monde, ethnomusicologie. Une touche prépare le studio selon ses procédés ; la boîte propose ensuite les sons à chercher et les gestes à faire sur un clip. Les collections ajoutent la taxonomie officielle de Freesound ; Internet Archive ajoute les 78 tours (dont 40 000 de jazz), la radio ancienne, les émissions, les livres lus, les rites et cultes, la NASA et le Free Music Archive.
+
+Chaque clip reçoit une fiche de terrain : lieu, date, musiciens, fonction, saison, lutherie, accordage mesuré en cents, texte chanté et traduction. La fiche part dans le fichier des crédits.

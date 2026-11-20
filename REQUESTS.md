@@ -68,6 +68,8 @@ Critères de qualité appliqués à chaque lot : direction artistique, réalisme
 - Taxonomie officielle de Freesound (5 catégories, 23 sous-catégories, d'après le dépôt MTG/BroadSoundTaxonomy) dans les collections.
 - Grandes collections d'Internet Archive sous licence libre : 78 tours (70 000 disques, dont 40 000 de jazz), 78 · blues, 78 · monde, radio ancienne, émissions, livres lus, rites et cultes, NASA, Free Music Archive.
 
+- Fiche de terrain d'un clip (menu du clip) : lieu, date, musiciens, fonction, saison, lutherie, accordage mesuré en cents, texte chanté, traduction. Un point lumineux marque le clip ; la fiche part dans le fichier des crédits.
+
 ## À trancher par Mauk Tenieb
 
 - Figurines 3D des pistes 01 à 18 : elles restent en 3D, comme demandé ; la règle photographique de la DA appelle des portraits photographiques. Décision réservée à l'auteur.
