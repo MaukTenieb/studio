@@ -38,6 +38,8 @@ Critères de qualité appliqués à chaque lot : direction artistique, réalisme
 - Zoom sémantique : à partir de 300 px par seconde, la forme d'onde d'un clip devient un spectrogramme (graves en bas, aigus en haut, couleur du Mask).
 - Chaleur des pistes : saturation douce après chaque fader, transparente à faible niveau.
 - Branches de projet dans la palette de commandes : créer (« branche nom »), ouvrir, fusionner (les pistes vides reçoivent le contenu de l'autre branche).
+- Timeline en secondes, sans tempo ni mesures (touche chronomètre) : règle, grille, compteur et magnétisme en secondes.
+- Notes de terrain : un double appui sur la règle pose, modifie ou efface un repère avec son texte (traduction, accordage, lieu).
 - Collection « Huit univers sonores » : 133 entrées tirées des annexes.
 - DA de la kave Korhogo, photographique : acier bruni du flanc de borne, jonc chromé, plaque MAUK TENIEB, étiquettes Dymo, écrans à phosphore photographiés, disque photographié pour le Scratch, capuchons rétroéclairés, cave voûtée, étagères de bandes, deux photographies de groupe de la Fauna à l'ouverture.
 - Proportions continues : chaque aire (pistes, bibliothèque, tiroir du bas) suit le format de l'écran ; poignée de partage entre pistes et tiroir ; téléphone couché avec bibliothèque à droite.
@@ -53,8 +55,6 @@ Critères de qualité appliqués à chaque lot : direction artistique, réalisme
 - Poste de mix de Musik : deux platines son et vidéo, fondu croisé.
 - Recherche par tonalité dans les packs.
 - Annexes du 20 nov. 2026, 5 h 08 (outils natifs souhaités par genre, lus avec esprit critique) :
-  - Timeline en secondes, sans tempo (musique concrète).
-  - Notes de terrain sur la timeline (texte, traduction, accordage).
   - Envois dub momentanés vers un bus écho + ressort rebouclés, un seul fader de réinjection.
   - Espaces de travail par étape (composition, mixage, mastering), vue des circuits en nœuds, données spectrales sur les formes d'onde, spatialisation 3D avec Doppler, détection des coupes vidéo, micro-accordage (maqâm, raga, gamelan) et mesure de hauteur au cent près.
   - Banques des huit univers (power electronics, dark ambient, hip-hop et IDM, sound design, dub, orchestre, monde et micro-intervalles, ethnographie de terrain) en recherche directe dans Freesound et Wikimedia Commons.
