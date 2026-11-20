@@ -33,6 +33,7 @@ Critères de qualité appliqués à chaque lot : direction artistique, réalisme
 - Pompage en un clic (grave seul, calé sur le temps, limiteur de sécurité) ; repliement d'onde ; chaînes « brise-voix » et « scie suédoise ».
 - Générateurs de bruits : blanc, rose, brun, interférences radio, oscillateurs qui dérivent.
 - Séquenceur génératif : longueur propre à chaque rangée (polymétrie), probabilité de déclenchement, décalage en millisecondes, remplissage euclidien, swing général ; l'écriture en clips réalise une variation.
+- Export par lots : tranches d'un clip détectées entre les silences, normalisées à −1 dB de crête, nommées selon UCS (CatID_Nom_Créateur_Source).
 - Collection Arsenal : 8 familles, 133 entrées tirées des annexes.
 - DA de la kave Korhogo, photographique : acier bruni du flanc de borne, jonc chromé, plaque MAUK TENIEB, étiquettes Dymo, écrans à phosphore photographiés, disque photographié pour le Scratch, capuchons rétroéclairés, cave voûtée, étagères de bandes, deux photographies de groupe de la Fauna à l'ouverture.
 - Proportions continues : chaque aire (pistes, bibliothèque, tiroir du bas) suit le format de l'écran ; poignée de partage entre pistes et tiroir ; téléphone couché avec bibliothèque à droite.
@@ -49,10 +50,15 @@ Critères de qualité appliqués à chaque lot : direction artistique, réalisme
 - Recherche par tonalité dans les packs.
 - Annexes du 20 nov. 2026, 5 h 08 (outils natifs souhaités par genre, lus avec esprit critique) :
   - Timeline en secondes, sans tempo (musique concrète).
-  - Export par lots des tranches détectées, normalisées, nommées selon UCS.
   - Notes de terrain sur la timeline (texte, traduction, accordage).
   - Envois dub momentanés vers un bus écho + ressort rebouclés, un seul fader de réinjection.
   - Espaces de travail par étape (composition, mixage, mastering), vue des circuits en nœuds, données spectrales sur les formes d'onde, spatialisation 3D avec Doppler, détection des coupes vidéo, micro-accordage (maqâm, raga, gamelan) et mesure de hauteur au cent près.
   - Arsenal : banques des huit univers (power electronics, dark ambient, hip-hop et IDM, sound design, dub, orchestre, monde et micro-intervalles, ethnographie de terrain) en recherche directe dans Freesound et Wikimedia Commons.
+- Annexe AETHER du 20 nov. 2026, 5 h 14 (lue avec esprit critique) :
+  - Scène en champ de force : chaque piste devient un objet sur une scène vue du dessus ; gauche-droite = panoramique, profondeur = distance (réverbération, absorption de l'air, volume).
+  - Zoom sémantique : à fort zoom, la forme d'onde d'un clip devient un spectrogramme.
+  - Branches de projet façon Git (versions Dub, Noise, Orchestrale de la même matière).
+  - Chaleur des pistes : pousser le gain sature en douceur, à la manière du matériel analogique.
+  - Écartés : GESTURE-NET (remplace le MIDI, sans objet ici) ; séparateur sémantique par IA profonde (hors de portée du navigateur ; le studio garde attaques, harmonique / percussif, bandes, milieu / côtés).
   - Écartés : articulations MIDI, MPE, keyswitches (règle « zéro MIDI ») ; abandon du skeuomorphisme (la DA photographique de la kave prime) ; collaboration en temps réel (le studio tourne sans serveur, sur GitHub Pages).
 - Vignettes vidéo de KamOrhogo sur les pistes 19 à 32 : contrôle du rendu.

@@ -1457,7 +1457,7 @@ function renderActionBar(){
   const one=sel.length===1?sel[0]:null,B=(ic,lbl,fn,dis)=>{const b=el("button",{title:lbl,class:dis?"dis":""},icon(ic),el("span",{},lbl));b.onclick=()=>{if(!dis)fn()};return b};
   const m=regionMore(sel),at=()=>{const r=bar.getBoundingClientRect();return[r.left+r.width/2,r.top-10]};
   const main=[B("del",t("del"),delSel),B("dup",t("copy"),()=>{const[,c]=sel[0];clipboard={...c};dupSel()}),B("loop","Loop",()=>edit(()=>{for(const[tr,c]of sel)tr.clips.push({...c,id:uid(),start:c.start+c.len})})),B("cut",t("slice"),splitSel)];
-  const more=[B("shift",t("shift"),m.shift),B("gain","Gain",m.gain),B("tune",t("transposeS"),m.transpose,!one),B("stretch","Timestretch",m.stretch,!one),B("fade",t("fades"),m.fade),B("denoise",t("denoise"),m.denoise,!one),B("rev",t("reverse"),m.reverse),
+  const more=[B("down",lang==="fr"?"Tranches":"Slices",()=>exportSlices(sel),!one),B("shift",t("shift"),m.shift),B("gain","Gain",m.gain),B("tune",t("transposeS"),m.transpose,!one),B("stretch","Timestretch",m.stretch,!one),B("fade",t("fades"),m.fade),B("denoise",t("denoise"),m.denoise,!one),B("rev",t("reverse"),m.reverse),
     B("fuse",t("fuseS"),fuse,sel.length<2),B("lab",t("atelierS"),()=>{const[x,y]=at();atelier(one[0],one[1],x,y)},!one),B("split2",t("separateS"),()=>{const[x,y]=at();sepMenu(one[0],one[1],x,y)},!one)];
   const tog=el("button",{title:t("more"),class:abarMore?"on":""},el("b",{style:"font-size:1.3em;line-height:1"},"⋯"),el("span",{},t("more")));tog.onclick=()=>{abarMore=!abarMore;renderActionBar()};
   bar.replaceChildren(...(abarMore?more:main),tog);
@@ -2374,6 +2374,19 @@ function cmdOpen(){let box=$("#cmdk");if(!box){box=el("div",{id:"cmdk"});documen
 function cmdClose(){$("#cmdk")?.classList.remove("on")}
 $("#bCmd").onclick=cmdOpen;
 addEventListener("keydown",e=>{const tg=e.target&&e.target.tagName;if((e.key==="k"||e.key==="K")&&(e.ctrlKey||e.metaKey)){e.preventDefault();cmdOpen()}else if(e.key==="/"&&!/INPUT|TEXTAREA|SELECT/.test(tg)){e.preventDefault();cmdOpen()}},true);
+
+/* export par lots : tranches détectées entre les silences, normalisées à −1 dB de crête, nommées selon UCS (CatID_Nom_Créateur_Source) */
+const UCS=[[/door|porte/i,"DOORMisc"],[/glass|verre/i,"GLASMisc"],[/metal|tôle|sheet|anvil|bolt|boulon|spring|ressort|chain/i,"METLImpt"],[/water|eau|splash|rain|pluie/i,"WATRMisc"],[/fire|feu/i,"FIREBurn"],[/voice|voix|scream|cri|vox/i,"VOXScrm"],[/foot|pas\b|step/i,"FEETMisc"],[/cloth|tissu/i,"FOLYCloth"],[/kick|snare|hat|clap|tom|drum|perc|rim/i,"DRUMPerc"],[/noise|bruit|static|radio|feedback|larsen/i,"NOISMisc"],[/machine|motor|engine|factory|usine/i,"MACHMisc"],[/elec|spark|hum|buzz|relay/i,"ELECMisc"],[/wind|vent|forest|forêt|city|ville|amb/i,"AMBMisc"],[/bell|gong|cloche/i,"BELLMisc"],[/whoosh|riser|swoosh/i,"WHSHMisc"]];
+async function exportSlices(sel){const[tr,c]=sel[0]||[];const s=c&&lib.get(c.snd);if(!s)return;status(t("working"));
+  const b=s.buffer,sr=b.sampleRate,a0=Math.floor(c.off*sr),a1=Math.min(b.length,Math.floor((c.off+c.len)*sr)),hop=Math.floor(sr*.01),thr=Math.pow(10,-45/20),gap=Math.floor(.08*sr/hop);
+  const on=[];for(let i=a0;i<a1;i+=hop){let m=0;for(let ch=0;ch<b.numberOfChannels;ch++){const d=b.getChannelData(ch);for(let j=i;j<Math.min(a1,i+hop);j+=2)m=Math.max(m,Math.abs(d[j]))}on.push(m>thr)}
+  const segs=[];let st=-1,q=0;for(let k=0;k<=on.length;k++){if(k<on.length&&on[k]){if(st<0)st=k;q=0}else if(st>=0){q++;if(q>gap||k===on.length){segs.push([st,k-q+1]);st=-1;q=0}}}
+  const cat=(UCS.find(([re])=>re.test(s.name))||[0,"DSGNMisc"])[1],nm=s.name.replace(/[^\p{L}\p{N} ]+/gu," ").trim().replace(/\s+/g," ").slice(0,40)||"Sound";let n=0;
+  for(const[x,y]of segs){const f=Math.max(a0,a0+x*hop-Math.floor(.005*sr)),e=Math.min(a1,a0+y*hop+Math.floor(.03*sr));if(e-f<sr*.02)continue;const o=new AudioBuffer({numberOfChannels:b.numberOfChannels,length:e-f,sampleRate:sr});
+    for(let ch=0;ch<b.numberOfChannels;ch++){const d=b.getChannelData(ch).slice(f,e),fl=Math.min(d.length,Math.floor(sr*.004));for(let i=0;i<fl;i++){d[i]*=i/fl;d[d.length-1-i]*=i/fl}o.copyToChannel(d,ch)}
+    const p=peakDb(o);if(isFinite(p)){const g=Math.pow(10,(-1-p)/20);for(let ch=0;ch<o.numberOfChannels;ch++){const d=o.getChannelData(ch);for(let i=0;i<d.length;i++)d[i]*=g}}
+    n++;download(wavBlob(o),`${cat}_${nm} ${String(n).padStart(2,"0")}_MT_STUDIO.wav`);await new Promise(r=>setTimeout(r,350))}
+  status();toast((lang==="fr"?"Tranches exportées : ":"Slices exported: ")+n)}
 </script>
 </body>
 </html>
