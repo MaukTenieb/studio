@@ -1,3 +1,4 @@
+2026-11-20-13h59|0e8a2fa|séquenceur : choix des sons au toucher
 2026-11-20-13h58|e68eb08|larsen du master
 2026-11-20-13h50|953791d|téléphone : prise en main au doigt
 2026-11-20-13h43|4852a5d|silence au repos
