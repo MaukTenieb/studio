@@ -1701,13 +1701,24 @@ function render(){
   }
   drawRuler();placeLoop();placeHead();renderActionBar();if(consoleOn)renderConsole();
 }
+function specOf(s,rev){const key=rev?"_specR":"_spec";if(s[key]!==undefined)return s[key];const b=rev?reversed(s).buffer:s.buffer;if(!b||b.duration>240)return s[key]=null;
+  const d=b.getChannelData(0),N=1024,hop=Math.max(256,Math.floor(b.length/3000)),F=Math.max(1,Math.floor((d.length-N)/hop)+1),B=60,out=new Float32Array(F*B),win=hann(N),sr=b.sampleRate,ed=[];
+  for(let k=0;k<=B;k++)ed.push(Math.max(1,Math.round(30*Math.pow((sr/2)/30,k/B)/sr*N)));let mx=-200;
+  for(let f=0;f<F;f++){const re=new Float64Array(N),im=new Float64Array(N),o=f*hop;for(let i=0;i<N;i++)re[i]=(d[o+i]||0)*win[i];fft(re,im);
+    for(let k=0;k<B;k++){let m=0;for(let j=ed[k];j<=Math.max(ed[k],ed[k+1]-1)&&j<N/2;j++)m=Math.max(m,re[j]*re[j]+im[j]*im[j]);const v=10*Math.log10(m+1e-12);out[f*B+k]=v;if(v>mx)mx=v}}
+  return s[key]={F,B,v:out,max:mx}}
 function clipEl(tr,c){
   const s=lib.get(c.snd);const w=Math.max(4,c.len*state.pps);
   const e=el("div",{"data-id":c.id,class:"clip"+(state.sel===c.id||multi.has(c.id)?" sel":"")+(c.mute?" muted":""),style:`left:${c.start*state.pps}px;width:${w}px;--ink:${INK(tr.color)}`});
   e.append(el("b",{},(c.rev?"◂ ":"")+(c.name||(s?s.name:"?"))+(c.gain&&Math.abs(c.gain-1)>.01?` ${(20*Math.log10(c.gain)).toFixed(1)}dB`:"")));
   if(s){const pk=c.rev?reversed(s).peaks:s.peaks,dur=s.buffer.duration,o0=c.rev?dur-(c.off+c.len):c.off;
     const cv=document.createElement("canvas");const H=60;cv.width=Math.min(4000,Math.ceil(w));cv.height=H;const g=cv.getContext("2d");g.fillStyle=INK(tr.color);g.globalAlpha=.72;
-    for(let x=0;x<cv.width;x++){const r=x/cv.width*c.len,tt=o0+r;const i=Math.floor(tt/dur*pk.length);let env=c.gain??1;if(c.fadeIn&&r<c.fadeIn)env*=r/c.fadeIn;if(c.fadeOut&&r>c.len-c.fadeOut)env*=(c.len-r)/c.fadeOut;const h=Math.max(1,Math.min(1,(pk[i]||0)*env)*H);g.fillRect(x,(H-h)/2,1,h)}
+    const sp=state.pps>=300?specOf(s,c.rev):null;
+    if(sp){/* zoom sémantique : à fort zoom, la forme d'onde devient un spectrogramme (graves en bas, aigus en haut), teinté de la couleur du Mask */
+      const im=g.createImageData(cv.width,H),[R0,G0,B0]=[1,3,5].map(k=>parseInt(tr.color.slice(k,k+2),16)),lo=sp.max-72;
+      for(let x=0;x<cv.width;x++){const tt=o0+x/cv.width*c.len,f=Math.min(sp.F-1,Math.floor(tt/dur*sp.F));for(let y=0;y<H;y++){const k=sp.B-1-Math.floor(y/H*sp.B),v=clamp((sp.v[f*sp.B+k]-lo)/72,0,1),w=v*v,hot=Math.max(0,w-.7)/.3,o=(y*cv.width+x)*4;
+        im.data[o]=Math.min(255,R0*w*1.15+255*hot*.6);im.data[o+1]=Math.min(255,G0*w*1.15+240*hot*.6);im.data[o+2]=Math.min(255,B0*w*1.15+200*hot*.6);im.data[o+3]=255}}g.putImageData(im,0,0)}
+    else for(let x=0;x<cv.width;x++){const r=x/cv.width*c.len,tt=o0+r;const i=Math.floor(tt/dur*pk.length);let env=c.gain??1;if(c.fadeIn&&r<c.fadeIn)env*=r/c.fadeIn;if(c.fadeOut&&r>c.len-c.fadeOut)env*=(c.len-r)/c.fadeOut;const h=Math.max(1,Math.min(1,(pk[i]||0)*env)*H);g.fillRect(x,(H-h)/2,1,h)}
     e.append(cv);
     const sv=document.createElementNS("http://www.w3.org/2000/svg","svg");sv.setAttribute("class","fades");sv.setAttribute("preserveAspectRatio","none");sv.setAttribute("viewBox",`0 0 ${w} 100`);
     const fi=(c.fadeIn||0)*state.pps,fo=(c.fadeOut||0)*state.pps;sv.innerHTML=`<path d="M0 100 L${fi} 0 L${w-fo} 0 L${w} 100" />`;e.append(sv)}
