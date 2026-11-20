@@ -4,7 +4,13 @@ Ce registre recense chaque demande sur le studio, depuis l'ouverture du chantier
 
 Critères de qualité appliqués à chaque lot : direction artistique, réalisme photographique, beauté, commodité, simplicité, exhaustivité de la bibliothèque de sons, ergonomie, UI-UX, proportions constantes sur tous les écrans.
 
+## À méditer
+
+- 20 nov. 23 h 24 (Mauk Tenieb) : une autre Kave, « Kalabass », où l'on achète des choses et qui évoque la chambre du TVCR. Idée en réflexion : rien de construit.
+
 ## Fait
+
+- 20 nov. 23 h 40 : MiniTale entre dans la suite FaunEye (septième point du zapping), sa touche 3615 reste ; le Video Kave garde son accès propre.
 
 - 20 nov. 23 h 35 (« harmoniser DA, UI-UX, emplacements » ; « la suite FaunEye : TVCR, Kapture, Kamescope + Musik + StudioRhogo, BakuBook ») : StudioRhogo suit la clé de langue unique du site (ik.lang), en direct dans la borne ; écran de 380 px et moins (StudioRhogo dans l'écran de la borne au téléphone) : horloge entière (78 px pour 78), annuler et arrêt d'urgence dans ⋯, pied en pictogrammes, zéro commande hors cadre à 320 et 352 px. Insert Koin : suite FaunEye dans cet ordre, borne et KorhogOS ; règle des emplacements dans DA.md.
 
