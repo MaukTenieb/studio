@@ -6,6 +6,8 @@ Critères de qualité appliqués à chaque lot : direction artistique, réalisme
 
 ## Fait
 
+- 20 nov. 14 h 30 : mode simple par défaut (Créer, Pads, Rythme, Master), Atelier derrière un bouton ; feuille Créer à six portes (Rythme, Sons, Voix, Boîtes d'artistes, Film, Platines) ; gros + sur projet vide. Pads = surface Enveloppe × Hauteur existante, reprise telle quelle.
+
 - Station audio dans le navigateur, façon BandLab, un seul fichier, dépôt MaukTenieb/studio, en ligne sur https://mauktenieb.github.io/studio/
 - Toutes les fonctions de BandLab étudiées et reprises : pistes, clips, découpe, boucle, fondus, inversion, transposition, étirement, débruitage, rack d'effets, automation, accordeur, métronome, enregistrement au micro, export WAV, MP3 et pistes séparées.
 - Zéro MIDI : uniquement de l'audio interne.
