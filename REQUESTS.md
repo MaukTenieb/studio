@@ -92,7 +92,7 @@ Critères de qualité appliqués à chaque lot : direction artistique, réalisme
 - Collaboration en temps réel : le studio tourne sans serveur, sur GitHub Pages ; les branches de projet en tiennent lieu.
 - Noms tirés des annexes (aucun nom inventé).
 
-- Silence au repos (20 nov., 13 h 40 : « l'appli larsenne avant même qu'on lance quoi que ce soit ») : les effets qui produisent du son par eux-mêmes (boucles de larsen de Musik, craquements et souffle du vinyle, parasites de la radio AM) se taisent à l'arrêt et reprennent à la lecture, à l'enregistrement ou sur la piste armée en écoute. Mesure : −34 dB (larsen) et −14 dB (vinyle) à l'arrêt avant, −78 dB après.
+- Silence au repos (20 nov., 13 h 40 : « l'appli larsenne avant même qu'on lance quoi que ce soit ») : les effets qui produisent du son par eux-mêmes (boucles de larsen de Musik, craquements et souffle du vinyle, parasites de la radio AM) se taisent à l'arrêt et reprennent à la lecture, à l'enregistrement ou sur la piste armée en écoute. Mesure : −34 dB (larsen) et −14 dB (vinyle) à l'arrêt avant, −78 dB après. Second cas (13 h 52 : « le larsen recommence ») : les chaînes de power electronics posées sur le master larsennaient encore (−15 à −32 dB) ; le rack du master se tait lui aussi au repos, les écoutes de sons, le métronome et les platines passent après lui.
 
 - Prise en main au téléphone (20 nov., 13 h 42 : « tout est rigide, j'arrive pas sur mon téléphone à redimensionner, toucher, accéder ») ; mesuré au doigt sur un iPhone simulé (390 × 664) :
   - en-tête sur une rangée (lecture, enregistrement, compteur, tempo, annuler) ; ⋯ ouvre les autres commandes ; cibles de 117 sous 36 px ramenées à 0 hormis les étiquettes de piste ;
