@@ -6,6 +6,8 @@ Critères de qualité appliqués à chaque lot : direction artistique, réalisme
 
 ## Fait
 
+- 20 nov. 23 h 05 (comparaison Kamescope, StudioRhogo, Musik ; premier pont) : chaque rendu KAVE IT! de Musik (WAV, ou WebM quand des images jouent) se range dans le stockage commun du site, base « borne-musik », les 8 plus récents ; StudioRhogo le montre en tête de bibliothèque, tiroir « Musik », avec tempo, nombre de pas et motifs (« ♩96 · 21 · ABCD »), et le reprend en direct quand Musik rend pendant que StudioRhogo est ouvert ; posé sur une piste à 8 s, il ouvre une section à 96 et marque A, B, C, D sur la règle à 8 ; 11,281 ; 14,563 ; 17,844 s (21 pas de double croche à 96 = 3,281 s), sans étirement.
+
 - 20 nov. 22 h 43 (« Kamescope, StudioRhogo, Musik ») : le studio s'appelle StudioRhogo — titre de la page, carte de partage, en-tête BWF des WAV exportés (« StudioRhogo - Mauk Tenieb »), README ; les trois postes portent leurs noms : Kamescope (prise), StudioRhogo (montage, mix, livraison), Musik (jeu). Le préréglage de salle « Studio » de la réverbération garde son nom : il désigne une salle d'enregistrement.
 
 - 20 nov. 21 h 24 (« pas des trucs à la Fruity Loops : de petits pavés réguliers et lumineux ») : le séquenceur s'ouvre sur la Console de Musik — bac des figurines en haut, banc de noyer photographié à œillets de laiton en bas, un emplacement par pas ; on pose une figurine au doigt (glisser, ou toucher puis toucher) ou à la souris, on la déplace d'un œillet à l'autre, on la retire en la lâchant hors du banc ; le voyant s'allume au pas joué. La grille, derrière la touche Console, devient l'écran à phosphore vert d'un séquenceur Page R (Fairlight CMI), comme le rack de Musik.

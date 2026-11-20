@@ -1322,7 +1322,7 @@ async function renderKit(){
 /* ================= DSP: time-stretch & pitch (WSOLA) ================= */
 /* boucles calées sur le tempo du projet, comme dans BandLab : tempo lu dans le nom (« 120 bpm », « 120bpm », « bpm120 »), étirement sans changer la hauteur ; une boucle à moitié ou au double du tempo garde sa carrure */
 function bpmOf(...names){for(const n of names){const m=String(n||"").match(/(?:^|[^\d])(\d{2,3}(?:[.,]\d+)?)\s*-?\s*bpm|bpm\s*-?\s*(\d{2,3})/i);if(m){const v=parseFloat((m[1]||m[2]).replace(",","."));if(v>=50&&v<=220)return v}}return 0}
-async function tempoFit(s,item){if(!s||!s.buffer||s.buffer.duration<1.2)return s;const src=bpmOf(item&&item.name,item&&item.credit&&item.credit.title,s.name);if(!src)return s;
+async function tempoFit(s,item){if(!s||!s.buffer||s.buffer.duration<1.2||item&&item.musik)return s;const src=bpmOf(item&&item.name,item&&item.credit&&item.credit.title,s.name);if(!src)return s;
   let b=src;const P=state.bpm;for(const f of [2,.5])if(Math.abs(src*f-P)<Math.abs(b-P))b=src*f;const speed=P/b;if(Math.abs(speed-1)<.008)return s;
   const id=s.id+"@"+P;if(lib.has(id))return lib.get(id);const n=addSound({id,name:s.name+" ↦ "+P,buffer:wsola(s.buffer,speed),src:s.src,credit:s.credit});storeSound(n);toast(Math.round(src)+" → "+P+" bpm");return n}
 function wsola(b,speed){ // speed>1 = shorter
@@ -1819,6 +1819,16 @@ function mediaHead(i){
   const d=el("div",{class:"kam snd",title:it.name},icon("mic"));d.addEventListener("dblclick",put);return d;
 }
 try{new BroadcastChannel("borne-vid").onmessage=()=>kamLoad()}catch(e){}
+/* Musik → StudioRhogo (20 nov. 2026) : les rendus KAVE de Musik (base « borne-musik », magasin « kave ») entrent dans la bibliothèque ; posés sur une piste, ils ouvrent une section au tempo de Musik et marquent leurs motifs A B C D sur la règle */
+const MUSIK={items:[],urls:[]};
+async function musikLoad(){MUSIK.urls.forEach(u=>URL.revokeObjectURL(u));MUSIK.urls=[];const L=await idbAll("borne-musik","kave");
+  MUSIK.items=L.map(x=>{const u=URL.createObjectURL(x.blob);MUSIK.urls.push(u);return{id:"mk:"+x.id,name:x.name+"  \u2669"+x.bpm+" \u00b7 "+x.n+" \u00b7 "+(x.pats||[]).join(""),src:"musik",remote:u,musik:{bpm:x.bpm,n:x.n,pats:x.pats||["A"]},credit:{title:x.name,author:"Mauk Tenieb",license:"Musik",url:"https://mauktenieb.github.io/insertkoin/"}}});
+  if(typeof renderKitList==="function")renderKitList()}
+function musikSections(item,at){const m=item&&item.musik;if(!m)return;const d=60/m.bpm/4*m.n;
+  if(at>.05)tmapSet(at,m.bpm);else{state.bpm=m.bpm;$("#bpm").value=m.bpm}
+  state.notes=state.notes||[];m.pats.forEach((p,k)=>{const t=at+k*d;if(!state.notes.some(n=>Math.abs(n.t-t)<.01))state.notes.push({t,x:p})});state.notes.sort((a,b)=>a.t-b.t);render();save()}
+try{new BroadcastChannel("borne-musik").onmessage=()=>musikLoad()}catch(e){}
+setTimeout(()=>musikLoad().catch(()=>{}),0);
 addEventListener("borne-diktat",kamLoad);addEventListener("storage",()=>{});
 
 
@@ -2042,7 +2052,7 @@ let PICK=null;
 function pickSound(item,row){if(PICK&&PICK.row===row){dropPick();return}dropPick();PICK={item,row};row.classList.add("held");document.body.classList.add("picking");try{navigator.vibrate&&navigator.vibrate(12)}catch(_){}toast((lang==="fr"?(seqOn?"Touchez une rangée : ":"Touchez une piste : "):(seqOn?"Tap a row: ":"Tap a track: "))+item.name)}
 function dropPick(){if(PICK)PICK.row.classList.remove("held");PICK=null;document.body.classList.remove("picking")}
 async function placeItem(item,row,tr,at){row.classList.add("loading");let s;try{s=await ensureSound(item);s=await tempoFit(s,item)}catch(e){toast("✕")}row.classList.remove("loading");if(!s)return;
-  snapshot();if(!tr){tr=freeTrack(-1);if(!tr)return;rebuildChains()}const c={id:uid(),snd:s.id,start:at,off:0,len:s.buffer.duration,gain:1};if(s.credit&&s.credit.meta&&Object.keys(s.credit.meta).length)c.meta={...s.credit.meta};tr.clips.push(c);state.sel=c.id;render();save();restartIfPlaying()}
+  snapshot();if(!tr){tr=freeTrack(-1);if(!tr)return;rebuildChains()}const c={id:uid(),snd:s.id,start:at,off:0,len:s.buffer.duration,gain:1};if(s.credit&&s.credit.meta&&Object.keys(s.credit.meta).length)c.meta={...s.credit.meta};tr.clips.push(c);state.sel=c.id;render();save();musikSections(item,at);restartIfPlaying()}
 addEventListener("pointerdown",e=>{if(!PICK)return;const lane=e.target.closest&&e.target.closest(".lane");if(!lane){if(!e.target.closest(".snd,.sq-snd,.sq-add"))dropPick();return}e.preventDefault();e.stopPropagation();
   const tr=state.tracks.find(x=>x.id===lane.dataset.id),at=snapT(Math.max(0,(e.clientX-lane.getBoundingClientRect().left)/state.pps)),{item,row}=PICK;dropPick();placeItem(item,row,tr,at)},true);
 function touchHold(e,item,row){const x0=e.clientX,y0=e.clientY,id=e.pointerId;let held=false;
@@ -2067,7 +2077,7 @@ function startDrag(e,item,row,fromHold){
     row.classList.add("loading");let s;try{s=await ensureSound(item);s=await tempoFit(s,item)}catch(e){toast("✕")}row.classList.remove("loading");if(!s)return;
     snapshot();if(!tr){tr=freeTrack(-1);if(!tr)return;rebuildChains()}
     const c={id:uid(),snd:s.id,start:at,off:0,len:s.buffer.duration,gain:1};if(s.credit&&s.credit.meta&&Object.keys(s.credit.meta).length)c.meta={...s.credit.meta};tr.clips.push(c);state.sel=c.id;
-    render();save();restartIfPlaying()};
+    render();save();musikSections(item,at);restartIfPlaying()};
   addEventListener("pointermove",mv);addEventListener("pointerup",up);addEventListener("pointercancel",up);
 }
 const KIT_GROUPS=[["Percussion",/^(Kick|Hard kick|Snare|Clap|Hat|Open hat|Rim|Tom)$/],["808",/^808/],["909",/^909/],["Bass & synth",/^(Sub A1|Acid bass|Pluck|Pad|Drone|Noise riser|Feedback)$/],["Polivoks",/^Polivoks/],["Chaos",/Lorenz|Logistic|Henon|Chua/],["Industrial",/Anvil|Sheet metal|Piston|Steam|Chain|Machine/],["Metal & bells",/Gong|Bonang|Bell/],["Vinyl & radio",/Vinyl|Needle|Record|Tape hiss|Radio|Shortwave|Crackle/],["Infra & sub",/^Infra|^Sub (30|drop)|Earth rumble/],["Synthesis",/FM drone|Additive choir|Plucked string/]];
@@ -2175,7 +2185,8 @@ function faunaDrawers(){
   const OR=[["violons","Violons","Violins"],["altos","Altos","Violas"],["violoncelles","Violoncelles","Cellos"],["contrebasse","Contrebasse","Double bass"],["cor","Cor","French horn"],["tuba","Tuba","Tuba"],["flute","Flûte","Flute"],["hautbois","Hautbois","Oboe"],["clarinette","Clarinette","Clarinet"],["basson","Basson","Bassoon"]];
   const or=el("details",{class:"kitg"},el("summary",{},lang==="fr"?"Orchestre":"Orchestra",el("small",{},String(OR.length))),...OR.map(([f,fr,en])=>sndRow({id:"orch:"+f,name:lang==="fr"?fr:en,src:"orch",remote:"snd/orchestre/"+f+".mp3",dur:8,credit:{title:(lang==="fr"?fr:en)+" — note longue",author:"Versilian Studios, VSCO 2 Community Edition",license:"CC0",licenseUrl:"https://creativecommons.org/publicdomain/zero/1.0/",url:"https://github.com/sgossner/VSCO-2-CE"}})));
   return [fa,or,st,nb,bo]}
-function renderKitList(){const all=[...lib.values()].filter(s=>s.src==="kit");$("#p-kit").replaceChildren(...[...KIT_GROUPS.map(g=>g[0]),"Other"].map(g=>{const items=all.filter(s=>s.group===g);if(!items.length)return null;const d=el("details",{class:"kitg"},el("summary",{},(lang==="fr"&&KIT_FR[g])||g,el("small",{},String(items.length))),...items.map(sndRow));return d}).filter(Boolean));const fd=faunaDrawers();fd[0].open=true;$("#p-kit").prepend(fd[0],fd[1],boxDrawer(),fd[4],fd[3],fd[2])}
+function musikDrawer(){return MUSIK.items.length?el("details",{class:"kitg",open:""},el("summary",{},"Musik",el("small",{},String(MUSIK.items.length))),...MUSIK.items.map(sndRow)):null}
+function renderKitList(){const all=[...lib.values()].filter(s=>s.src==="kit");$("#p-kit").replaceChildren(...[...KIT_GROUPS.map(g=>g[0]),"Other"].map(g=>{const items=all.filter(s=>s.group===g);if(!items.length)return null;const d=el("details",{class:"kitg"},el("summary",{},(lang==="fr"&&KIT_FR[g])||g,el("small",{},String(items.length))),...items.map(sndRow));return d}).filter(Boolean));const fd=faunaDrawers();fd[0].open=true;$("#p-kit").prepend(fd[0],fd[1],boxDrawer(),fd[4],fd[3],fd[2]);const md=musikDrawer();if(md)$("#p-kit").prepend(md)}
 async function renderMine(){const st=await dbAll("snd").catch(()=>[]);$("#mineList").replaceChildren(...st.map(x=>sndRow({id:x.id,name:x.name,src:x.src,credit:x.credit,dur:x.chans[0].length/x.sr})))}
 
 /* ================= timeline render ================= */
@@ -2621,7 +2632,7 @@ function drawRuler(){
     for(let n=Math.max(0,Math.floor((t0-G.t)*state.pps/bw));;n++){const tb=G.t+n*bw/state.pps;if(tb>=tE-1e-6||tb>t1)break;const x=tb*state.pps-sl,b=G.B/4+n;g.fillStyle="#d8dccf";g.fillRect(x,H*.45,1,H*.55);
       for(let q=1;q<4;q++){const xq=x+q*bw/4;if(G.t+(n+q/4)*bw/state.pps<tE-1e-6){g.fillStyle="#9aa392";g.fillRect(xq,H*.75,1,H*.25)}}
       if(b%every===0){g.fillStyle="#f1f0e8";g.fillText(b+1,x+4,H*.72)}}
-    if(k>0){const x=G.t*state.pps-sl;g.fillStyle="#7fd0c8";g.fillRect(x-1,0,2,H);const bn=String(G.B/4+1),wb=g.measureText(bn).width;g.fillText("\u2669"+(+G.bpm.toFixed(2)),x+wb+10,H*.72)}}
+    if(k>0){const x=G.t*state.pps-sl;g.fillStyle="#7fd0c8";g.fillRect(x-1,0,2,H);const bn=String(G.B/4+1),nt=(state.notes||[]).find(n=>Math.abs(n.t-G.t)*state.pps<3),wb=Math.max(g.measureText(bn).width,nt?g.measureText(String(nt.x||"").slice(0,40)).width+5:0);g.fillText("\u2669"+(+G.bpm.toFixed(2)),x+wb+10,H*.72)}}
 }
 /* rotary knob: drag up/down, wheel, arrows, double-click resets */
 function knob(label,[mn,mx,st,lg],val,def,onset,fmt){
@@ -2780,7 +2791,7 @@ addEventListener("pointerdown",()=>audio(),{once:true,capture:true});
   if(all.length&&all.every(c=>demo.has(c.snd))){state.tracks.forEach(tr=>{tr.clips=[];tr.rack=[]});state.loop=false}
   if(!state.tracks.length)fillTracks();
   state.tracks.forEach(tr=>{if(/^(Kick|Snare|Hat|Drone|Track \d+|Piste \d+|Harmonic|Percussive|Harmonique|Percussif|Low|Mid|High|Graves|Médiums|Aigus|Side)$/.test(tr.name))tr.name=""});fillTracks();
-  syncUI();render();kamLoad();filmRestore();
+  syncUI();render();kamLoad();musikLoad();filmRestore();
   if(navigator.storage&&navigator.storage.persist)navigator.storage.persist().catch(()=>{});
 })();
 
