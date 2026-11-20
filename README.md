@@ -49,6 +49,8 @@ The Master button opens a mastering drawer in the manner of BandLab Mastering: t
 
 Every area follows the screen: track height, side panel, bottom drawer. A grip between the tracks and the drawer sets their share; a double tap resets it.
 
+The steps drawer, taken from Musik, writes audio clips from a step grid: 15, 16, 17, 19 or 21 steps, odd by default, a dice for patterns, a loop preview. Drift lets the settings of every effect and every pan evolve with the music, each track driven by a Lorenz attractor fed by its own level and its neighbour's; the heart keeps what you hear, the arrow brings the starting point back. The noise boxes and the kits Α to Μ come from the setups that power electronics artists describe: contact mics on sheet metal, springs, bolts, a no-input mixer, fuzz, delay, ring modulation.
+
 One search field at the top of the side panel looks through the kit, the collections, the user's sounds, Freesound, Wikimedia Commons, Jamendo and Internet Archive at once.
 
 ## Keys

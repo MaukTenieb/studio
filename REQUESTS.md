@@ -27,6 +27,8 @@ Critères de qualité appliqués à chaque lot : direction artistique, réalisme
 - Dérive : écosystème de réglages qui évolue pendant la lecture (attracteurs de Lorenz couplés au niveau des pistes), touche « garder » qui fait de l'état entendu le nouveau point de départ, touche « retour ».
 - Boucles calées sur le tempo du projet au dépôt ; filtre « au tempo du projet » dans les packs.
 - Barre d'actions des clips en bas sur téléphone ; libellés trop longs en téléprompteur.
+- Séquenceur à pas de Musik : mesures de 15, 16, 17, 19 ou 21 pas (tirage impair à l'ouverture), dé de motifs, écoute en boucle, écriture en clips audio sur les pistes.
+- Intensité et égaliseur du Master enregistrés avec le projet.
 - DA de la kave Korhogo, photographique : acier bruni du flanc de borne, jonc chromé, plaque MAUK TENIEB, étiquettes Dymo, écrans à phosphore photographiés, disque photographié pour le Scratch, capuchons rétroéclairés, cave voûtée, étagères de bandes, deux photographies de groupe de la Fauna à l'ouverture.
 - Proportions continues : chaque aire (pistes, bibliothèque, tiroir du bas) suit le format de l'écran ; poignée de partage entre pistes et tiroir ; téléphone couché avec bibliothèque à droite.
 
@@ -38,7 +40,6 @@ Critères de qualité appliqués à chaque lot : direction artistique, réalisme
 
 ## À faire
 
-- Séquenceur à pas de Musik (15, 17, 19 ou 21 pas) qui écrit des clips audio.
 - Poste de mix de Musik : deux platines son et vidéo, fondu croisé.
 - Recherche par tonalité dans les packs.
 - Vignettes vidéo de KamOrhogo sur les pistes 19 à 32 : contrôle du rendu.
