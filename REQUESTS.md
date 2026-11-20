@@ -64,6 +64,10 @@ Critères de qualité appliqués à chaque lot : direction artistique, réalisme
 - Calage sur l'image : le tempo se règle pour que les temps forts tombent sur les coupes vidéo et les notes de terrain (palette de commandes, ou Alt + clic sur un repère de la règle).
 - Gomme spectrale (menu du clip) : on encadre des zones du spectrogramme ; « réparer » les remplit avec le son d'avant et d'après, « effacer » les vide.
 
+- Boîtes d'artistes (bibliothèque, onglet Kit) : 26 boîtes sous lettres grecques, chacune « tribute to » un artiste cité par les annexes ou par Musik : power electronics (Whitehouse, Sutcliffe Jügend, Merzbow, Atrax Morgue, Prurient, Pharmakon), dark ambient (Lustmord, Tim Hecker, Roly Porter), hip-hop (J Dilla, Flying Lotus), IDM (Aphex Twin, Autechre), sound design (Ben Burtt, Richard Devine), dub (King Tubby, Lee « Scratch » Perry, Adrian Sherwood), musique à l'image (Hans Zimmer, John Williams, Hildur Guðnadóttir), instruments du monde (Gustavo Santaolalla, Heitor Pereira, Lisa Gerrard), ethnomusicologie (Alan Lomax, Simha Arom). Une touche prépare le studio : rack des pistes, chaîne du master, tempo ou secondes, swing, séquenceur (décalages en ms, longueurs de rangées, cycles euclidiens), retour du dub ; puis les sons à chercher et les gestes à faire sur le clip choisi. Aucun son d'artiste n'est copié.
+- Taxonomie officielle de Freesound (5 catégories, 23 sous-catégories, d'après le dépôt MTG/BroadSoundTaxonomy) dans les collections.
+- Grandes collections d'Internet Archive sous licence libre : 78 tours (70 000 disques, dont 40 000 de jazz), 78 · blues, 78 · monde, radio ancienne, émissions, livres lus, rites et cultes, NASA, Free Music Archive.
+
 ## À trancher par Mauk Tenieb
 
 - Figurines 3D des pistes 01 à 18 : elles restent en 3D, comme demandé ; la règle photographique de la DA appelle des portraits photographiques. Décision réservée à l'auteur.
