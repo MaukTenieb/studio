@@ -29,6 +29,10 @@ Critères de qualité appliqués à chaque lot : direction artistique, réalisme
 - Barre d'actions des clips en bas sur téléphone ; libellés trop longs en téléprompteur.
 - Séquenceur à pas de Musik : mesures de 15, 16, 17, 19 ou 21 pas (tirage impair à l'ouverture), dé de motifs, écoute en boucle, écriture en clips audio sur les pistes.
 - Intensité et égaliseur du Master enregistrés avec le projet.
+- Palette de commandes (Ctrl+K, « / » ou la touche dédiée) : transport, tiroirs, export, masterings, sonie, effets et chaînes sur la piste choisie, boîtes à bruit, recherche de sons.
+- Pompage en un clic (grave seul, calé sur le temps, limiteur de sécurité) ; repliement d'onde ; chaînes « brise-voix » et « scie suédoise ».
+- Générateurs de bruits : blanc, rose, brun, interférences radio, oscillateurs qui dérivent.
+- Collection Arsenal : 8 familles, 133 entrées tirées des annexes.
 - DA de la kave Korhogo, photographique : acier bruni du flanc de borne, jonc chromé, plaque MAUK TENIEB, étiquettes Dymo, écrans à phosphore photographiés, disque photographié pour le Scratch, capuchons rétroéclairés, cave voûtée, étagères de bandes, deux photographies de groupe de la Fauna à l'ouverture.
 - Proportions continues : chaque aire (pistes, bibliothèque, tiroir du bas) suit le format de l'écran ; poignée de partage entre pistes et tiroir ; téléphone couché avec bibliothèque à droite.
 
@@ -42,4 +46,13 @@ Critères de qualité appliqués à chaque lot : direction artistique, réalisme
 
 - Poste de mix de Musik : deux platines son et vidéo, fondu croisé.
 - Recherche par tonalité dans les packs.
+- Annexes du 20 nov. 2026, 5 h 08 (outils natifs souhaités par genre, lus avec esprit critique) :
+  - Séquenceur : swing et micro-décalage en millisecondes par rangée, probabilités de déclenchement, remplissage euclidien, longueur propre à chaque rangée (polymétrie).
+  - Timeline en secondes, sans tempo (musique concrète).
+  - Export par lots des tranches détectées, normalisées, nommées selon UCS.
+  - Notes de terrain sur la timeline (texte, traduction, accordage).
+  - Envois dub momentanés vers un bus écho + ressort rebouclés, un seul fader de réinjection.
+  - Espaces de travail par étape (composition, mixage, mastering), vue des circuits en nœuds, données spectrales sur les formes d'onde, spatialisation 3D avec Doppler, détection des coupes vidéo, micro-accordage (maqâm, raga, gamelan) et mesure de hauteur au cent près.
+  - Arsenal : banques des huit univers (power electronics, dark ambient, hip-hop et IDM, sound design, dub, orchestre, monde et micro-intervalles, ethnographie de terrain) en recherche directe dans Freesound et Wikimedia Commons.
+  - Écartés : articulations MIDI, MPE, keyswitches (règle « zéro MIDI ») ; abandon du skeuomorphisme (la DA photographique de la kave prime) ; collaboration en temps réel (le studio tourne sans serveur, sur GitHub Pages).
 - Vignettes vidéo de KamOrhogo sur les pistes 19 à 32 : contrôle du rendu.
