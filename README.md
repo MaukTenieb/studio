@@ -1,5 +1,7 @@
 # Studio
 
+![Studio](img/social.jpg)
+
 Studio is a multitrack audio workstation that runs in the browser, in a single HTML file.
 
 https://mauktenieb.github.io/studio/

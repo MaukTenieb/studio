@@ -4,6 +4,13 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Studio</title>
+<link rel="icon" type="image/png" sizes="32x32" href="img/icon-32.png">
+<link rel="apple-touch-icon" href="img/icon-180.png">
+<meta property="og:title" content="Studio">
+<meta property="og:description" content="Multitrack audio studio in the browser.">
+<meta property="og:image" content="https://mauktenieb.github.io/studio/img/social.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#6b7567">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@400;500;600&family=Courier+Prime&display=swap" rel="stylesheet">
 <meta name="description" content="Multitrack audio studio in the browser: tracks, clips, effects, microphone recording, live search in Freesound, WAV export with credits.">
@@ -54,6 +61,7 @@ main{grid-row:2;grid-column:1;position:relative;overflow:hidden;display:flex;fle
 #rulerCanvas{position:absolute;left:0;top:0;height:100%}
 #scroller{flex:1;overflow:auto;position:relative;touch-action:pan-x pan-y}
 #tracks{position:relative;min-height:100%}
+#scroller{background:linear-gradient(180deg,var(--bed) 0,rgba(43,48,44,.82) 40%,rgba(43,48,44,.9)),url(img/reel.jpg) right bottom/min(900px,80%) auto no-repeat,var(--bed)}
 .track{display:flex;height:calc(var(--u)*2.75);border-bottom:1px solid #20251f}
 .thead{width:var(--head);flex:none;position:sticky;left:0;z-index:3;background:linear-gradient(90deg,var(--panel-lo),var(--panel) 12%,var(--panel));border-right:2px solid #3b4237;padding:5px 6px 4px 8px;display:flex;flex-direction:column;gap:3px;box-shadow:inset 5px 0 0 var(--c)}
 .thead .r1{display:flex;gap:3px;align-items:center}
@@ -63,7 +71,7 @@ main{grid-row:2;grid-column:1;position:relative;overflow:hidden;display:flex;fle
 .thead .r2 button{height:calc(var(--u)*.78);min-width:calc(var(--u)*.78);padding:0 .25em;font-size:.92em}
 .thead .r3{display:flex;gap:6px;align-items:center}
 .thead .r3 input{height:calc(var(--u)*.7)}
-.lane{flex:1;position:relative;background-image:var(--grid);min-width:0}
+.lane{flex:1;position:relative;background-color:var(--bed);background-image:var(--grid);min-width:0}
 .clip{position:absolute;top:4px;bottom:4px;border-radius:2px;background:var(--c);overflow:hidden;cursor:grab;touch-action:none;box-shadow:0 2px 0 rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.25),inset 0 -1px 0 rgba(0,0,0,.25)}
 .clip::before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(90deg,rgba(255,255,255,.05) 0 1px,transparent 1px 5px);pointer-events:none}
 .clip.sel{outline:2px solid var(--lit);outline-offset:1px;z-index:2}
@@ -116,8 +124,8 @@ footer{grid-row:3;grid-column:1;display:flex;gap:6px;align-items:center;padding:
 #fx .card .ch button{height:calc(var(--u)*.68);min-width:calc(var(--u)*.68);padding:0}
 #fx .knobs{display:grid;grid-template-columns:repeat(auto-fill,minmax(calc(var(--u)*1.55),1fr));gap:6px 8px;min-width:calc(var(--u)*3.4)}
 .knob{display:flex;flex-direction:column;align-items:center;gap:1px;cursor:ns-resize;touch-action:none;outline:none}
-.knob .cap{width:calc(var(--u)*1.05);height:calc(var(--u)*1.05);border-radius:50%;position:relative;background:radial-gradient(circle at 40% 32%,#55514c,#1f1d1b 62%);box-shadow:0 2px 3px rgba(0,0,0,.55),0 0 0 3px rgba(0,0,0,.12)}
-.knob .cap::after{content:"";position:absolute;left:50%;top:6%;width:2px;height:36%;margin-left:-1px;background:var(--legend);border-radius:1px}
+.knob .cap{width:calc(var(--u)*1.02);height:calc(var(--u)*1.02);border-radius:16%;position:relative;background:repeating-radial-gradient(circle at 50% 50%,#3a3a3a 0 1px,#2e2e2e 1px 2px),#303030;box-shadow:0 3px 4px rgba(0,0,0,.55),inset 0 1px 0 rgba(255,255,255,.12),inset 0 -2px 0 rgba(0,0,0,.4);border:1px solid #161616}
+.knob .cap::after{content:"";position:absolute;left:50%;top:5%;width:3px;height:40%;margin-left:-1.5px;background:linear-gradient(90deg,#b8741c,#e6a33a,#b8741c);border-radius:2px;box-shadow:0 0 3px rgba(230,163,58,.4)}
 .knob .cap{transform:rotate(var(--a,0deg))}
 .knob span{font-size:.82em;color:var(--legend-dim);white-space:nowrap}
 .knob i{font-style:normal;font-size:.82em;font-variant-numeric:tabular-nums}
