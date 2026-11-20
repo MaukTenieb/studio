@@ -495,6 +495,9 @@ footer .lbl{font-size:max(12px,.8em)!important}
   #sgrip{display:none!important}
   .dk .tv{display:none}
 }
+#busy{position:fixed;left:50%;bottom:calc(var(--u)*2.2);transform:translateX(-50%);z-index:60;display:none;align-items:center;gap:10px;padding:6px 8px 6px 14px;border-radius:4px;background:linear-gradient(rgba(11,9,8,.55),rgba(11,9,8,.85)),url(img/metal.webp) center/cover;box-shadow:0 8px 20px rgba(0,0,0,.65);color:#ffe3a0;font-size:max(12px,1em)}
+#busy.on{display:flex}#busy i{display:block;width:clamp(90px,22vw,200px);height:6px;border-radius:3px;background:#0c0a08;box-shadow:inset 0 1px 2px #000;overflow:hidden}#busy b{display:block;height:100%;width:0;background:#ffa726}
+#busy .bl{white-space:nowrap;font-variant-numeric:tabular-nums}
 </style>
 </head>
 <body>
@@ -1428,6 +1431,7 @@ async function fsSearch(q,more){
     if(next){fsPage++;$("#fsList").append(el("button",{class:"more",onclick:()=>fsSearch(fsQuery,true)},"+"))}
   }catch(e){$("#fsList").replaceChildren(el("div",{class:"note"},t("fsErr")))}
 }
+const fmtMin=s=>Math.floor(s/60)+":"+String(Math.floor(s%60)).padStart(2,"0");
 function trimBuf(b,max){if(b.duration<=max)return b;return sliceBuf(b,0,max)}
 async function ensureSound(item){
   if(lib.has(item.id))return lib.get(item.id);
@@ -1435,7 +1439,8 @@ async function ensureSound(item){
   if(st){const b=newBuf(st.chans.length,st.chans[0].length,st.sr);st.chans.forEach((d,i)=>b.copyToChannel(d,i));return addSound({id:st.id,name:st.name,buffer:b,src:st.src,credit:st.credit})}
   if(!item.remote)return null;
   const url=FS_PROXY&&!fsDirect&&item.src==="freesound"?`${FS_PROXY}/preview?u=${encodeURIComponent(item.remote)}`:item.remote;
-  const ab=await (await fetch(url,item.range?{headers:{Range:"bytes=0-6999999"}}:{})).arrayBuffer();let b=await audio().decodeAudioData(ab);b=trimBuf(b,240);
+  /* sons distants entiers jusqu'à 15 min (analyse du 20 nov. 2026, E-04) ; au-delà, coupe annoncée */
+  const ab=await (await fetch(url,item.range?{headers:{Range:"bytes=0-39999999"}}:{})).arrayBuffer();let b=await audio().decodeAudioData(ab);const full=b.duration;b=trimBuf(b,900);if(b.duration<full-1||item.range&&item.dur>b.duration+1)toast((lang==="fr"?"Son coupé à ":"Sound cut at ")+fmtMin(b.duration)+" / "+fmtMin(Math.max(full,item.dur||0)));
   const s=addSound({id:item.id,name:item.name,buffer:b,src:item.src,credit:item.credit});storeSound(s);renderMine();return s;
 }
 
@@ -1472,7 +1477,7 @@ function iaItem(d){
   box.onclick=async()=>{if(open){files.replaceChildren();open=false;return}open=true;files.replaceChildren(el("div",{class:"note"},"…"));
     try{const m=await (await fetch(`https://archive.org/metadata/${d.identifier}`)).json();
       const all=(m.files||[]).filter(f=>/\.mp3$/i.test(f.name)),names=new Set(all.map(f=>f.name));const fl=all.filter(f=>!(/_64kb\.mp3$/i.test(f.name)&&names.has(f.name.replace(/_64kb\.mp3$/i,".mp3")))&&!(/_vbr\.mp3$/i.test(f.name)&&names.has(f.name.replace(/_vbr\.mp3$/i,".mp3")))).slice(0,60);
-      files.replaceChildren(...(fl.length?fl.map(f=>sndRow({id:"ia:"+d.identifier+"/"+f.name,name:(f.title||f.name.replace(/\.mp3$/i,"")),src:"ia",dur:Math.min(durOf(f.length),(+f.size||0)>12e6?240:1e9),range:(+f.size||0)>12e6,
+      files.replaceChildren(...(fl.length?fl.map(f=>sndRow({id:"ia:"+d.identifier+"/"+f.name,name:(f.title||f.name.replace(/\.mp3$/i,"")),src:"ia",dur:durOf(f.length),range:(+f.size||0)>40e6,
         remote:`https://archive.org/download/${d.identifier}/${f.name.split("/").map(encodeURIComponent).join("/")}`,
         credit:{title:f.title||title,author:creator||"Internet Archive",license:iaLic(d.licenseurl),url:`https://archive.org/details/${d.identifier}`}})):[el("div",{class:"note"},t("nores"))]))}
     catch(e){files.replaceChildren(el("div",{class:"note"},"✕"))}};
@@ -1563,7 +1568,7 @@ async function collRun(g,v,label,more,elx){
       const r=await fetch("https://commons.wikimedia.org/w/api.php?action=query&format=json&origin=*&generator=search&gsrnamespace=6&gsrlimit=30&gsrsearch="+encodeURIComponent(search)+(collCont?"&gsroffset="+collCont:"")+"&prop=imageinfo|videoinfo&iiprop=url|extmetadata|size&viprop=derivatives");
       const j=await r.json();collCont=j.continue?j.continue.gsroffset:null;next=!!collCont;
       items=Object.values(j.query?.pages||{}).sort((a,b)=>a.index-b.index).map(p=>{const ii=p.imageinfo?.[0]||{},m=ii.extmetadata||{},mp3=(p.videoinfo?.[0]?.derivatives||[]).find(d=>/mpeg/.test(d.type));
-        return{id:"wc:"+p.pageid,name:p.title.replace(/^File:/,"").replace(/\.[a-z0-9]+$/i,""),src:"commons",remote:mp3?mp3.src:ii.url,dur:0,range:(ii.size||0)>12e6&&!!mp3,credit:{title:p.title.replace(/^File:/,""),author:stripTags(m.Artist?.value)||"Wikimedia Commons",license:stripTags(m.LicenseShortName?.value)||"see page",url:ii.descriptionurl||""}}})}
+        return{id:"wc:"+p.pageid,name:p.title.replace(/^File:/,"").replace(/\.[a-z0-9]+$/i,""),src:"commons",remote:mp3?mp3.src:ii.url,dur:0,range:(ii.size||0)>40e6&&!!mp3,credit:{title:p.title.replace(/^File:/,""),author:stripTags(m.Artist?.value)||"Wikimedia Commons",license:stripTags(m.LicenseShortName?.value)||"see page",url:ii.descriptionurl||""}}})}
     list.querySelector(".note")?.remove();list.querySelector(".more")?.remove();
     if(!items.length&&!more)list.append(el("div",{class:"note"},t("nores")));
     for(const it of items)list.append(sndRow(it));
@@ -1735,7 +1740,7 @@ function regionMore(sel){
    shift:()=>sheet(t("shift"),[["ms",t("shift")+" (ms)",-500,500,1,0,v=>(v>0?"+":"")+v+" ms"]],v=>{undoLive();edit(()=>{for(const k of keep)k.c.start=Math.max(0,k.start+v.ms/1000)})},v=>{for(const k of keep)k.c.start=Math.max(0,k.start+v.ms/1000);live()},undoLive),
    gain:()=>sheet("Gain",[["db","Gain (dB)",-24,24,.5,+(20*Math.log10(keep[0].gain)).toFixed(1),v=>(v>0?"+":"")+v+" dB"]],v=>{undoLive();edit(()=>{for(const k of keep)k.c.gain=Math.pow(10,v.db/20)})},v=>{for(const k of keep)k.c.gain=Math.pow(10,v.db/20);restartIfPlaying()},undoLive),
    transpose:()=>one&&sheet(t("transposeS"),[["st",t("semisS"),-12,12,1,0,v=>(v>0?"+":"")+v]],v=>{if(v.st)processClip(one[0],one[1],b=>pitchShift(b,v.st))}),
-   stretch:()=>one&&sheet(lang==="fr"?"Étirement":"Timestretch",[["sp",t("speedS"),50,200,1,100,v=>v+" %"]],v=>{if(v.sp!==100)processClip(one[0],one[1],b=>wsola(b,v.sp/100))}),
+   stretch:()=>one&&sheet(lang==="fr"?"Étirement":"Timestretch",[["sp",t("speedS"),50,200,1,100,v=>v+" %"]],v=>{if(v.sp!==100)processClip(one[0],one[1],b=>offRun("wsola",b,[v.sp/100]))}),
    fade:()=>sheet(t("fades"),[["fi",t("fadeIn"),0,Math.min(...keep.map(k=>k.c.len))*.5,.01,keep[0].fi,v=>v.toFixed(2)+" s"],["fo",t("fadeOut"),0,Math.min(...keep.map(k=>k.c.len))*.5,.01,keep[0].fo,v=>v.toFixed(2)+" s"]],
      v=>{undoLive();edit(()=>{for(const k of keep){k.c.fadeIn=v.fi;k.c.fadeOut=v.fo}})},v=>{for(const k of keep){k.c.fadeIn=v.fi;k.c.fadeOut=v.fo}restartIfPlaying()},undoLive),
    denoise:()=>one&&processClip(one[0],one[1],denoiseBuf),
@@ -2088,7 +2093,7 @@ function spectralRender(b,outLen,N,magAt){
   /* fenêtre de synthèse racine de Hann : à phases aléatoires, la puissance recouvrée reste constante (zéro ondulation) */
   const H=N/2,w=hann(N).map(Math.sqrt),r=newBuf(b.numberOfChannels,outLen,b.sampleRate);
   for(let c=0;c<b.numberOfChannels;c++){const y=r.getChannelData(c),acc=new Float64Array(outLen+N);
-    for(let f=0,o=0;o<outLen;f++,o+=H){const s=synthRandom(magAt(c,f,o),N);for(let i=0;i<N;i++)acc[o+i]+=s[i]*w[i]}
+    for(let f=0,o=0;o<outLen;f++,o+=H){if(!(f&31)&&typeof __prog==="function")__prog((c+o/outLen)/b.numberOfChannels);const s=synthRandom(magAt(c,f,o),N);for(let i=0;i<N;i++)acc[o+i]+=s[i]*w[i]}
     for(let i=0;i<outLen;i++)y[i]=acc[i]}
   return normalizeTo(r,peakOfBuf(b)||.8);
 }
@@ -2096,10 +2101,10 @@ function peakOfBuf(b){let m=0;for(let c=0;c<b.numberOfChannels;c++){const d=b.ge
 function normalizeTo(b,target){const p=peakOfBuf(b);if(p>0){const g=target/p;for(let c=0;c<b.numberOfChannels;c++){const d=b.getChannelData(c);for(let i=0;i<d.length;i++)d[i]*=g}}return b}
 const SP_N=sec=>{let n=256;while(n<sec*44100&&n<65536)n*=2;return n};
 const AT={
- paul:{n:"Paulstretch",p:{stretch:8,win:.25},r:{stretch:[1.5,64,.5],win:[.05,1,.01]},
-  run(b,p){const N=SP_N(p.win),outLen=Math.min(Math.floor(b.length*p.stretch),b.sampleRate*600),w=hann(N),hin=N/2/p.stretch;
+ paul:{n:"Paulstretch",p:{stretch:8,win:.25},r:{stretch:[1.5,256,.5],win:[.05,1,.01]},
+  run(b,p){const N=SP_N(p.win),outLen=Math.min(Math.floor(b.length*p.stretch),b.sampleRate*1200),w=hann(N),hin=N/2/p.stretch;
    return spectralRender(b,outLen,N,(c,f)=>frameMag(b.getChannelData(c),Math.floor(f*hin)-N/2,N,w))}},
- freeze:{n:"Spectral freeze",p:{at:.5,dur:12,win:.18},r:{at:[0,1,.01],dur:[1,120,1],win:[.03,.8,.01]},
+ freeze:{n:"Spectral freeze",p:{at:.5,dur:12,win:.18},r:{at:[0,1,.01],dur:[1,600,1],win:[.03,.8,.01]},
   run(b,p){const N=SP_N(p.win),w=hann(N),pos=Math.floor(p.at*(b.length-N));const mags=[];for(let c=0;c<b.numberOfChannels;c++)mags.push(frameMag(b.getChannelData(c),pos,N,w));
    const outLen=Math.floor(p.dur*b.sampleRate),r=spectralRender(b,outLen,N,c=>mags[c]);fadeEdges(r,.3);return r}},
  blur:{n:"Spectral blur",p:{amount:12,win:.09},r:{amount:[2,80,1],win:[.02,.4,.01]},
@@ -2114,7 +2119,7 @@ const AT={
    return spectralRender(b,len,N,(c,f,o)=>{const M=frameMag(b.getChannelData(c%b.numberOfChannels),o-H,N,w),C=frameMag(b2.getChannelData(c%b2.numberOfChannels),(o%Math.max(1,b2.length-N))-H,N,w);
      const env=new Float64Array(M.length),cen=new Float64Array(M.length);const sm=(src,dst)=>{let acc=0;const q=[];for(let i=0;i<src.length;i++){acc+=src[i];q.push(src[i]);if(q.length>S)acc-=q.shift();dst[i]=acc/q.length}};sm(M,env);sm(C,cen);
      for(let i=0;i<M.length;i++)M[i]=C[i]*env[i]/(cen[i]+1e-6);return M})}},
- grain:{n:"Granular / brassage",p:{dur:10,size:.08,density:40,jitter:1,pitch:0,spread:3,rev:.15},r:{dur:[1,120,1],size:[.005,.5,.005],density:[2,300,1],jitter:[0,1,.01],pitch:[-24,24,1],spread:[0,24,.5],rev:[0,1,.01]},
+ grain:{n:"Granular / brassage",p:{dur:10,size:.08,density:40,jitter:1,pitch:0,spread:3,rev:.15},r:{dur:[1,600,1],size:[.005,.5,.005],density:[2,300,1],jitter:[0,1,.01],pitch:[-24,24,1],spread:[0,24,.5],rev:[0,1,.01]},
   run(b,p){const sr=b.sampleRate,outLen=Math.floor(p.dur*sr),r=newBuf(2,outLen,sr),L=r.getChannelData(0),R=r.getChannelData(1),src=[b.getChannelData(0),b.getChannelData(Math.min(1,b.numberOfChannels-1))];
    const n=Math.floor(p.dur*p.density);for(let g=0;g<n;g++){const at=Math.floor(Math.random()*outLen),len=Math.floor(p.size*sr*(.5+Math.random())),cen=at/outLen*(1-p.jitter)+Math.random()*p.jitter,from=Math.floor(cen*(b.length-len*4));
      const rate=Math.pow(2,(p.pitch+(Math.random()*2-1)*p.spread)/12),rv=Math.random()<p.rev,pan=Math.random(),gl=Math.cos(pan*Math.PI/2),gr=Math.sin(pan*Math.PI/2);
@@ -2126,11 +2131,11 @@ const AT={
  wavesets:{n:"Wavesets",p:{mode:0,n:3},r:{mode:[0,3,1],n:[2,12,1]},
   run(b,p){const x0=b.getChannelData(0),z=[0];for(let i=1;i<x0.length;i++)if(x0[i-1]<0&&x0[i]>=0)z.push(i);z.push(x0.length);const sets=[];for(let i=0;i+1<z.length;i++)sets.push([z[i],z[i+1]]);
    const plan=[];const m=p.mode|0,n=p.n|0;sets.forEach((s,i)=>{if(m===0)for(let k=0;k<n;k++)plan.push([s,0]);else if(m===1){if(i%n===0)plan.push([s,0])}else if(m===2)plan.push([s,1]);else{const j=Math.floor(i/n)*n;plan.push([sets[Math.min(sets.length-1,j+((i*7)%n))],0])}});
-   const len=Math.min(plan.reduce((a,[s])=>a+s[1]-s[0],0),b.sampleRate*600),r=newBuf(b.numberOfChannels,len,b.sampleRate);
+   const len=Math.min(plan.reduce((a,[s])=>a+s[1]-s[0],0),b.sampleRate*1200),r=newBuf(b.numberOfChannels,len,b.sampleRate);
    for(let c=0;c<b.numberOfChannels;c++){const x=b.getChannelData(c),y=r.getChannelData(c);let o=0;for(const[[a,e],rv]of plan){for(let i=a;i<e&&o<len;i++)y[o++]=rv?x[e-1-(i-a)]:x[i];if(o>=len)break}}return r}},
  stutter:{n:"Stutter",p:{slice:.125,repeats:4,prob:.5},r:{slice:[.03125,1,.03125],repeats:[2,16,1],prob:[0,1,.01]},
   run(b,p){const S=Math.floor(spb()*p.slice*b.sampleRate),out=[];let len=0;for(let a=0;a<b.length;a+=S){const k=Math.random()<p.prob?p.repeats|0:1;for(let j=0;j<k;j++){out.push([a,Math.min(b.length,a+S),j]);len+=Math.min(b.length,a+S)-a}}
-   const r=newBuf(b.numberOfChannels,Math.min(len,b.sampleRate*600),b.sampleRate);for(let c=0;c<b.numberOfChannels;c++){const x=b.getChannelData(c),y=r.getChannelData(c);let o=0;for(const[a,e,j]of out){const g=Math.pow(.85,j);for(let i=a;i<e&&o<y.length;i++){const q=i-a,l=e-a;y[o++]=x[i]*g*Math.min(1,q/64,(l-q)/64)}}}return r}},
+   const r=newBuf(b.numberOfChannels,Math.min(len,b.sampleRate*1200),b.sampleRate);for(let c=0;c<b.numberOfChannels;c++){const x=b.getChannelData(c),y=r.getChannelData(c);let o=0;for(const[a,e,j]of out){const g=Math.pow(.85,j);for(let i=a;i<e&&o<y.length;i++){const q=i-a,l=e-a;y[o++]=x[i]*g*Math.min(1,q/64,(l-q)/64)}}}return r}},
  bend:{n:"Circuit bend",p:{chaos:.5,seed:1},r:{chaos:[0,1,.01],seed:[1,99,1]},
   run(b,p){let s=p.seed*9301;const rnd=()=>(s=(s*9301+49297)%233280)/233280;const r=newBuf(b.numberOfChannels,b.length,b.sampleRate),sr=b.sampleRate;const ev=[];
    for(let t=0;t<b.length;){const l=Math.floor(sr*(.02+rnd()*.4));ev.push([t,l,rnd()<p.chaos?Math.floor(rnd()*5):-1,rnd(),rnd()]);t+=l}
@@ -2159,7 +2164,7 @@ function atDialog(tr,c,k){
   const fields=Object.keys(def.p).map(key=>{const[mn,mx,st]=def.r[key];const inp=el("input",{type:"range",min:mn,max:mx,step:st});inp.value=p[key];const v=el("i",{},String(p[key]));
     inp.oninput=()=>{p[key]=+inp.value;v.textContent=key==="mode"?["Repeat","Omit","Reverse","Shuffle"][p[key]|0]:String(p[key])};inp.oninput();return el("label",{},el("span",{},AT_PN[key]||key,v),inp)});
   d.replaceChildren(el("h3",{},lang==="fr"?AT_FR[k]:def.n),...fields,el("div",{class:"row"},el("button",{onclick:()=>d.close()},"×"),el("button",{class:"on",onclick:async()=>{d.close();atLast[k]={...p};
-    const b2=def.need==="copy"&&clipboard?clipBuffer(clipboard):null;await processClip(tr,c,async b=>await def.run(b,p,b2))}},"OK")));
+    const b2=def.need==="copy"&&clipboard?clipBuffer(clipboard):null;await processClip(tr,c,async b=>await offRun("AT."+k,b,[p],b2,def.n))}},"OK")));
   d.showModal();
 }
 function clipBuffer(c){const s=lib.get(c.snd);if(!s)return null;return sliceBuf(c.rev?reversed(s).buffer:s.buffer,c.rev?s.buffer.duration-(c.off+c.len):c.off,c.len)}
@@ -2204,7 +2209,7 @@ function hpss(b,L=17){ // FitzGerald 2010: median across time -> harmonic, acros
   const N=2048,H=512,len=b.length,outs=[newBuf(b.numberOfChannels,len,b.sampleRate),newBuf(b.numberOfChannels,len,b.sampleRate)];
   for(let c=0;c<b.numberOfChannels;c++){const{re,im,F,w}=stft(b.getChannelData(c),N,H),B=N/2+1,M=[];for(let f=0;f<F;f++){const m=new Float64Array(B);for(let k=0;k<B;k++)m[k]=Math.hypot(re[f][k],im[f][k]);M.push(m)}
     const h=L>>1,hr=[],hi=[],pr=[],pi=[];
-    for(let f=0;f<F;f++){const Hm=new Float64Array(B),Pm=new Float64Array(B),win=[];
+    for(let f=0;f<F;f++){if(!(f&15)&&typeof __prog==="function")__prog((c+f/F)/b.numberOfChannels);const Hm=new Float64Array(B),Pm=new Float64Array(B),win=[];
       for(let k=0;k<B;k++){win.length=0;for(let j=Math.max(0,f-h);j<=Math.min(F-1,f+h);j++)win.push(M[j][k]);Hm[k]=median(win)}
       for(let k=0;k<B;k++){win.length=0;for(let j=Math.max(0,k-h);j<=Math.min(B-1,k+h);j++)win.push(M[f][j]);Pm[k]=median(win)}
       const a=new Float64Array(N),ai=new Float64Array(N),p=new Float64Array(N),q=new Float64Array(N);
@@ -2235,7 +2240,7 @@ async function separate(tr,c,kind){
         const segs=kind==="silence"?silences(b):(()=>{const pts=[0,...cuts.filter(x=>x>.03),c.len];const out=[];for(let i=0;i+1<pts.length;i++)if(pts[i+1]-pts[i]>.02)out.push([pts[i],pts[i+1]]);return out})();
         for(const [a,z] of segs){if(c.rev){tr.clips.push({...c,id:uid(),start:c.start+a,off:c.off+(c.len-z),len:z-a,fadeIn:.003,fadeOut:.005})}else tr.clips.push({...c,id:uid(),start:c.start+a,off:c.off+a,len:z-a,fadeIn:.003,fadeOut:.005})}});toast(t("splitDone"));return}
     let parts,names;
-    if(kind==="hpss"){parts=hpss(b);names=[t("harm"),t("perc")]}
+    if(kind==="hpss"){parts=await offRun("hpss",b,[],null,t("harm")+" / "+t("perc"));names=[t("harm"),t("perc")]}
     else if(kind==="bands"){parts=await bands(b);names=[t("low"),t("mid"),t("high")]}
     else{parts=midSide(b);names=["Mid","Side"]}
     snapshot();const at=state.tracks.indexOf(tr);
@@ -2273,6 +2278,35 @@ function closeOut(e){if(!$("#menu").contains(e.target))closeMenu()}
 function closeMenu(){$("#menu").style.display="none";removeEventListener("pointerdown",closeOut,true)}
 let clipboard=null;
 function edit(fn){snapshot();fn();render();save();restartIfPlaying()}
+/* calculs lourds hors du fil principal (analyse du 20 nov. 2026, E-03) : les fonctions de calcul du studio tournent dans un Web Worker,
+   avec avancement et arrêt ; sans Worker ou si le calcul demande l'audio du navigateur, il retombe sur le fil principal */
+let WK=null,WKn=0;const WKjobs=new Map();
+function wkSource(){const src=[...document.querySelectorAll("script:not([src])")].map(s=>s.textContent).sort((x,y)=>y.length-x.length)[0],names=new Set(),parts=[];
+  for(const m of src.matchAll(/^(?:async )?function ([A-Za-z_$][\w$]*)\s*\(/gm))names.add(m[1]);
+  for(const m of src.matchAll(/^const ([A-Za-z_$][\w$]*)=(?:\([^)]*\)|[A-Za-z_$][\w$]*)=>/gm))names.add(m[1]);
+  for(const n of names){try{const f=(0,eval)(n);if(typeof f==="function")parts.push((/^(async )?function/.test(f.toString())?"":"var "+n+"=")+f.toString())}catch(e){}}
+  const at="var AT={"+Object.entries(AT).map(([k,v])=>{let s=v.run.toString();s=s.replace(/^(async\s+)?run\s*\(/,(m,a)=>(a||"")+"function(");return JSON.stringify(k)+":{run:"+s+"}"}).join(",")+"};";
+  const shim=`class WB{constructor(o){this.numberOfChannels=o.numberOfChannels;this.length=o.length;this.sampleRate=o.sampleRate;this.duration=o.length/o.sampleRate;this._d=o.data||Array.from({length:o.numberOfChannels},()=>new Float32Array(o.length))}getChannelData(c){return this._d[c]}copyToChannel(s,c,o){this._d[c].set(s,o||0)}copyFromChannel(d,c,o){d.set(this._d[c].subarray(o||0,(o||0)+d.length))}}
+var AudioBuffer=WB;var __last=0;self.__prog=v=>{const n=Date.now();if(n-__last>250){__last=n;postMessage({id:self.__id,prog:v})}};`;
+  const tail=`function newBuf(ch,len,sr){return new WB({numberOfChannels:ch,length:Math.max(1,len),sampleRate:sr})}
+const pack=b=>b&&b.getChannelData?{__buf:1,sr:b.sampleRate,len:b.length,data:Array.from({length:b.numberOfChannels},(_,c)=>b.getChannelData(c))}:Array.isArray(b)&&b.length&&b[0]&&b[0].getChannelData?b.map(pack):b;
+onmessage=async e=>{const{id,fn,buf,args,buf2}=e.data;self.__id=id;try{const B=buf&&new WB({numberOfChannels:buf.data.length,length:buf.len,sampleRate:buf.sr,data:buf.data});const B2=buf2&&new WB({numberOfChannels:buf2.data.length,length:buf2.len,sampleRate:buf2.sr,data:buf2.data});
+  const f=fn.startsWith("AT.")?(...a)=>AT[fn.slice(3)].run(...a):self[fn]||eval(fn);let r=await f(B,...args,...(B2?[B2]:[]));r=pack(r);
+  const tr=[];(Array.isArray(r)?r:[r]).forEach(x=>x&&x.__buf&&x.data.forEach(d=>tr.push(d.buffer)));postMessage({id,r},tr)}catch(err){postMessage({id,err:String(err&&err.message||err)})}}`;
+  return shim+"\n"+parts.join("\n")+"\n"+at+"\n"+tail}
+function wkGet(){if(WK)return WK;try{WK=new Worker(URL.createObjectURL(new Blob([wkSource()],{type:"text/javascript"})));WK.onmessage=e=>{const j=WKjobs.get(e.data.id);if(!j)return;if(e.data.prog!==undefined){busyShow(j.label,e.data.prog);return}WKjobs.delete(e.data.id);e.data.err?j.no(new Error(e.data.err)):j.ok(e.data.r)}}catch(e){WK=null}return WK}
+const wkPack=b=>({sr:b.sampleRate,len:b.length,data:Array.from({length:b.numberOfChannels},(_,c)=>b.getChannelData(c).slice())});
+function wkUnpack(r){if(r&&r.__buf){const o=newBuf(r.data.length,r.len,r.sr);r.data.forEach((d,c)=>o.copyToChannel(d,c));return o}if(Array.isArray(r)&&r.length&&r[0]&&r[0].__buf)return r.map(wkUnpack);return r}
+/* fn : nom d'une fonction du studio ("hpss", "wsola", "yinTrack") ou "AT.clé" ; retombe sur le fil principal si le Worker refuse */
+async function offRun(fn,b,args=[],b2=null,label){const main=()=>fn.startsWith("AT.")?AT[fn.slice(3)].run(b,...args,...(b2?[b2]:[])):(0,eval)(fn)(b,...args);
+  const w=wkGet();if(!w)return main();const id=++WKn,lb=label||(lang==="fr"?"Calcul":"Processing");busyShow(lb,0);
+  try{const r=await new Promise((ok,no)=>{WKjobs.set(id,{ok,no,label:lb});const m={id,fn,buf:wkPack(b),args,buf2:b2?wkPack(b2):null},tr=[...m.buf.data.map(d=>d.buffer),...(m.buf2?m.buf2.data.map(d=>d.buffer):[])];w.postMessage(m,tr)});return wkUnpack(r)}
+  catch(e){if(e.message==="annulé")throw e;console.warn("worker → fil principal :",e.message);return main()}finally{busyHide()}}
+function busyShow(label,v){let bx=$("#busy");if(!bx){bx=el("div",{id:"busy"},el("span",{class:"bl"}),el("i",{},el("b")),el("button",{title:lang==="fr"?"Arrêter le calcul":"Stop processing"},icon("stop")));document.body.append(bx);
+    bx.querySelector("button").onclick=()=>{if(WK){WK.terminate();WK=null}for(const j of WKjobs.values())j.no(new Error("annulé"));WKjobs.clear();busyHide();toast(lang==="fr"?"Calcul arrêté":"Processing stopped")}}
+  bx.querySelector(".bl").textContent=label+" "+Math.round(v*100)+" %";bx.querySelector("b").style.width=Math.round(v*100)+"%";bx.classList.add("on")}
+function busyHide(){const bx=$("#busy");if(bx)bx.classList.remove("on")}
+
 async function processClip(tr,c,fn){ // destructive process on the clip's visible part -> new sound
   const s=lib.get(c.snd);if(!s)return;status(t("working"));await new Promise(r=>setTimeout(r,30));
   try{let b=sliceBuf(c.rev?reversed(s).buffer:s.buffer,c.rev?s.buffer.duration-(c.off+c.len):c.off,c.len);b=await fn(b);
@@ -2289,7 +2323,7 @@ function clipMenu(x,y,tr,c){
     [t("fadeReset"),()=>edit(()=>{c.fadeIn=0;c.fadeOut=0}),!(c.fadeIn||c.fadeOut)],
     ["—"],
     [t("transpose"),()=>{const v=parseFloat(prompt(t("semis"),"0"));if(v&&Math.abs(v)<=24)processClip(tr,c,b=>pitchShift(b,v))}],
-    [t("stretch"),()=>{const v=parseFloat(prompt(t("speed"),"100"));if(v&&v>=25&&v<=400&&v!==100)processClip(tr,c,b=>wsola(b,v/100))}],
+    [t("stretch"),()=>{const v=parseFloat(prompt(t("speed"),"100"));if(v&&v>=25&&v<=400&&v!==100)processClip(tr,c,b=>offRun("wsola",b,[v/100]))}],
     [t("denoise"),()=>processClip(tr,c,denoiseBuf)],
     [t("atelier"),()=>setTimeout(()=>atelier(tr,c,x,y),10)],
     [t("separate"),()=>setTimeout(()=>sepMenu(tr,c,x,y),10)],
@@ -2503,6 +2537,9 @@ addEventListener("pointerdown",()=>audio(),{once:true,capture:true});
 /* ================= boot ================= */
 (async function boot(){
   applyLang();
+  /* les 32 pistes s'affichent avant la synthèse du kit (analyse du 20 nov. 2026, E-05) */
+  if(!state.tracks.length)fillTracks();syncUI();render();requestAnimationFrame(frame);
+  await new Promise(r=>requestAnimationFrame(()=>setTimeout(r,0)));
   await renderKit();renderKitList();
   const saved=await dbGet("proj","cur").catch(()=>null);
   if(saved){try{Object.assign(state,JSON.parse(saved));state.tracks.forEach(fixTrack);state.masterRack=state.masterRack||[];if(!MASTERS[state.masterPreset])state.masterPreset="Universal";
@@ -2512,7 +2549,7 @@ addEventListener("pointerdown",()=>audio(),{once:true,capture:true});
   if(all.length&&all.every(c=>demo.has(c.snd))){state.tracks.forEach(tr=>{tr.clips=[];tr.rack=[]});state.loop=false}
   if(!state.tracks.length)fillTracks();
   state.tracks.forEach(tr=>{if(/^(Kick|Snare|Hat|Drone|Track \d+|Piste \d+|Harmonic|Percussive|Harmonique|Percussif|Low|Mid|High|Graves|Médiums|Aigus|Side)$/.test(tr.name))tr.name=""});fillTracks();
-  syncUI();render();requestAnimationFrame(frame);kamLoad();filmRestore();
+  syncUI();render();kamLoad();filmRestore();
   if(navigator.storage&&navigator.storage.persist)navigator.storage.persist().catch(()=>{});
 })();
 
@@ -2858,11 +2895,11 @@ async function markVideoCuts(){const items=(KAM.items||[]).filter(i=>i.kind==="v
 /* échelle réelle d'un clip : suivi de hauteur (YIN) toutes les 20 ms, histogramme des hauteurs en cents (0–1200), comparaison aux gammes de référence */
 const SCALES={"12-TET":[0,100,200,300,400,500,600,700,800,900,1000,1100],"Just":[0,112,204,316,386,498,590,702,814,884,996,1088],"Rast":[0,200,350,500,700,900,1050],"Bayati":[0,150,300,500,700,800,1000],"Slendro":[0,240,480,720,960],"Pelog":[0,120,270,540,670,780,950],"Raga Bhairav":[0,112,386,498,702,814,1088]};
 function yinTrack(b,from,len){const sr=b.sampleRate,d=b.getChannelData(0),W=Math.floor(sr*.04),hop=Math.floor(sr*.02),tmin=Math.floor(sr/1000),tmax=Math.floor(sr/40),out=[];
-  for(let a=Math.floor(from*sr);a+W+tmax<Math.min(d.length,Math.floor((from+len)*sr));a+=hop){let e=0;for(let i=0;i<W;i++)e+=d[a+i]*d[a+i];if(e/W<1e-5)continue;
+  const A0=Math.floor(from*sr),AZ=Math.min(d.length,Math.floor((from+len)*sr));for(let a=A0;a+W+tmax<AZ;a+=hop){if(typeof __prog==="function"&&!((a-A0)/hop&63))__prog((a-A0)/(AZ-A0));let e=0;for(let i=0;i<W;i++)e+=d[a+i]*d[a+i];if(e/W<1e-5)continue;
     const df=new Float32Array(tmax+1);for(let t=tmin;t<=tmax;t++){let q=0;for(let i=0;i<W;i+=2){const x=d[a+i]-d[a+i+t];q+=x*x}df[t]=q}
     let run=0,best=-1;for(let t=tmin;t<=tmax;t++){run+=df[t];const n=df[t]*(t-tmin+1)/(run||1);if(n<.15){best=t;while(t+1<=tmax&&df[t+1]<df[t]){t++;best=t}break}}
     if(best>0){let t=best;if(t>tmin&&t<tmax){const a1=df[t-1],b1=df[t],c1=df[t+1],dn=a1-2*b1+c1;if(dn>0)t+=.5*(a1-c1)/dn}out.push(sr/t)}}return out}
-function scaleSheet(sel){const[tr,c]=sel[0]||[];const s=c&&lib.get(c.snd);if(!s)return;const f0=yinTrack(s.buffer,c.off,c.len);const sh=$("#sheet");
+async function scaleSheet(sel){const[tr,c]=sel[0]||[];const s=c&&lib.get(c.snd);if(!s)return;let f0;try{f0=await offRun("yinTrack",s.buffer,[c.off,c.len],null,lang==="fr"?"Hauteur":"Pitch")}catch(e){return}const sh=$("#sheet");
   if(!f0.length){toast(lang==="fr"?"Aucune hauteur nette":"No clear pitch");sh.replaceChildren(el("b",{},s.name),el("p",{class:"note"},lang==="fr"?"Son sans hauteur nette : bruit, souffle ou percussion.":"This sound has no clear pitch: noise, breath or percussion."));sh.classList.add("on");return}
   const ref=+localStorage.getItem("st.ref")||440,cents=f0.map(f=>((1200*Math.log2(f/ref)%1200)+1200)%1200),H=new Float32Array(120);cents.forEach(x=>H[Math.floor(x/10)%120]++);
   const sm=H.map((v,i)=>(H[(i+119)%120]+2*v+H[(i+1)%120])/4),mx=Math.max(...sm),peaks=[];sm.forEach((v,i)=>{if(v>mx*.18&&v>=sm[(i+119)%120]&&v>=sm[(i+1)%120]){const c0=i*10+5,w=cents.map(x=>((x-c0+1800)%1200)-600).filter(x=>Math.abs(x)<25);peaks.push(Math.round((c0+(w.length?w.reduce((p,q)=>p+q,0)/w.length:0)+1200)%1200))}});{const u=dedupC(peaks);peaks.length=0;peaks.push(...u)}
@@ -3012,7 +3049,7 @@ function metaLine(m){return META_K.filter(([k])=>m[k]).map(([k,fr,en])=>(lang===
 function fmtT(t){const m=Math.floor(t/60);return m+":"+String(Math.floor(t%60)).padStart(2,"0")}
 function fieldSheet(sel){const[tr,c]=sel[0]||[];if(!c)return;const F=lang==="fr",sh=$("#sheet"),m={...(c.meta||{})},ins={};
   const grid=el("div",{class:"fs"},...META_K.flatMap(([k,fr,en])=>{const i=el(k==="text"||k==="trans"?"textarea":"input",{rows:"2",placeholder:F?fr:en});i.value=m[k]||"";ins[k]=i;return[el("small",{},F?fr:en),i]}));
-  const meas=el("button",{title:F?"Mesurer l'accordage du clip":"Measure the clip's tuning"},icon("tune"));meas.onclick=()=>{const s=lib.get(c.snd);if(!s)return;const f0=yinTrack(s.buffer,c.off,c.len);if(!f0.length){toast(F?"Aucune hauteur nette":"No clear pitch");return}
+  const meas=el("button",{title:F?"Mesurer l'accordage du clip":"Measure the clip's tuning"},icon("tune"));meas.onclick=async()=>{const s=lib.get(c.snd);if(!s)return;let f0;try{f0=await offRun("yinTrack",s.buffer,[c.off,c.len],null,F?"Hauteur":"Pitch")}catch(e){return}if(!f0.length){toast(F?"Aucune hauteur nette":"No clear pitch");return}
     const ref=+localStorage.getItem("st.ref")||440,cents=f0.map(f=>((1200*Math.log2(f/ref)%1200)+1200)%1200),H=new Float32Array(120);cents.forEach(x=>H[Math.floor(x/10)%120]++);const sm=H.map((v,i)=>(H[(i+119)%120]+2*v+H[(i+1)%120])/4),mx=Math.max(...sm),pk=[];
     sm.forEach((v,i)=>{if(v>mx*.18&&v>=sm[(i+119)%120]&&v>=sm[(i+1)%120]){const c0=i*10+5,w=cents.map(x=>((x-c0+1800)%1200)-600).filter(x=>Math.abs(x)<25);pk.push(Math.round((c0+(w.length?w.reduce((p,q)=>p+q,0)/w.length:0)+1200)%1200))}});
     ins.tuning.value=dedupC(pk).join(", ")+" (La "+ref+" Hz)"};

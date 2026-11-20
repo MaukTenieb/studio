@@ -6,6 +6,8 @@ Gravité choisie : la plus haute des gravités d'origine, baissée d'un cran qua
 
 ## Fait
 
+- 20 nov. 19 h 34 : E-03 ; E-05 ; E-04 ; E-24. Paulstretch, gel, flou, grain, wavesets, séparation harmonique / percussive, WSOLA et analyse de hauteur tournent dans un Web Worker, avec barre d'avancement et touche d'arrêt (les traitements qui demandent l'audio du navigateur retombent sur le fil principal). Paulstretch ×64 de 8 s : 8,9 s au téléphone, image suivante en 80 ms pendant le calcul (contre 66 à 437 s de page figée) ; séparation de 8 s : 245 ms de blocage au plus, contre 4 763 ms. Plafonds : étirement ×256 et 1 200 s (20 min stéréo en 38,8 s), gel et grain 600 s. Sons distants entiers jusqu'à 15 min, au-delà coupe annoncée. Pistes affichées 0,25 s après l'ouverture, avant la synthèse du kit (contre 0,78 s sur la même machine au calme).
+
 - 20 nov. 19 h 29 : E-06 ; E-07 ; E-08 ; E-09 ; E-10 ; E-18 ; E-35 ; E-42. Courbes de saturation symétriques (continu des 33 chaînes : −240 dBFS, contre −24,5 à −49,1 ; export Noise : −74,4 dBFS, contre −12,8). Plafond d'export en vraie crête (sinus à fs/4 : +3,04 dBTP ramené à −1,09 dBTP mesuré par Python ×16). Garde de sortie du rack : trois larsens et un écho à 0,95 restent sous −0,8 dBFS de crête pendant 30 s (contre +24,6). Touche D enregistrée pendant la lecture et rejouée à l'export (échos du dub présents à −32,8 dBFS entre 4,5 et 6 s). Réglage de réinjection sur l'écho : à 5 s, −152,9 dB au réglage 0, −67,7 dB à 0,5, auto-oscillation bornée à 1,05. Cible de sonie : deux rendus au plus, relèvement borné à +6 dB (export de 8,7 s en 4,7 à 5,3 s). Queues : ping-pong compté deux fois, écho de bande 10 + 50 × dosage s, bus dub selon sa réinjection. Projet vide : message à l'export.
 
 - 20 nov. 19 h 24 : E-01 ; E-02 ; E-16 ; E-60. Téléphone couché : bibliothèque à droite, tiroirs sur toute la largeur, console à tranches en deux colonnes avec faders, platines avec disques. Barre du clip dans le flux du pied (4 touches sur 5 au doigt, la cinquième au défilement). Cibles : 0 % sous 44 px et 0 % de texte sous 11 px sur iPhone 13 debout et couché, dans les neuf écrans mesurés (contre 96 à 100 % et 21 à 76 %). Téléprompteur : la marge de fin n'entre plus dans le calcul, M et S restent fixes.
@@ -13,24 +15,6 @@ Gravité choisie : la plus haute des gravités d'origine, baissée d'un cran qua
 ## À faire
 
 ### Bloquant
-
-- E-03 · bloquant · Calculs lourds sur le fil principal : Paulstretch, séparation harmonique / percussive, Atelier et analyse de hauteur gèlent la page sans avancement ni arrêt.
-  - Experts : 3 (04-01, 07-02, 08-02). Gravités d'origine : 04-01 bloquant, 07-02 bloquant, 08-02 important.
-  - Preuve : `processClip` (ligne 2228) appelle `AT.paul.run` (ligne 2051), `hpss` (ligne 2155) et `yinTrack` (lignes 2812-2822) sur le fil principal. Paulstretch 8 s → 512 s : 66,5 s de page figée à charge 11 (04). Séparation de 4 s mono : 6,6 s de calcul à charge 10 (08). `yinTrack` : 240 s de son → 62,1 s de calcul (07). Zéro barre d'avancement, zéro touche d'arrêt. Captures : [04-s3-paulstretch-fait-pc1366](captures/04-s3-paulstretch-fait-pc1366.webp), [08-pc-hpss-resultat](captures/08-pc-hpss-resultat.webp).
-  - Correction : Passer `spectralRender`, `hpss`, `wsola`, `yinTrack`, freeze, blur, grain et convx dans un Web Worker (transfert des Float32Array de chaque canal) ; barre d'avancement (trames faites / trames totales) sur le clip ; touche ✕ qui arrête le worker. Pour `yinTrack` : sous-échantillonner à 16 kHz et ouvrir la loupe sur l'onglet ♪ sans calculer le spectre. Contrôle : écart entre deux images ≤ 50 ms pendant tout calcul.
-  - Charge de la machine : existe quelle que soit la charge. Les durées absolues varient avec la charge ; le gel du fil principal existe à toute charge (charge 10 à 11 pour les chiffres cités).
-
-- E-04 · bloquant · Sons d'Internet Archive coupés à 240 s et à 7 Mo, sans avertissement.
-  - Experts : 2 (06-01, 04-04). Gravités d'origine : 06-01 bloquant, 04-04 important.
-  - Preuve : Ligne 1390 : `Range:"bytes=0-6999999"` puis `trimBuf(b,240)`. Mozart, Symphonie 40, II affiché 7:44 → clip de 240,0 s, 48 % perdus (06) ; terrain annoncé 04:00 → clip de 144,8 s (04). Captures : [06-mozart40-fichiers-pc1366](captures/06-mozart40-fichiers-pc1366.webp), [06-mozart40-pose-pc1366](captures/06-mozart40-pose-pc1366.webp), [04-s9-terrain-pose-iphone](captures/04-s9-terrain-pose-iphone.webp).
-  - Correction : Retirer `trimBuf(b,240)` et l'en-tête Range pour Internet Archive, Commons et Jamendo ; télécharger le fichier entier jusqu'à 60 min. Au-delà, pictogramme ciseaux sur la ligne du son et sur le clip, avec durée reçue / durée annoncée, et choix du passage avant la pose.
-  - Charge de la machine : existe quelle que soit la charge.
-
-- E-05 · bloquant · Premier son lent et pistes absentes pendant le chargement ; le son d'un film tombe alors sur la piste 01.
-  - Experts : 2 (10-03, 01-09). Gravités d'origine : 10-03 bloquant, 01-09 important.
-  - Preuve : `boot()` attend `await renderKit()` (ligne 2458) avant `fillTracks()` et `render()` (lignes 2465-2466). Calcul du fil principal avant le premier son : 3,33 s sur iphone (`ThreadTime`, mesure peu sensible à la charge) (10). `state.tracks.length` vaut 0 pendant plus de 2,5 s ; la ligne 3003 prend alors `freeTrack(0)` : son du film sur la piste 01 dans 2 essais sur 7 (01). Captures : [10-iphone-simple-accueil](captures/10-iphone-simple-accueil.webp), [01-filmB-pc1366](captures/01-filmB-pc1366.webp).
-  - Correction : Appeler `fillTracks(); syncUI(); render();` avant `await renderKit()` ; synthétiser d'abord les sons des rangées du séquenceur et du premier tiroir, puis le reste par lots de 20 entre deux images (`requestIdleCallback`) ; une lampe du pied s'allume pendant le chargement (pictogramme). `filmLoad` attend la promesse de `fillTracks` puis prend la première piste libre de 19 à 32. Contrôle : premier son à moins de 2 s d'horloge et moins de 1 s de calcul sur pc1366 non chargé.
-  - Charge de la machine : mécanisme fixe, ampleur liée à la charge. Les durées d'horloge (6,3 à 44,9 s avant les pistes) dépendent de la charge ; les 3,33 s de calcul du fil principal et l'ordre des appels de `boot()` existent à toute charge : la gravité reste bloquante.
 
 - E-11 · bloquant · Console au téléphone debout : touche D de 48 × 22 px, réglage « D ⟲ » hors de l'écran.
   - Experts : 1 (02-04). Gravités d'origine : 02-04 bloquant (partie debout).
@@ -80,12 +64,6 @@ Gravité choisie : la plus haute des gravités d'origine, baissée d'un cran qua
   - Experts : 2 (04-06, 06-09). Gravités d'origine : 04-06 important, 06-09 détail.
   - Preuve : Grotte, silo, cathédrale et 20 pièces = bruit filtré et réflexions posées (lignes 718, 829-836) ; `convx` (ligne 2099) destructif, sans mix, pré-délai ni écoute (04, 06).
   - Correction : Effet de piste « Convolution » dont la réponse est un son de la bibliothèque (cave, silo, citerne, salle), avec mix, pré-délai, longueur ; `ConvolverNode` direct ; réglage de distance (proche, salle, ambiance) sur Room ; réponses de salles réelles sous licence libre.
-  - Charge de la machine : existe quelle que soit la charge.
-
-- E-24 · important · Plafonds d'étirement et de durée : ×64 et 600 s pour Paulstretch, 120 s pour le gel et le granulaire.
-  - Experts : 2 (04-02, 08-11). Gravités d'origine : 04-02 important, 08-11 important.
-  - Preuve : `stretch:[1.5,64,.5]` et `b.sampleRate*600` (ligne 2051) ; gel `dur:[1,120,1]` (ligne 2054) ; granulaire `dur:[1,120,1]` (ligne 2069). 10 s × 64 donnent 600 s au lieu de 640 s (08).
-  - Correction : Facteur jusqu'à ×1 000 sur une réglette logarithmique ; sortie jusqu'à 3 600 s, écrite par blocs de 60 s dans le worker de l'écart du fil principal ; gel et granulaire jusqu'à 3 600 s ; durée produite affichée dans le dialogue (« → 8:32 »).
   - Charge de la machine : existe quelle que soit la charge.
 
 - E-25 · important · Licences déclarées par les déposants et abrégées dans les crédits.
