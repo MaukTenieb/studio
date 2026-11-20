@@ -599,7 +599,9 @@ const toast=m=>{const e=$("#toast");e.textContent=m;e.classList.add("on");clearT
 const status=m=>{$("#status").textContent=m||""};
 
 /* ================= effects ================= */
-const CRUSH_SRC=`registerProcessor("crusher",class extends AudioWorkletProcessor{static get parameterDescriptors(){return[{name:"bits",defaultValue:8,minValue:1,maxValue:16},{name:"down",defaultValue:4,minValue:1,maxValue:64}]}
+const CRUSH_SRC=`/* arrêt propre : un message __stop éteint le processeur (process rend false) */
+const _rp=registerProcessor;registerProcessor=(n,C)=>_rp(n,class extends C{constructor(o){super(o);this._alive=true;const p=this.port,prev=p.onmessage;p.onmessage=e=>{if(e.data&&e.data.__stop)this._alive=false;else if(prev)prev.call(p,e)}}process(i,o,pa){return this._alive?super.process(i,o,pa):false}});
+registerProcessor("crusher",class extends AudioWorkletProcessor{static get parameterDescriptors(){return[{name:"bits",defaultValue:8,minValue:1,maxValue:16},{name:"down",defaultValue:4,minValue:1,maxValue:64}]}
 constructor(){super();this.h=[0,0];this.c=0}process(i,o,p){const inp=i[0],out=o[0];if(!inp||!inp.length)return true;const st=Math.pow(2,p.bits[0]-1),d=Math.max(1,Math.round(p.down[0]));
 for(let ch=0;ch<out.length;ch++){const x=inp[ch]||inp[0],y=out[ch];let c=this.c;for(let n=0;n<y.length;n++){if(c%d===0)this.h[ch]=Math.round(x[n]*st)/st;y[n]=this.h[ch];c++}if(ch===out.length-1)this.c=c}return true}})
 registerProcessor("fshift",class extends AudioWorkletProcessor{static get parameterDescriptors(){return[{name:"shift",defaultValue:50,minValue:-5000,maxValue:5000}]}
@@ -889,9 +891,9 @@ function mchain(c,m,trimDb,dest){
   const ceil=Math.pow(10,m.ceil/20),cc=new Float32Array(2048);for(let i=0;i<2048;i++){const x=(i/2047*2-1)*2;cc[i]=(Math.abs(x)<ceil*.9?x:Math.sign(x)*(ceil*.9+(ceil*.1)*Math.tanh((Math.abs(x)-ceil*.9)/(ceil*.1))))/2}clip.curve=cc;pre.gain.value=.5;unpre.gain.value=2;
   node.connect(trim).connect(lim).connect(pre).connect(clip).connect(unpre).connect(dest);return{input}}
 /* fabrique d'effet : garde la trace des oscillateurs et sources créés, pour les arrêter au démontage */
-function mkFX(type,c,p){const made=[],o=c.createOscillator,cs=c.createConstantSource,bs=c.createBufferSource;c.createOscillator=function(){const n=o.call(c);made.push(n);return n};c.createConstantSource=function(){const n=cs.call(c);made.push(n);return n};c.createBufferSource=function(){const n=bs.call(c);made.push(n);return n};
-  let u;try{u=FX[type].make(c,p)}finally{delete c.createOscillator;delete c.createConstantSource;delete c.createBufferSource}u._made=made;return u}
-function disposeFX(u){if(!u||u._dead)return;u._dead=true;if(u.out&&u.out._t)clearTimeout(u.out._t);if(u.dispose)try{u.dispose()}catch(e){}(u._made||[]).forEach(n=>{try{n.stop()}catch(e){}try{n.disconnect()}catch(e){}});try{u.out.disconnect()}catch(e){}try{u.in.disconnect()}catch(e){}}
+function mkFX(type,c,p){const made=[],o=c.createOscillator,cs=c.createConstantSource,bs=c.createBufferSource,AW=window.AudioWorkletNode;if(AW)window.AudioWorkletNode=class extends AW{constructor(...a){super(...a);made.push(this)}};c.createOscillator=function(){const n=o.call(c);made.push(n);return n};c.createConstantSource=function(){const n=cs.call(c);made.push(n);return n};c.createBufferSource=function(){const n=bs.call(c);made.push(n);return n};
+  let u;try{u=FX[type].make(c,p)}finally{delete c.createOscillator;delete c.createConstantSource;delete c.createBufferSource;if(AW)window.AudioWorkletNode=AW}u._made=made;return u}
+function disposeFX(u){if(!u||u._dead)return;u._dead=true;if(u.out&&u.out._t)clearTimeout(u.out._t);if(u.dispose)try{u.dispose()}catch(e){}(u._made||[]).forEach(n=>{try{n.port&&n.port.postMessage({__stop:1})}catch(e){}try{n.stop&&n.stop()}catch(e){}try{n.disconnect()}catch(e){}});try{u.out.disconnect()}catch(e){}try{u.in.disconnect()}catch(e){}}
 function buildMaster(c,dest,tap,trimDb=0){
   const m=scaledM(state.masterPreset,state.mInt,state.mEq);
   const input=c.createGain();let node=input;const fx=new Map();

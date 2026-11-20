@@ -94,7 +94,7 @@ Critères de qualité appliqués à chaque lot : direction artistique, réalisme
 
 ## Jugement par quatre instances séparées (20 nov., 12 h 03)
 
-Juges : son, direction artistique et écrans, fidélité aux demandes, code et sécurité. Rapports : /home/claude/judges/<juge>/RAPPORT.md (hors dépôt). Notes reçues au premier passage : son 4/10, DA 5/10, fidélité 5/10, code 5/10. Second passage : DA 6/10, fidélité 6/10.
+Juges : son, direction artistique et écrans, fidélité aux demandes, code et sécurité. Rapports : /home/claude/judges/<juge>/RAPPORT.md (hors dépôt). Notes reçues au premier passage : son 4/10, DA 5/10, fidélité 5/10, code 5/10. Second passage : DA 6/10, fidélité 6/10, code 8/10.
 
 Lettres grecques : la boîte Α à Ζ « tribute to » sort la chaîne Α à Ζ de Musik du même nom ; c'est le même objet, vu depuis la bibliothèque.
 
@@ -111,5 +111,6 @@ Corrigé après jugement :
 - polices et encodeur MP3 hébergés dans le dépôt (zéro requête vers Google Fonts et jsDelivr) ;
 - sauvegardes datées : chacune a sa propre base, reçoit une copie du projet courant à sa première ouverture et ne touche plus jamais au projet en ligne ;
 - catégories 78 tours retirées : leur mention « domaine public » repose sur des déclarations contestées en justice ;
+- nœuds de calcul des effets (worklets) arrêtés et suivis au démontage ; copie des sauvegardes réessayée en cas d'échec, limitée aux sons utilisés par le projet ;
 - chiffres du registre et du README revérifiés par le juge de la fidélité, puis corrigés là où il les a trouvés faux (collections, coupes du film, origine des noms de chaînes).
 - son (juge 4/10) : Résonateur stable (Q de boucle en dB corrigé, réinjection plafonnée à 0,95, saturation de pente 1 : zéro NaN) ; bus dub stable à tout retour (saturation de pente 1, ressort borné à 0,8 de gain par FFT, échos qui s'éteignent en 5 à 6 s) ; sonomètre interne exact au dixième de LU près de la référence BS.1770 de 30 Hz à 1 kHz ; filtres de séparation de bandes et multibande à somme plate (Q de Butterworth en dB) ; queue d'export calculée sur les effets présents (jusqu'à 60 s) ; dérive sans saut sur les durées d'écho, tailles, pièces et tenues ; grands espaces à énergie unité et posés une fois au master dans les boîtes ; outils de clip au niveau de crête de la source ; Doppler adouci ; synthèse spectrale sans ondulation (0,55 dB au lieu de 3,04) ; sous-grave à reconstruction exacte ; suivi de hauteur jusqu'à 40 Hz.

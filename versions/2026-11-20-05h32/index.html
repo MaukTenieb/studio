@@ -1,9 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
-<head><base href="../../"><script>(function(){var V="studio-v-2026-11-20-05h32",K="st.vcopied."+V;if(localStorage.getItem(K))return;document.documentElement.style.visibility="hidden";
-function op(n,up){return new Promise(function(ok,ko){var r=indexedDB.open(n,1);r.onupgradeneeded=function(){if(up){r.result.createObjectStore("snd");r.result.createObjectStore("proj")}else{r.transaction.abort()}};r.onsuccess=function(){ok(r.result)};r.onerror=function(){ok(null)}})}
+<head><base href="../../"><script>(function(){var V="studio-v-2026-11-20-05h32",K="st.vcopied."+V;try{if(localStorage.getItem(K))return}catch(e){return}var H=document.documentElement;H.style.visibility="hidden";
+function op(n,up){return new Promise(function(ok){var r=indexedDB.open(n,1);r.onupgradeneeded=function(){if(up){r.result.createObjectStore("snd");r.result.createObjectStore("proj")}else{r.transaction.abort()}};r.onsuccess=function(){ok(r.result)};r.onerror=function(){ok(null)}})}
 function all(d,s){return new Promise(function(ok){var out=[],q=d.transaction(s).objectStore(s).openCursor();q.onsuccess=function(){var c=q.result;if(c){out.push([c.key,c.value]);c.continue()}else ok(out)};q.onerror=function(){ok(out)}})}
-(async function(){try{var a=await op("studio",false),b=await op(V,true);if(a&&b&&a.objectStoreNames.contains("proj")){for(var s of ["snd","proj"]){if(!a.objectStoreNames.contains(s))continue;var rows=await all(a,s);await new Promise(function(ok){var tx=b.transaction(s,"readwrite"),st=tx.objectStore(s);rows.forEach(function(r){st.put(r[1],r[0])});tx.oncomplete=ok;tx.onerror=ok})}}a&&a.close();b&&b.close()}catch(e){}localStorage.setItem(K,"1");location.reload()})()})();</script>
+function get(d,s,k){return new Promise(function(ok){var q=d.transaction(s).objectStore(s).get(k);q.onsuccess=function(){ok(q.result)};q.onerror=function(){ok(null)}})}
+function put(d,s,rows){return new Promise(function(ok,ko){var tx=d.transaction(s,"readwrite"),st=tx.objectStore(s);rows.forEach(function(r){st.put(r[1],r[0])});tx.oncomplete=ok;tx.onerror=function(){ko(tx.error)}})}
+(async function(){var ok=false;try{var a=await op("studio",false),b=await op(V,true);
+  if(!a||!a.objectStoreNames.contains("proj")){ok=true}else if(b){var projs=await all(a,"proj");await put(b,"proj",projs);
+    /* seuls les sons utilisés par les projets sont copiés */
+    var ids={};projs.forEach(function(r){var t=typeof r[1]==="string"?r[1]:JSON.stringify(r[1]),re=/"snd":"([^"]+)"/g,m;while(m=re.exec(t))ids[m[1]]=1});
+    var rows=[];if(a.objectStoreNames.contains("snd"))for(var k in ids){var v=await get(a,"snd",k);if(v!=null)rows.push([k,v])}
+    await put(b,"snd",rows);ok=true}
+  a&&a.close();b&&b.close()}catch(e){ok=false}
+  try{if(ok)localStorage.setItem(K,"1")}catch(e){}H.style.visibility="";if(ok)location.reload()})()})();</script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Studio</title>
