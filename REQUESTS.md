@@ -54,6 +54,7 @@ Critères de qualité appliqués à chaque lot : direction artistique, réalisme
 - Échelle réelle d'un clip (menu du clip, touche « Échelle ») : hauteur suivie toutes les 20 ms, histogramme de 0 à 1 200 cents, pics nommés au cent près, comparés au tempérament égal, à la gamme juste, aux maqâms rast et bayati, au slendro, au pelog et au raga bhairav.
 - Branchements : dans le tiroir Scène, une touche bascule vers le plan des circuits. Chaque piste suit son rack d'effets jusqu'au master, puis le rack du master et la sortie. Les envois vers la scène et le dub apparaissent. Toucher une piste la coupe ; toucher un effet le contourne ; appuyer sur la pastille orange envoie la piste au dub. Les liaisons s'épaississent avec le niveau du son.
 - Scène en distances réelles : 6 m de large, 14 m de profondeur. Le son de chaque objet met le temps de l'air pour arriver (jusqu'à 44 ms), ce qui donne l'effet Doppler quand on le déplace vite. L'objet rougit en s'éloignant, bleuit en s'approchant, et indique l'écart en cents.
+- Vignettes KamOrhogo contrôlées avec de vraies vidéos sonores : l'image s'affiche sur les pistes 19 et suivantes, sur ordinateur et téléphone ; un double-clic pose le son de la vidéo en clip sur sa piste.
 
 ## À trancher par Mauk Tenieb
 
@@ -61,7 +62,6 @@ Critères de qualité appliqués à chaque lot : direction artistique, réalisme
 
 ## À faire
 
-- Vignettes vidéo de KamOrhogo sur les pistes 19 à 32 : contrôle du rendu avec de vraies vidéos.
 
 ## Écarté, avec raison
 
