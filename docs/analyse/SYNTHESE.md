@@ -276,3 +276,12 @@ Les dix rapports citent 138 captures distinctes ; les 138 fichiers existent dans
 - Les heures d'effort de la section 4 : estimations, sans mesure.
 - Les écarts de Δ (3, 2, 1) du barème de gain : convention écrite avant le calcul, qui suppose qu'une correction remonte chaque note touchée d'autant de points. Le tour suivant de la roue mesure le gain réel.
 - Le décompte des lettres grecques libres (16) et les vérifications de lignes 29, 197, 397, 713, 937, 1016, 1038, 1057, 1390, 2051, 2458, 2655, 2795 d'index.html : relus par l'agent de synthèse, conformes aux citations des rapports.
+
+## 8. Corrections faites le 20 novembre 2026
+
+Mauk Tenieb valide l'analyse et retire l'enregistrement au micro. Les corrections passent en ligne lot par lot, chacune avec une sauvegarde datée dans versions/ et une mesure avant et après, notée dans la section « Fait » de [ECARTS.md](ECARTS.md).
+
+- Écarts corrigés : 26 sur 93, dont les 12 bloquants.
+- Écarts restants : 67 (39 importants, 28 détails), dans la section « À faire » de ECARTS.md.
+- Mesures de contrôle, iPhone 13 debout et couché, neuf écrans : 0 % de cibles sous 44 px (contre 96 à 100 %), 0 à 3 % de textes sous 11 px (contre 21 à 76 %).
+- Les durées des calculs et des exports sont mesurées sur la machine au calme, une mesure à la fois.

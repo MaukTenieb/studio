@@ -6,6 +6,8 @@ Gravité choisie : la plus haute des gravités d'origine, baissée d'un cran qua
 
 ## Fait
 
+- 20 nov. 19 h 43 : E-44 ; E-65. Dérive gravée : touche ● de la dérive, chaque réglage suivi s'écrit en enveloppe fx: toutes les 200 ms et passe à l'export (filtre : 14 points par réglage en 3,5 s, rendu sans erreur). Couleurs : l'accent #f2e3a6 et ses variantes deviennent #ffe3a0, les ambres et rouges hors palette deviennent #ffa726 et #c9302a (27 remplacements) ; les polices Barlow et Courier Prime restent, DA.md réserve ses quatre familles à la borne.
+
 - 20 nov. 19 h 41 : E-11 ; E-12 ; E-21. Console au téléphone : touche D de 44 px, tranche Master épinglée au bord droit, réglage de réinjection visible. Coupes de film : seuil adaptatif (4 fois la médiane des 2 s précédentes, 0,04 au moins) et lecture deux fois moins rapide ; film gris à 5 % d'écart : 4 coupes trouvées sur 4, à 6 ms près (contre 0). Mastering : Neutral devient le réglage d'origine des projets neufs, Neutral et Classical en tête du tiroir Master, relèvement de sonie borné à +6 dB (la compensation du gain de rattrapage des compresseurs reste à faire).
 
 - 20 nov. 19 h 40 : E-17 ; E-19 ; E-51 ; E-90 ; E-71. Internet Archive : tri par pertinence dès qu'un mot est saisi ; entrée d'une collection en expression exacte, avec sujet ethnographique pour les familles de terrain (« berber » : chants d'anachid et récitation du Coran sortis de la tête de liste ; « gamelan » : 3 enregistrements de gamelan sur 5) ; Jazz sans country, chants de prison ni gospel ; Classique sans radio ancienne. Quinze boîtes « tribute to » sous les minuscules ι à ψ : Ennio Morricone, Bernard Herrmann, Jóhann Jóhannsson, Mica Levi, Trent Reznor & Atticus Ross, Angelo Badalamenti, Thomas Köner, Raison d'être, Atrium Carceri, Duke Ellington, Ornette Coleman, Sun Ra, Scientist, Mad Professor, Basic Channel ; chaque chaîne mesurée (crête −3,2 à −11 dBFS, continu ≤ −65 dBFS, zéro NaN). Fiche de terrain remplie à la pose depuis les métadonnées d'Internet Archive (lieu avec coordonnées, date, collecteur, langue, cote, licence, source), écrite dans les crédits avec l'adresse complète de la licence. Noms anglais des sons de kit sans kick, snare ni hat (bass drum, side drum, cymbals) ; réglages de l'Atelier en français ; « 1 bar ».
@@ -142,12 +144,6 @@ Gravité choisie : la plus haute des gravités d'origine, baissée d'un cran qua
   - Correction : Plancher à 0,25 px/s ; pictogramme crochets « tout le projet » : `pps = largeur utile / projEnd()`.
   - Charge de la machine : existe quelle que soit la charge.
 
-- E-44 · important · La dérive ignore le master et reste hors de l'export.
-  - Experts : 1 (04-07). Gravités d'origine : 04-07 important.
-  - Preuve : 0 effet du master suivi ; `DRIFT_SKIP_K`, `DRIFT_SKIP_T` (ligne 2592) ; l'export reprend l'instant gardé (04, S8). Capture : [04-s8-derive-pc1920](captures/04-s8-derive-pc1920.webp).
-  - Correction : Touche « enregistrer la dérive » qui écrit une enveloppe `fx:` par réglage suivi (ligne 1306) ; dérive étendue au rack du master.
-  - Charge de la machine : existe quelle que soit la charge.
-
 - E-45 · important · La lecture en direct du séquenceur part en rafales quand le fil principal prend du retard.
   - Experts : 1 (05-01). Gravités d'origine : 05-01 important.
   - Preuve : Ligne 2655 : les pas en retard partent à `Math.max(c.currentTime,t)`, ensemble. 76 intervalles nuls sur 87, paquet de 59 coups (05, S9, avec un blocage volontaire de 400 ms).
@@ -254,12 +250,6 @@ Gravité choisie : la plus haute des gravités d'origine, baissée d'un cran qua
   - Experts : 1 (10-11). Gravités d'origine : 10-11 important.
   - Preuve : Ligne 291 : masque des touches du pied seulement ; 18 commandes sur pc1366 et pc1920 (10, S2).
   - Correction : Masquer en mode simple `#bMetro,#bLoop,#bSnap,#bFree,#bCount,#bMon,#bFlash,#bTuner,#bNew` ; 9 commandes restent. Chronomètre et Flashback restent dans l'Atelier (voir contradictions).
-  - Charge de la machine : existe quelle que soit la charge.
-
-- E-65 · important · Lettres et couleurs hors de `insertkoin/DA.md`.
-  - Experts : 1 (10-12). Gravités d'origine : 10-12 important.
-  - Preuve : Barlow Semi Condensed et Courier Prime (lignes 15-18, 31), aucune des quatre familles de DA.md ; 105 couleurs hexadécimales dans le CSS ; accent le plus fréquent #f2e3a6, hors palette (10, S10).
-  - Correction : Bebas Neue pour touches et plaques, DM Mono pour compteurs et noms de sons, Press Start 2P pour les écrans à phosphore ; #f2e3a6 remplacé par #ffe3a0 ; couleurs ramenées aux variables de la ligne 22.
   - Charge de la machine : existe quelle que soit la charge.
 
 - E-66 · important · Surfaces encore dessinées : pistes vides, bouton +, grille Master.
