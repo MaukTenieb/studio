@@ -220,6 +220,9 @@ dialog .col{display:flex;flex-direction:column;gap:6px}
 .box .gl{font:700 22px/1 "Barlow Semi Condensed",serif;letter-spacing:0;min-width:1.1em;text-align:center}.box .tt{flex:1;min-width:0;white-space:nowrap;overflow:hidden;font-size:13px}
 .box .bd{display:none;padding:6px 2px 4px}.box.open .bd{display:block}.box .bf{display:block;color:var(--legend-dim);margin:0 0 4px}
 #sheet.wide{width:min(96%,1100px)}
+.sq-snd{flex:0 0 clamp(90px,18vw,170px);min-width:0;justify-content:flex-start;border-left:3px solid var(--rc)!important;text-align:left;overflow:hidden}
+.sq-ch{display:flex;flex-direction:column;gap:10px;max-height:60vh;overflow:auto}.sq-ch small{color:var(--legend-dim);display:block;margin:0 0 4px}
+.sq-tiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:6px}.sq-tile{min-height:56px;justify-content:center;border-bottom:3px solid var(--rc)!important;overflow:hidden}.sq-tile.on{background:var(--lit,#f2e3a6)!important;color:#120f0c}
 .sq-row .sq-n{flex:none;font:700 12px/1 "Barlow Semi Condensed",sans-serif;letter-spacing:.1em;padding:3px 6px;background:linear-gradient(#1c1a18,#0d0c0b 55%,#171513);color:#efe6d4;border-left:3px solid var(--rc);align-self:center}
 #sheet .lt{display:flex;gap:6px;align-items:center}#sheet .lt button{font-size:19px;line-height:1;min-width:44px}#sheet .lt b{flex:1;min-width:0;overflow:hidden;white-space:nowrap}
 #sheet{max-height:calc(100% - 16px);overflow:auto}
@@ -2603,7 +2606,9 @@ function renderSeq(){const box=$("#seq");box.classList.toggle("on",seqOn);$("#bS
   const ed=el("button",{class:SEQ.edit?"on":"",title:lang==="fr"?"Réglages des rangées : longueur, probabilité, décalage, euclidien":"Row settings: length, probability, offset, euclidean"});ed.innerHTML='<svg><use href="#i-gear"/></svg>';ed.onclick=()=>{SEQ.edit=!SEQ.edit;renderSeq()};
   const sw=el("label",{class:"sq-sw",title:"Swing"},el("span",{},"Swing"),(()=>{const i=el("input",{type:"range",min:0,max:.6,step:.01,value:SEQ.swing});i.oninput=()=>SEQ.swing=+i.value;return i})());
   const opts=seqSounds();const grid=el("div",{class:"sq-grid"},...SEQ.rows.map((r,ri)=>{const col=FAUNA_C[r.mask]||COLORS[ri%COLORS.length],own=MASK_CUTS[r.mask].map((c,j)=>lib.get("ik:"+c)||maskItem(r.mask,j));
-    const sel=el("select",{style:`--rc:${col}`,title:num(r.tr+1)},...own.map(o=>el("option",{value:o.id},o.name)),...opts.map(o=>el("option",{value:o.id},o.name)));sel.value=r.snd;sel.onchange=()=>r.snd=sel.value;
+    const cur=lib.get(r.snd)||own.find(o=>o.id===r.snd)||opts.find(o=>o.id===r.snd);
+    const sel=el("button",{class:"sq-snd",style:`--rc:${col}`,title:lang==="fr"?"Choisir le son de cette rangée":"Choose this row's sound"},el("span",{class:"tp"},el("i",{},cur?cur.name:"—")));
+    sel.onclick=async()=>{if(PICK){const {item,row}=PICK;dropPick();try{const s=await ensureSound(item);r.snd=s.id;renderSeq()}catch(e){toast("✕")}return}seqChooser(r,own,opts,col)};
     const cells=SEQ.edit?seqRowCtl(r):el("div",{class:"sq-cells",style:`--n:${rlen(r)};--rc:${col}`},...Array.from({length:rlen(r)},(_,k)=>{const b=el("b",{class:r.st[k]?"on":"","data-k":String(k)});b.onpointerdown=e=>{e.preventDefault();r.st[k]^=1;b.classList.toggle("on",!!r.st[k]);if(r.st[k]){const s=lib.get(r.snd);if(s&&!SEQ.play){const c=audio(),x=c.createBufferSource();x.buffer=s.buffer;x.connect(master.post||master.input);x.start()}}};return b}));
     return el("div",{class:"sq-row",style:`--rc:${col}`},el("span",{class:"sq-n"},num(r.tr+1)),sel,cells)}));
   box.replaceChildren(el("div",{class:"ms-row"},play,...lens,dice,ed,sw,bars,write,close),grid);fit()}
@@ -2993,6 +2998,16 @@ $("#bMoreH").onclick=()=>{const h=$("header"),on=!h.classList.contains("more");h
 
 /* la hauteur des pistes suit ce que la tête contient vraiment, mesuré après chaque rendu */
 try{new ResizeObserver(()=>{clearTimeout(fit.ro);fit.ro=setTimeout(fit,50)}).observe(document.querySelector("#trackList"))}catch(e){}
+
+/* choix du son d'une rangée : une grille de sons en gros carreaux ; toucher écoute et choisit */
+function seqChooser(r,own,opts,col){const F=lang==="fr",sh=$("#sheet");let chosen=r.snd;
+  const tile=o=>{const b=el("button",{class:"sq-tile"+(o.id===chosen?" on":""),style:`--rc:${col}`},el("span",{class:"tp"},el("i",{},o.name)));
+    b.onclick=async()=>{chosen=o.id;sh.querySelectorAll(".sq-tile.on").forEach(x=>x.classList.remove("on"));b.classList.add("on");try{const s=await ensureSound(o);const c=audio(),x=c.createBufferSource();x.buffer=s.buffer;x.connect(master.post||master.input);x.start();r.snd=s.id}catch(e){toast("✕")}};return b};
+  const groups=[[F?"Son du Mask":"Mask sound",own]];const by=new Map();for(const o of opts){const g=o.group||(F?"Autres":"Other");if(!by.has(g))by.set(g,[]);by.get(g).push(o)}
+  for(const [g,l] of by)groups.push([(F&&typeof KIT_FR!=="undefined"&&KIT_FR[g])||g,l]);
+  const body=el("div",{class:"sq-ch"},...groups.filter(([,l])=>l.length).map(([g,l])=>el("div",{},el("small",{},g),el("div",{class:"sq-tiles"},...l.map(tile)))));
+  const close=()=>{sh.classList.remove("on","wide");sh.replaceChildren();renderSeq()};
+  sh.classList.add("wide");sh.replaceChildren(el("div",{class:"lt"},el("b",{},num(r.tr+1)+" · "+(F?"son de la rangée":"row sound")),el("button",{class:"on",onclick:close},"✓")),body);sh.classList.add("on")}
 </script>
 </body>
 </html>

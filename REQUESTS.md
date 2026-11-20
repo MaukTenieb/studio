@@ -101,6 +101,8 @@ Critères de qualité appliqués à chaque lot : direction artistique, réalisme
   - bibliothèque : le doigt fait défiler la liste ; une touche brève écoute ; un appui tenu prend le son, une touche sur une piste le pose à cet endroit ;
   - poignée au-dessus de la bibliothèque : on la tire pour agrandir ou réduire, la taille reste en mémoire.
 
+- Séquenceur (13 h 55 : « je comprends même pas comment on met les sons dans le séquenceur ») : chaque rangée porte le nom de son son ; le toucher ouvre une grille de sons en gros carreaux (sons du Mask, puis familles du kit) ; toucher un carreau l'écoute et le choisit. Un son pris par appui tenu dans la bibliothèque se pose aussi sur une rangée d'un toucher.
+
 ## Jugement par quatre instances séparées (20 nov., 12 h 03)
 
 Juges : son, direction artistique et écrans, fidélité aux demandes, code et sécurité. Rapports : /home/claude/judges/<juge>/RAPPORT.md (hors dépôt). Notes reçues au premier passage : son 4/10, DA 5/10, fidélité 5/10, code 5/10. Second passage : son 7/10, DA 6/10, fidélité 6/10, code 8/10.
