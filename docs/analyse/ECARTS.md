@@ -6,6 +6,8 @@ Gravité choisie : la plus haute des gravités d'origine, baissée d'un cran qua
 
 ## Fait
 
+- 20 nov. 19 h 29 : E-06 ; E-07 ; E-08 ; E-09 ; E-10 ; E-18 ; E-35 ; E-42. Courbes de saturation symétriques (continu des 33 chaînes : −240 dBFS, contre −24,5 à −49,1 ; export Noise : −74,4 dBFS, contre −12,8). Plafond d'export en vraie crête (sinus à fs/4 : +3,04 dBTP ramené à −1,09 dBTP mesuré par Python ×16). Garde de sortie du rack : trois larsens et un écho à 0,95 restent sous −0,8 dBFS de crête pendant 30 s (contre +24,6). Touche D enregistrée pendant la lecture et rejouée à l'export (échos du dub présents à −32,8 dBFS entre 4,5 et 6 s). Réglage de réinjection sur l'écho : à 5 s, −152,9 dB au réglage 0, −67,7 dB à 0,5, auto-oscillation bornée à 1,05. Cible de sonie : deux rendus au plus, relèvement borné à +6 dB (export de 8,7 s en 4,7 à 5,3 s). Queues : ping-pong compté deux fois, écho de bande 10 + 50 × dosage s, bus dub selon sa réinjection. Projet vide : message à l'export.
+
 - 20 nov. 19 h 24 : E-01 ; E-02 ; E-16 ; E-60. Téléphone couché : bibliothèque à droite, tiroirs sur toute la largeur, console à tranches en deux colonnes avec faders, platines avec disques. Barre du clip dans le flux du pied (4 touches sur 5 au doigt, la cinquième au défilement). Cibles : 0 % sous 44 px et 0 % de texte sous 11 px sur iPhone 13 debout et couché, dans les neuf écrans mesurés (contre 96 à 100 % et 21 à 76 %). Téléprompteur : la marge de fin n'entre plus dans le calcul, M et S restent fixes.
 
 ## À faire
@@ -30,36 +32,6 @@ Gravité choisie : la plus haute des gravités d'origine, baissée d'un cran qua
   - Correction : Appeler `fillTracks(); syncUI(); render();` avant `await renderKit()` ; synthétiser d'abord les sons des rangées du séquenceur et du premier tiroir, puis le reste par lots de 20 entre deux images (`requestIdleCallback`) ; une lampe du pied s'allume pendant le chargement (pictogramme). `filmLoad` attend la promesse de `fillTracks` puis prend la première piste libre de 19 à 32. Contrôle : premier son à moins de 2 s d'horloge et moins de 1 s de calcul sur pc1366 non chargé.
   - Charge de la machine : mécanisme fixe, ampleur liée à la charge. Les durées d'horloge (6,3 à 44,9 s avant les pistes) dépendent de la charge ; les 3,33 s de calcul du fil principal et l'ordre des appels de `boot()` existent à toute charge : la gravité reste bloquante.
 
-- E-06 · bloquant · Vraie crête au-dessus du plafond à l'export.
-  - Experts : 2 (03-02, 09-11). Gravités d'origine : 03-02 bloquant, 09-11 important (partie vraie crête).
-  - Preuve : `capPeak` (ligne 1004) mesure la crête échantillon ; l'écrêteur final (lignes 984-987) travaille sans suréchantillonnage. Mastering Noise : +0,69 dBTP pour un plafond de −0,5 (03). Mastering Jazz : −0,84 dBTP pour un plafond de −1 (09). Convolution croisée : +0,01 dBTP (04, S6).
-  - Correction : Dans `capPeak`, mesurer la vraie crête par suréchantillonnage ×4 (filtre polyphase, BS.1770 annexe 2) et régler le gain sur cette valeur ; `clip.oversample="4x"` sur l'écrêteur final. Contrôle : vraie crête ≤ plafond sur les 26 masterings.
-  - Charge de la machine : existe quelle que soit la charge.
-
-- E-07 · bloquant · Composante continue dans les saturations et le master : choc grave à chaque lecture, queues jamais rognées.
-  - Experts : 1 (03-01, 03-05, 03-07). Gravités d'origine : 03-01 bloquant, 03-05 important, 03-07 important.
-  - Preuve : `driveCurve` (ligne 713) et `tapeCurve` (ligne 937) calculent `x=i/n*2-1` : le milieu de la courbe s'écarte de zéro. Repos du master Universal −78,1 dBFS constant (crête = RMS) ; export Noise −12,8 dBFS de continu ; 13 chaînes sur 15 entre −24,5 et −49,1 dBFS à vide ; HM-2 sur piste vide : −28,3 dBFS en lecture ; export larsen 17,13 s pour 4 s de son, queue « inf », dernier échantillon −0,0093 (03). Capture : [03-larsen-pose-pc1366](captures/03-larsen-pose-pc1366.webp).
-  - Correction : 1. Écrire `x=i/(n-1)*2-1` dans `driveCurve` et `tapeCurve` (comme ligne 935). 2. Passe-haut du premier ordre à 5 Hz après chaque WaveShaper de `dist`, `fold`, `m.sat` et en tête de `buildMaster`. 3. `trimTail` rogne à −80 dBFS ; fondu de sortie de 50 ms sur la queue de la boucle de larsen. Contrôle : sortie à vide de chaque chaîne ≤ −120 dBFS ; repos Noise ≤ −120 dBFS.
-  - Charge de la machine : existe quelle que soit la charge.
-
-- E-08 · bloquant · Emballement non borné en sortie de piste : trois larsens et un écho à 0,95.
-  - Experts : 1 (03-03). Gravités d'origine : 03-03 bloquant.
-  - Preuve : Banc moteur, 3 Boucles de larsen dose 1 + Écho 0,95 : +12 dBFS RMS et +24,6 dBFS crête pendant 60 s en sortie de piste, zéro NaN (03, S8).
-  - Correction : Sur chaque piste, après le rack : limiteur de sécurité à −0,3 dBFS (DynamicsCompressor attaque 0,001, taux 20) suivi de la courbe douce de pente 1 de la ligne 935 ; témoin rouge sur la tête de piste quand il agit. Contrôle : sortie de piste ≤ 0 dBFS pour toute pile d'effets.
-  - Charge de la machine : existe quelle que soit la charge.
-
-- E-09 · bloquant · Le dub joué à la console (touche D) reste absent de tout export.
-  - Experts : 1 (02-01). Gravités d'origine : 02-01 bloquant.
-  - Preuve : Ligne 1038 : `if(!(c instanceof OfflineAudioContext))dub.connect(dubBus(c,dest))` ; `PROJ_KEYS` (ligne 1059) garde `dubFb` seul ; `DK.rec` (ligne 2781) enregistre les platines seules (02, lecture du code ; prise en direct inexploitable sous la charge).
-  - Correction : 1. Relier l'envoi au bus sans condition. 2. Enregistrer chaque appui D en automation `tr.auto.dub` (points `{t,v}`), rejouée par `schedAuto` en direct et à l'export, ligne orange sous le clip. 3. Touche ● « graver le master » : `master.tail` vers un MediaStreamDestination, sur une piste libre.
-  - Charge de la machine : existe quelle que soit la charge.
-
-- E-10 · bloquant · Le réglage de réinjection « D ⟲ » change moins de 3,5 dB sur les cinq premières secondes.
-  - Experts : 1 (02-02). Gravités d'origine : 02-02 bloquant.
-  - Preuve : `dfb` figé à 0,6 (ligne 1016) ; le réglage pilote `sfb=min(.45, réglage × .6)` (ligne 1020), inerte au-dessus de 0,75. Niveau à 5 s : −57,0 à −60,5 dB de 0 à 1,05 (02, S4, `dubBus` en OfflineAudioContext).
-  - Correction : Le réglage pilote `dfb` de 0 à 1,1 ; la saturation `sat` de la boucle borne l'auto-oscillation ; limiteur à −3 dB en sortie ; le ressort passe sur un second réglage ; graduation linéaire. Contrôle : à 5 s, −80 dB au réglage 0 et −20 dB stable à 1,1.
-  - Charge de la machine : existe quelle que soit la charge.
-
 - E-11 · bloquant · Console au téléphone debout : touche D de 48 × 22 px, réglage « D ⟲ » hors de l'écran.
   - Experts : 1 (02-04). Gravités d'origine : 02-04 bloquant (partie debout).
   - Preuve : Touche D de 48 × 22 px ; « D ⟲ » à x = 1 920 px pour un écran de 390 px ; libellé à 9,6 px ; faders coupés (02). Capture : [02-console-iphone](captures/02-console-iphone.webp).
@@ -79,12 +51,6 @@ Gravité choisie : la plus haute des gravités d'origine, baissée d'un cran qua
   - Preuve : Famille « Ethnographie par région » (ligne 1466) : 9 résultats pertinents sur 69 (13 %), 6 entrées vides sur 20, « papua new guinea singing » rend 0 chant de Papouasie sur 6 ; en tête de « berber », une récitation du Coran et deux albums d'anachid jihadistes (07). Classique : 20 feuilletons radio et 12 œuvres orchestrales sur 60 (06). Jazz : `subject:(jazz OR ragtime OR blues OR swing)` (ligne 1395) remonte blues, chants de prison et country (09). Tri par téléchargements (ligne 1411). Captures : [07-entrees-region-iphone](captures/07-entrees-region-iphone.webp), [06-ia-classique-iphone](captures/06-ia-classique-iphone.webp), [09-archive-jazz-pc1920](captures/09-archive-jazz-pc1920.webp).
   - Correction : Tri par pertinence ; sujet obligatoire par famille (`subject:(ethnographic OR "field recording" OR "traditional music")`) ; requêtes de région entre guillemets ; listes d'items vérifiés à la main pour les régions ; Classique : `-subject:("old time radio" OR otr OR "radio drama" OR comedy) -collection:(oldtimeradio)` ; Jazz : `subject:(jazz) AND NOT subject:(country)` et sous-catégories free jazz, big band, swing, bebop ; entrées vides retirées.
   - Charge de la machine : existe quelle que soit la charge.
-
-- E-18 · important · L'export avec cible de sonie refait jusqu'à 5 rendus complets.
-  - Experts : 3 (03-06, 04-05, 06-06). Gravités d'origine : 03-06 important, 04-05 important, 06-06 important.
-  - Preuve : `masteredRender` (ligne 1313) relance `renderOffline` jusqu'à 5 fois. 5 rendus comptés par interception sur un projet de 642 s : 2 162 s contre 857 s sans cible, à charge 10-12 (04). Projet de 35 s à charge 13 : Universal −14 en 111,7 s, Neutral −14 en 6,6 s (06). `renderOffline` alloue tout le morceau d'un bloc puis `trimTail` et `wavBlob` recopient le tampon (04).
-  - Correction : Rendre le mixage une fois sans master ; mesurer la sonie ; repasser seulement la chaîne `mchain` (ligne 941) avec le gain d'écart ; un second rendu au plus si l'écart dépasse 1 LU ; barre d'avancement sur la touche Export ; rendu par segments de 60 s pour les projets longs ; libérer les tampons entre deux exports.
-  - Charge de la machine : existe quelle que soit la charge. Le nombre de rendus et les rapports de durée (2,5 fois, 17 fois) viennent de mesures à charge 10 à 13 ; le principe existe à toute charge.
 
 - E-19 · important · Étalons absents des boîtes d'artistes : film, dark ambient, jazz, dub.
   - Experts : 3 (01-12, 04-08, 09-12). Gravités d'origine : 01-12 important, 04-08 important, 09-12 détail ; 02 (S1, sans numéro).
@@ -182,12 +148,6 @@ Gravité choisie : la plus haute des gravités d'origine, baissée d'un cran qua
   - Correction : Réglage de temps sur la tranche Master (pictogramme bobine), de 1/16 à 1 mesure et position libre ; changement par `setTargetAtTime` de 0,1 s.
   - Charge de la machine : existe quelle que soit la charge.
 
-- E-35 · important · Queues d'écho coupées à l'export (ping-pong, écho de bande).
-  - Experts : 1 (02-06). Gravités d'origine : 02-06 important.
-  - Preuve : Chaîne Dub coupée à −26,4 dBFS de crête à 12,53 s ; écho de bande au dosage 1 coupé à −22,2 dBFS (02, S7, S8). `tailSec` (lignes 1292-1293) compte un seul passage en ping-pong et 10 s fixes pour `mz_tape`.
-  - Correction : Dans `tailSec`, doubler le temps quand `p.pp` vaut 1 ; pour `mz_tape`, 10 + 50 × dosage secondes, plafond 60 s.
-  - Charge de la machine : existe quelle que soit la charge. Mesure de l'écho de bande faite avec `musik-fx.js` chargé en Blob (02) : l'écart reste valable.
-
 - E-36 · important · Sirène et laser figés et trop forts.
   - Experts : 1 (02-07). Gravités d'origine : 02-07 important.
   - Preuve : −2,1 et −1,4 LUFS, 7 s et 5 s fixes, fondu forcé de 0,4 s, aucun réglage (lignes 1886, 1909-1912) (02, S9). Capture : [02-sirene-posee-iphone](captures/02-sirene-posee-iphone.webp).
@@ -222,12 +182,6 @@ Gravité choisie : la plus haute des gravités d'origine, baissée d'un cran qua
   - Experts : 1 (03-10). Gravités d'origine : 03-10 important.
   - Preuve : Zéro résultat pour « panic » et « panique » dans index.html ; la coupure au repos (`restGate`, ligne 963) rend le silence en 2 à 3 s (03).
   - Correction : Pictogramme ⏻ dans l'en-tête et le menu ⋯ : master coupé en 10 ms, lignes à retard et boucles vidées (`rebuildChains`).
-  - Charge de la machine : existe quelle que soit la charge.
-
-- E-42 · important · Export d'un projet vide : zéro fichier, zéro message.
-  - Experts : 1 (03-04). Gravités d'origine : 03-04 important.
-  - Preuve : `renderOffline` rend `null` (lignes 1295-1296), `doExport` sort par `if(!r)return;` (ligne 1323) (03, S2). Capture : [03-export-vide-iphone](captures/03-export-vide-iphone.webp).
-  - Correction : `toast("∅")` comme l'export des pistes séparées (ligne 1322).
   - Charge de la machine : existe quelle que soit la charge.
 
 - E-43 · important · Zoom arrière bloqué à 8 px/s.

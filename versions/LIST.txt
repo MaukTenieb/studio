@@ -1,3 +1,4 @@
+2026-11-20-19h29|82439ad|son : continu, vraie crête, garde du rack, dub exporté, réinjection
 2026-11-20-19h24|a9c23cf|téléphone : couché à deux colonnes, barre du clip, 44 px, 11 px
 2026-11-20-19h05|a9c23cf|avant les corrections de l'analyse
 2026-11-20-14h41|e78324a|séquenceur rempli
