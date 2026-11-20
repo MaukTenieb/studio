@@ -596,6 +596,13 @@ button.on:not(.rec):not(#bRec):not(#bPlay):not(.dubb):not(.tk)::after,#bMode.on:
 #bpm::-webkit-inner-spin-button,#bpm::-webkit-outer-spin-button{-webkit-appearance:none;margin:0}
 header #bpm{width:64px}
 @media (max-width:430px){header #bpm{width:50px;font-size:11px!important}}
+
+/* écran étroit (StudioRhogo dans l'écran de la borne, téléphone debout : 380 px et moins) : horloge entière, annuler et arrêt d'urgence passent dans ⋯, pied en pictogrammes */
+@media (max-width:380px){
+  header #bUndo,header #bPanic{display:none}header.more #bUndo,header.more #bPanic{display:inline-flex}
+  #clock{flex:none}header #bpm{width:46px}
+  footer{max-width:100vw;min-width:0;box-sizing:border-box;padding-left:6px!important;padding-right:6px!important}footer .lbl{display:none!important}footer .sp{min-width:0!important;flex:1 1 0!important;width:auto!important}
+}
 </style>
 </head>
 <body>
@@ -778,7 +785,8 @@ const T={
   reverse:"Inverser",normalize:"Normaliser",gainUp:"Gain +3 dB",gainDown:"Gain −3 dB",transpose:"Transposer…",stretch:"Vitesse (hauteur gardée)…",loop:"Répéter ×…",mute:"Couper le clip",denoise:"Débruiter",copy:"Copier",paste:"Coller",dup:"Dupliquer",split:"Couper en deux",del:"Supprimer",rename:"Renommer…",fadeReset:"Retirer les fondus",toSounds:"Figer dans mes sons",loopSel:"Boucler ce clip",atelier:"Atelier ▸",separate:"Séparer ▸",fuse:"Fusionner la sélection (Ctrl+J)",fused:"Fusion",needTwo:"Sélectionne au moins deux clips (Maj+clic ou cadre à la souris).",bounce:"Figer avec les effets",sepOnsets:"Découper aux attaques",sepSilence:"Retirer les silences",sepHpss:"Harmonique / percussif",sepBands:"Graves / médiums / aigus",sepMS:"Centre / côtés",splitDone:"Découpé",harm:"Harmonique",perc:"Percussif",low:"Graves",mid:"Médiums",high:"Aigus",fbOn:"Flashback écoute : les 60 dernières secondes restent en mémoire. F les capture.",fbGot:"Flashback capturé",full:"Les 32 pistes sont occupées.",loopX2:"Répéter",slice:"Trancher",more:"Plus",shift:"Décaler",transposeS:"Transposer",semisS:"Demi-tons",speedS:"Vitesse",fadeIn:"Entrée",fadeOut:"Sortie",envelope:"Enveloppe d'automation",autoVol:"Volume",autoPan:"Panoramique",autoHide:"Masquer l'enveloppe",fades:"Fondus",fuseS:"Fusionner",atelierS:"Atelier",separateS:"Séparer",searchAll:"Chercher dans tous les sons…",collections:"Collections",mine:"Mes sons",collapse:"Replier / déplier",flash:"Flashback",
   semis:"Demi-tons (−12 … +12)",speed:"Vitesse en % (50 … 200)",times:"Combien de répétitions ?",working:"Calcul…",addFx:"+ effet",presets:"Chaînes d'effets",none:"—",lyrics:"Paroles, notes…",tuner:"Accordeur",exportT:"Export",wav:"Mix WAV",mp3:"Mix MP3",stems:"Pistes séparées WAV (un fichier par piste)",countIn:"Décompte",monitor:"Écoute de contrôle (casque)",master:"Master",autoV:"Automation du volume",autoP:"Automation du panoramique",autoHelp:"Clic : ajoute un point. Glisser : déplace. Double-clic : retire."}
 };
-let lang=(localStorage.getItem("st.lang")||((navigator.language||"en").startsWith("fr")?"fr":"en"));
+/* une seule clé de langue pour tout l'écosystème (ik.lang d'Insert Koin), StudioRhogo compris */
+let lang=(localStorage.getItem("ik.lang")||localStorage.getItem("st.lang")||((navigator.language||"en").startsWith("fr")?"fr":"en"));
 const t=k=>T[lang][k]||T.en[k]||k;
 const $=s=>document.querySelector(s);
 const el=(tag,attrs={},...kids)=>{const e=document.createElement(tag);for(const k in attrs){if(k==="class")e.className=attrs[k];else if(k.startsWith("on"))e.addEventListener(k.slice(2),attrs[k]);else if(k==="style")e.style.cssText=attrs[k];else e.setAttribute(k,attrs[k]);}for(const c of kids)if(c!=null)e.append(c);return e};
@@ -2781,7 +2789,8 @@ addEventListener("keydown",e=>{const tg=e.target.tagName;if((tg==="INPUT"&&e.tar
   else if(k==="+"||k==="=")zoom(1.25)
   else if(k==="-")zoom(.8)});
 function applyLang(){document.documentElement.lang=lang;if(typeof renderColl==="function")renderColl();$("#bLang").textContent=lang==="fr"?"EN":"FR";document.querySelectorAll("[data-t]").forEach(n=>n.textContent=t(n.dataset.t));document.querySelectorAll("[data-tp]").forEach(n=>n.placeholder=t(n.dataset.tp));document.querySelectorAll("[data-tt]").forEach(n=>n.title=t(n.dataset.tt));renderIaCats();if(typeof frTitles==="function")frTitles(document.body)}
-$("#bLang").onclick=()=>{lang=lang==="fr"?"en":"fr";localStorage.setItem("st.lang",lang);applyLang();renderKitList()};
+$("#bLang").onclick=()=>{lang=lang==="fr"?"en":"fr";localStorage.setItem("st.lang",lang);try{localStorage.setItem("ik.lang",lang)}catch(e){}applyLang();renderKitList()};
+addEventListener("storage",e=>{if(e.key==="ik.lang"&&(e.newValue==="fr"||e.newValue==="en")&&e.newValue!==lang){lang=e.newValue;applyLang();renderKitList()}});
 function syncUI(){$("#bpm").value=state.bpm;$("#bLoop").classList.toggle("on",!!state.loop);$("#bMetro").classList.toggle("on",!!state.metro);$("#bSnap").classList.toggle("on",!!state.snap);$("#bCount").classList.toggle("on",!!state.countIn);$("#bMon").classList.toggle("on",!!state.monitor);
   $("#mVol").value=state.masterVol;$("#mLim").classList.toggle("on",!!state.limiter);$("#mPre").value=state.masterPreset;$("#mTgt").value=String(state.target);$("#lyrics").value=state.lyrics||""}
 const MS_FR={Universal:"Universel",Fire:"Feu",Clarity:"Clarté",Tape:"Bande",Punch:"Punch",Neutral:"Neutre",Natural:"Naturel",Cinematic:"Cinéma",Spatial:"Spatial",Warm:"Chaud",Bright:"Brillant",Loud:"Fort",Wide:"Large",Vintage:"Ancien","Lo-fi":"Lo-fi","Bass boost":"Basses en avant",Vocal:"Voix",Acoustic:"Acoustique",Classical:"Classique",Jazz:"Jazz","Hip-hop":"Hip-hop",EDM:"EDM",Rock:"Rock",Ambient:"Ambient",Podcast:"Podcast",Noise:"Noise"};
