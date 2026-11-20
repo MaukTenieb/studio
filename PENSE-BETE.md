@@ -42,3 +42,5 @@ Claude relit ce fichier avant chaque lot, puis REQUESTS.md. Chaque ligne reprend
 - Liens complets en https:// ; listes d'étapes numérotées, sans gras.
 - Commits : auteur et committer Mauk Tenieb.
 - Jamais saisir de clé d'API ni de mot de passe ; jamais de secret dans le dépôt.
+
+- Direction artistique commune avec le Kamescope et Musik : DA.md d'Insert Koin, section « Les trois appareils : Kamescope, StudioRhogo, Musik ». Toute touche, tout voyant, tout afficheur ou pictogramme ajouté suit ce tableau.
