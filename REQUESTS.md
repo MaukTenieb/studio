@@ -56,12 +56,16 @@ Critères de qualité appliqués à chaque lot : direction artistique, réalisme
 - Scène en distances réelles : 6 m de large, 14 m de profondeur. Le son de chaque objet met le temps de l'air pour arriver (jusqu'à 44 ms), ce qui donne l'effet Doppler quand on le déplace vite. L'objet rougit en s'éloignant, bleuit en s'approchant, et indique l'écart en cents.
 - Vignettes KamOrhogo contrôlées avec de vraies vidéos sonores : l'image s'affiche sur les pistes 19 et suivantes, sur ordinateur et téléphone ; un double-clic pose le son de la vidéo en clip sur sa piste.
 
+- Couleur des échantillonneurs dans le rack : SP-1200 (26,04 kHz, 12 bits), MPC60 (40 kHz, 12 bits), ASR-10 (29,76 kHz, 16 bits), S950 (22,05 kHz, 12 bits), chacun avec son filtre de sortie et une saturation à gain constant.
+- Sous-grave : une octave sous la fondamentale, graves ramenés au centre sous la fréquence choisie.
+- Grands espaces : grotte, silo (échos de paroi métallique), cathédrale ; la tenue allonge la queue jusqu'à une minute, avec une lente dérive de hauteur.
+- Boîtes à bruit : sirène dub et laser analogique, chacun dans un écho à bande qui s'emballe.
+
 ## À trancher par Mauk Tenieb
 
 - Figurines 3D des pistes 01 à 18 : elles restent en 3D, comme demandé ; la règle photographique de la DA appelle des portraits photographiques. Décision réservée à l'auteur.
 
 ## À faire
-
 
 ## Écarté, avec raison
 

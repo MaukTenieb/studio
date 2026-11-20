@@ -20,6 +20,7 @@ https://mauktenieb.github.io/studio/
 - Loudness targets measured in LUFS after ITU-R BS.1770 (K-weighting, gating): −9 club, −11 CD, −14 streaming, −16 Apple and podcast, −23 EBU R128, −24 ATSC A/85; the export iterates until the mix lands on the target, with the peak held under the preset ceiling.
 - Room reverbs modelled from early reflections and frequency-dependent decay: closet, bathroom, kitchen, bedroom, living room, vocal booth, studio, classroom, car, stairwell, parking garage, club, theatre, concert hall, church, cathedral, cave, tunnel, plate, spring.
 - Tempo, metronome, count-in, snap to the sixteenth, loop region drawn on the ruler, chromatic tuner, lyrics pad.
+- Sampler colours (SP-1200, MPC60, ASR-10, S950), sub octave with mono lows, large spaces (cave, silo, cathedral) with a hold up to one minute, dub siren and analog laser noise boxes.
 - Stage in real distances (6 m wide, 14 m deep): each object's sound takes the time of the air to arrive, so a fast move bends its pitch (Doppler). The object reddens moving away, turns blue coming closer.
 - Routing view, inside the Stage drawer: each track through its effects to the master, the master rack and the output, with the stage and dub sends. Tap a track to mute it, an effect to bypass it, hold the orange port to send to the dub. Links thicken with the signal level.
 - Actual scale of a clip: pitch tracked every 20 ms, a 0–1200 cent histogram with peaks named to the cent, compared with equal temperament, just intonation, maqam rast and bayati, slendro, pelog and raga bhairav.
@@ -91,3 +92,5 @@ La touche Échelle du menu d'un clip montre l'échelle réellement jouée : la h
 Dans le tiroir Scène, une touche ouvre le plan des branchements : chaque piste traverse ses effets jusqu'au master, puis le rack du master et la sortie, avec les envois vers la scène et le dub. Toucher une piste la coupe, toucher un effet le contourne, appuyer sur la pastille orange envoie la piste au dub. Les liaisons s'épaississent avec le niveau.
 
 La scène mesure 6 m de large et 14 m de profondeur. Le son de chaque objet met le temps de l'air à arriver ; déplacé vite, il glisse en hauteur comme une sirène qui passe (effet Doppler). L'objet rougit en s'éloignant, bleuit en s'approchant.
+
+Le rack reçoit la couleur des échantillonneurs SP-1200, MPC60, ASR-10 et S950, un sous-grave à l'octave inférieure avec graves au centre, et trois grands espaces : grotte, silo, cathédrale, avec une tenue jusqu'à une minute. Les boîtes à bruit ajoutent la sirène dub et le laser analogique.
