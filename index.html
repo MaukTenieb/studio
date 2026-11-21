@@ -624,10 +624,16 @@ header #bpm{width:64px}
   .thead .r2 button{min-width:0!important;flex:1 1 0;min-height:34px!important;padding:0!important}
   .thead .r1 button{min-height:30px!important}
   .thead .r1 input.name{height:32px!important;min-height:0!important;font-size:15px}
+  /* analyse FaunEye, point 4 (finalité : toucher M ou S sans se tromper) : les effets passent dans le menu ⋯ de la piste, qui luit quand la piste en a ; M et S prennent la place */
+  .thead .r2 .fxk{display:none!important}
+  .thead .r2 button{font-size:14px!important}
+  .thead .tmenu.has{color:#ffc061;text-shadow:0 0 6px rgba(255,192,97,.6)}
   #emptyGo button{width:58px!important;height:58px!important}
   #emptyGo button svg{width:26px;height:26px}
 }
-aside.min{height:auto!important}aside.min .gsearch{display:none!important}
+aside.min{height:auto!important}
+/* analyse FaunEye, point 7 : l'export se dit par la flèche, comme dans Musik ; le mot reste dans l'infobulle et pour les lecteurs d'écran */
+#bExport span{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}aside.min .gsearch{display:none!important}
 </style>
 </head>
 <body>
@@ -2255,9 +2261,9 @@ function render(){
     const name=el("input",{class:"name",value:tr.name,title:tr.name});name.addEventListener("change",()=>{tr.name=name.value;save()});name.addEventListener("pointerdown",e=>e.stopPropagation());
     const tog=(lbl,key,title)=>{const b=el("button",{class:tr[key]?"on":"",title},lbl);b.onclick=()=>{tr[key]=!tr[key];updTrack(tr);render();save()};return b};
     const arm=el("button",{class:"rec"+(state.armed===tr.id?" on":""),title:"Arm"},icon("mic"));arm.onclick=()=>{state.armed=state.armed===tr.id?null:tr.id;render()};
-    const fx=el("button",{title:"FX",class:(fxOpen===tr.id?"on":"")+(tr.rack.length?" has":"")},icon("fx"));fx.onclick=()=>{fxOpen=fxOpen===tr.id?null:tr.id;renderFx();render()};
+    const fx=el("button",{title:"FX",class:"fxk "+(fxOpen===tr.id?"on":"")+(tr.rack.length?" has":"")},icon("fx"));fx.onclick=()=>{fxOpen=fxOpen===tr.id?null:tr.id;renderFx();render()};
     const au=el("button",{title:t("envelope"),class:"au"+(tr.showAuto?" on":"")},"A");au.onclick=e=>autoMenu(e,tr);
-    const menu=el("button",{title:"…"},"⋯");menu.onclick=e=>trackMenu(e,tr);
+    const menu=el("button",{title:"…",class:"tmenu"+(tr.rack.length?" has":"")},"⋯");menu.onclick=e=>trackMenu(e,tr);
     const vol=el("input",{type:"range",min:0,max:1.2,step:.01,title:"Volume"});vol.value=tr.vol;vol.oninput=()=>{tr.vol=+vol.value;updTrack(tr);save()};vol.ondblclick=()=>{tr.vol=.8;vol.value=.8;updTrack(tr);save()};
     const pan=el("input",{type:"range",min:-1,max:1,step:.01,title:"Pan",style:"width:45%"});pan.value=tr.pan;pan.oninput=()=>{tr.pan=+pan.value;updTrack(tr);save()};pan.ondblclick=()=>{tr.pan=0;pan.value=0;updTrack(tr)};
     const ti=state.tracks.indexOf(tr),mh=mediaHead(ti);const head=el("div",{class:"thead"+(mh?" withfig":"")},el("div",{class:"ctl"},el("div",{class:"r1"},name,menu),el("div",{class:"r2"},tog("M","mute","Mute"),tog("S","solo","Solo"),arm,fx,au),el("div",{class:"r3"},vol,pan)),mh);
@@ -2626,6 +2632,7 @@ function clipMenu(x,y,tr,c){
 }
 function paste(tr,at){if(!clipboard)return;edit(()=>{const n={...clipboard,id:uid(),start:at};tr.clips.push(n);state.sel=n.id})}
 function trackMenu(e,tr){const r=e.currentTarget.getBoundingClientRect(),F=lang==="fr";openMenu(r.left,r.bottom,[
+  [(fxOpen===tr.id?"● ":"○ ")+(F?"Effets":"Effects")+(tr.rack.length?" ("+tr.rack.length+")":""),()=>{fxOpen=fxOpen===tr.id?null:tr.id;renderFx();render()}],
   [(state.armed===tr.id?"● ":"○ ")+(F?"Armer pour enregistrer":"Arm for recording"),()=>{state.armed=state.armed===tr.id?null:tr.id;render()}],
   [(F?"Enveloppes":"Envelopes")+" (A)",()=>autoMenu({currentTarget:e.currentTarget},tr)],
   [(F?"Volume et pano : console":"Volume and pan: console"),()=>drawer("console")],
