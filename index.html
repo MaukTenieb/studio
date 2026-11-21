@@ -1550,7 +1550,7 @@ async function doExport(kind){
     for(const[tr,b0]of rs){const b=new AudioBuffer({numberOfChannels:2,length:L,sampleRate:SRx});for(let c=0;c<2;c++){const d=b.getChannelData(c);d.set(b0.getChannelData(Math.min(c,b0.numberOfChannels-1)),PRE*SRx);if(PRE)for(let i=0;i<Math.round(SRx/24);i++)d[i]=.1*Math.sin(2*Math.PI*1000*i/SRx)}
       files.push([`${name}-${tr.name.replace(/[^\w-]+/g,"_")}.wav`,wavBlob(b,BITS,0)])}const c=creditsTxt(used);if(c)files.push([name+"-credits.txt",new Blob([c],{type:"text/plain"})]);if(!files.length){toast("∅");return}download(await zipBlob(files),name+"-pistes.zip")}
   else{const r=await masteredRender();if(!r){toast(lang==="fr"?"Projet vide : zéro son à exporter":"Empty project: no sound to export");return}const name=stamp();
-    if(kind==="mp3")download(await mp3Blob(r.b),name+".mp3");else download(wavBlob(r.b),name+".wav");
+    const wv=wavBlob(r.b);if(kind==="mp3")download(await mp3Blob(r.b),name+".mp3");else download(wv,name+".wav");studioKeep(wv,name);
     const c=creditsTxt(r.used);if(c)download(new Blob([c],{type:"text/plain"}),name+"-credits.txt")}
   toast(t("exported"))}catch(e){console.warn(e);toast("✕")}finally{status()}
 }
@@ -1842,7 +1842,12 @@ function mediaHead(i){
 try{new BroadcastChannel("borne-vid").onmessage=()=>kamLoad()}catch(e){}
 /* Musik → StudioRhogo (20 nov. 2026) : les rendus KAVE de Musik (base « borne-musik », magasin « kave ») entrent dans la bibliothèque ; posés sur une piste, ils ouvrent une section au tempo de Musik et marquent leurs motifs A B C D sur la règle */
 const MUSIK={items:[],urls:[]};
-async function musikLoad(){MUSIK.urls.forEach(u=>URL.revokeObjectURL(u));MUSIK.urls=[];const L=await idbAll("borne-musik","kave");
+/* 21 nov. 2026 : StudioRhogo monte, mixe et livre (DA.md) ; le mix exporté rejoint l'étagère commune « borne-musik/kave » (8 plus récents), et Musik le reçoit dans sa bibliothèque */
+function studioKeep(blob,name){try{const r=indexedDB.open("borne-musik",1);r.onupgradeneeded=()=>r.result.createObjectStore("kave",{keyPath:"id"});
+  r.onsuccess=()=>{try{const tx=r.result.transaction("kave","readwrite"),os=tx.objectStore("kave"),t=Date.now();os.put({id:"sr"+t,t,name:"StudioRhogo "+name,src:"studio",kind:"wav",mime:blob.type,blob,bpm:state.bpm});
+    const q=os.getAll();q.onsuccess=()=>{(q.result||[]).sort((a,b)=>b.t-a.t).slice(8).forEach(x=>os.delete(x.id))};
+    tx.oncomplete=()=>{try{new BroadcastChannel("borne-musik").postMessage("studio")}catch(e){}}}catch(e){}}}catch(e){}}
+async function musikLoad(){MUSIK.urls.forEach(u=>URL.revokeObjectURL(u));MUSIK.urls=[];const L=(await idbAll("borne-musik","kave")).filter(x=>x.src!=="studio");
   MUSIK.items=L.map(x=>{const u=URL.createObjectURL(x.blob);MUSIK.urls.push(u);return{id:"mk:"+x.id,name:x.name+"  \u2669"+x.bpm+" \u00b7 "+x.n+" \u00b7 "+(x.pats||[]).join(""),src:"musik",remote:u,musik:{bpm:x.bpm,n:x.n,pats:x.pats||["A"]},credit:{title:x.name,author:"Mauk Tenieb",license:"Musik",url:"https://mauktenieb.github.io/insertkoin/"}}});
   if(typeof renderKitList==="function")renderKitList()}
 function musikSections(item,at){const m=item&&item.musik;if(!m)return;const d=60/m.bpm/4*m.n;
