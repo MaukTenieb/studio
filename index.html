@@ -641,6 +641,16 @@ aside.min{height:auto!important}
 body.simple .thead .rec,body.simple .thead .fxk,body.simple .thead .au,body.simple .thead input[title="Pan"],
 body.simple #mTgt,body.simple #mMeas,body.simple #mPre,body.simple #mLim{display:none!important}
 body.simple #mVol{width:clamp(120px,22vw,260px)!important}
+/* 21 nov. 2026 : matières de console de Mauk Tenieb (Midjourney) — tranche de piste en aluminium brossé vissé, touches carrées à voyant
+   (le voyant s'allume quand la touche est enfoncée), bouton de fader strié, plateau de pupitre sous les pistes */
+.thead{background:url(img/plaque-piste.webp) 0 0/100% 100% no-repeat!important;box-shadow:inset 4px 0 0 var(--c),inset 0 -1px 0 rgba(0,0,0,.6)!important;border-bottom:1px solid #070605!important}
+.thead .r2>button:is([title=Mute],[title=Solo]){background:url(img/touche.webp) center/100% 100% no-repeat!important;border:0!important;border-radius:3px!important;box-shadow:0 1px 2px rgba(0,0,0,.7)!important;
+  color:rgba(222,214,196,.78)!important;font:700 9px/1 "Barlow Semi Condensed","DM Mono",monospace!important;letter-spacing:.08em;display:flex!important;align-items:flex-start!important;justify-content:center!important;padding-top:3px!important}
+.thead .r2>button:is([title=Mute],[title=Solo]).on{background-image:url(img/touche-on.webp)!important;color:#f3ead6!important}
+.thead input[type=range]::-webkit-slider-thumb{width:30px!important;height:19px!important;margin-top:-8px!important;border:0!important;border-radius:2px!important;background:url(img/fader.webp) center/100% 100% no-repeat!important;box-shadow:0 2px 3px rgba(0,0,0,.75)!important}
+.thead input[type=range]::-moz-range-thumb{width:30px;height:19px;border:0;border-radius:2px;background:url(img/fader.webp) center/100% 100% no-repeat;box-shadow:0 2px 3px rgba(0,0,0,.75)}
+#mVol::-webkit-slider-thumb{width:30px!important;height:19px!important;margin-top:-8px!important;border:0!important;background:url(img/fader.webp) center/100% 100% no-repeat!important}
+.lane::before{content:"";position:absolute;inset:0;background:url(img/desk.webp) center/cover;mix-blend-mode:overlay;opacity:.5;pointer-events:none}
 /* jugement externe : la règle d'un seul tenant (les raccords du jonc répété tombaient hors des mesures) */
 #ruler{background:linear-gradient(rgba(11,9,8,.45),rgba(11,9,8,.55)),url(img/jonc.webp) left center/100% 100% no-repeat!important}
 body.simple .thead input[aria-label="Volume"],body.simple .thead .r3 input:not([title="Pan"]){width:100%!important}
