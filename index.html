@@ -613,6 +613,21 @@ header #bpm{width:64px}
 .knob .cap::after{left:0!important;top:0!important;width:100%!important;height:100%!important;margin:0!important;border-radius:50%;box-shadow:none!important;background:linear-gradient(#e9dcc0,#e9dcc0) 50% 24%/2px 26% no-repeat!important;filter:drop-shadow(0 .7px 0 rgba(0,0,0,.85));transform:rotate(var(--a,0deg))}
 #fx{background:#15120f url(img/rack-fx.webp) center top/100% auto repeat-y!important}
 #fx .card{background:rgba(14,12,10,.78)!important;border-color:rgba(0,0,0,.6)!important;backdrop-filter:blur(1px)}
+
+/* 21 nov. 2026 (Mauk Tenieb : StudioRhogo dans la borne, téléphone debout) — présentation compacte, à la manière de BandLab et GarageBand sur téléphone :
+   la zone de montage d'abord ; tête de piste sur deux rangées (nom, puis M S effets), figurine réduite ; bouton « + » à la mesure d'une piste ;
+   bibliothèque rangée au départ, ouverte par sa touche (choix mémorisé) */
+@media (pointer:coarse) and (orientation:portrait) and (max-height:620px){
+  :root{--head:136px!important}
+  .thead.withfig canvas.fig,.thead.withfig .kam{width:30px!important}
+  .thead .r2{flex-wrap:nowrap!important;row-gap:0}
+  .thead .r2 button{min-width:0!important;flex:1 1 0;min-height:34px!important;padding:0!important}
+  .thead .r1 button{min-height:30px!important}
+  .thead .r1 input.name{height:32px!important;min-height:0!important;font-size:15px}
+  #emptyGo button{width:58px!important;height:58px!important}
+  #emptyGo button svg{width:26px;height:26px}
+}
+aside.min{height:auto!important}aside.min .gsearch{display:none!important}
 </style>
 </head>
 <body>
@@ -2768,8 +2783,11 @@ function panic(){const c=audio();if(playing)stop();if(SEQ.play)seqStop();if(type
 $("#bPanic").onclick=panic;
 $("#bZfit").onclick=()=>{const sc=$("#scroller"),w=sc.clientWidth-headW()-24,end=Math.max(4,projEnd());state.pps=clamp(w/end,.25,800);render();sc.scrollLeft=0;save()};
 $("#scroller").addEventListener("wheel",e=>{if(e.ctrlKey||e.metaKey){e.preventDefault();zoom(e.deltaY<0?1.15:1/1.15)}},{passive:false});
-document.querySelectorAll("aside nav button[data-p]").forEach(b=>b.onclick=()=>{document.querySelectorAll("aside nav button[data-p]").forEach(x=>x.classList.toggle("on",x===b));document.querySelectorAll(".pane").forEach(p=>p.classList.toggle("on",p.id==="p-"+b.dataset.p));$("#side").classList.remove("min");if(b.dataset.p==="mine")renderMine()});
-$("#bSide").onclick=()=>$("#side").classList.toggle("min");
+document.querySelectorAll("aside nav button[data-p]").forEach(b=>b.onclick=()=>{if($("#side").classList.contains("min")){$("#side").classList.remove("min");try{localStorage.setItem("st.side.min","0")}catch(e){}requestAnimationFrame(()=>{if(typeof fit==="function")fit()})}document.querySelectorAll("aside nav button[data-p]").forEach(x=>x.classList.toggle("on",x===b));document.querySelectorAll(".pane").forEach(p=>p.classList.toggle("on",p.id==="p-"+b.dataset.p));$("#side").classList.remove("min");if(b.dataset.p==="mine")renderMine()});
+$("#bSide").onclick=()=>{const m=$("#side").classList.toggle("min");try{localStorage.setItem("st.side.min",m?"1":"0")}catch(e){}if(typeof fit==="function")fit()};
+/* 21 nov. 2026 : écran court au doigt (téléphone debout, borne) : bibliothèque rangée au départ, sauf choix contraire mémorisé */
+(()=>{let v=null;try{v=localStorage.getItem("st.side.min")}catch(e){}const H=(window.visualViewport||window).height||innerHeight,coarse=matchMedia("(pointer:coarse)").matches;
+  if(v==="1"||(v===null&&coarse&&innerWidth<innerHeight&&H<=620))$("#side").classList.add("min")})();
 $("#fsForm").onsubmit=e=>{e.preventDefault();const q=$("#fsQ").value.trim();if(q)fsSearch(q)};
 $("#gsQ").addEventListener("input",()=>{clearTimeout(gsTimer);gsTimer=setTimeout(()=>globalSearch($("#gsQ").value),350)});$("#gsQ").addEventListener("keydown",e=>{if(e.key==="Enter"){clearTimeout(gsTimer);globalSearch($("#gsQ").value)}else if(e.key==="Escape"){$("#gsQ").value="";globalSearch("")}});
 $("#wForm").onsubmit=e=>{e.preventDefault();worldSearch($("#wQ").value.trim())};renderWorldSrc();
