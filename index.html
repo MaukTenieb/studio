@@ -515,7 +515,7 @@ footer .lbl{font-size:max(12px,.8em)!important}
 /* séquenceur au téléphone debout (E-46) : rangée en deux étages, cellules de 44 px par lignes de 8 */
 #seq>.ms-row{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none}#seq>.ms-row>*{flex:none}
 @media (pointer:coarse){.sq-row{flex-wrap:wrap;flex:none}.sq-row .sq-snd{flex:1 1 auto}.sq-cells{flex:1 1 100%;grid-template-columns:repeat(auto-fill,minmax(44px,1fr))}.sq-cells b{min-height:40px}.sq-ctl{flex:1 1 100%;flex-wrap:wrap}.sq-ctl label>span{display:inline}}
-body.drawer-open #emptyGo,body.rec #emptyGo{display:none!important}
+body.drawer-open #emptyGo,body.rec #emptyGo,body:has(#mFx.on) #emptyGo,body:has(#sheet.on) #emptyGo{display:none!important}
 body.simple #bMetro,body.simple #bLoop,body.simple #bSnap,body.simple #bFree,body.simple #bCount,body.simple #bMon,body.simple #bFlash,body.simple #bTuner,body.simple #bNew{display:none!important}
 /* analyse du 20 nov. 2026 : poignées de fondu sur le clip choisi seulement, nom masqué sous 48 px (E-61) ; onglets des pads en grille de 44 px (E-62) ;
    axes des pads lisibles (E-100) ; feuille Créer 3 × 2 en portrait (E-98) ; Créer en pictogramme seul dans le pied de l'Atelier sous 760 px (E-99) ; barre du clip au-dessus du rack (E-75) */
