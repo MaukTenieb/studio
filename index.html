@@ -651,6 +651,17 @@ body.simple #mVol{width:clamp(120px,22vw,260px)!important}
 .thead input[type=range]::-moz-range-thumb{width:30px;height:19px;border:0;border-radius:2px;background:url(img/fader.webp) center/100% 100% no-repeat;box-shadow:0 2px 3px rgba(0,0,0,.75)}
 #mVol::-webkit-slider-thumb{width:30px!important;height:19px!important;margin-top:-8px!important;border:0!important;background:url(img/fader.webp) center/100% 100% no-repeat!important}
 .lane::before{content:"";position:absolute;inset:0;background:url(img/desk.webp) center/cover;mix-blend-mode:overlay;opacity:.5;pointer-events:none}
+/* jugement externe (21 nov.) : la bibliothèque en fichier à fiches d'atelier — intercalaires cartonnés à onglet de couleur, lettrage d'étiqueteuse,
+   champ de recherche en vitre d'afficheur ; même pupitre métal que les tranches */
+aside#side{background:linear-gradient(rgba(8,7,6,.55),rgba(8,7,6,.7)),url(img/desk.webp) center/cover!important}
+aside .kitg.sub>summary{background:linear-gradient(#d9ccb0,#c9b994)!important;color:#2a2118!important;border-radius:3px 3px 0 0!important;margin:3px 0 0!important;padding:5px 8px 4px!important;
+  font:600 12px/1.2 "Barlow Semi Condensed","DM Mono",sans-serif!important;letter-spacing:.06em;text-transform:uppercase;box-shadow:0 1px 0 rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.4)!important;border-top:3px solid var(--c,#8a7a5a)!important;width:fit-content;min-width:58%;max-width:100%}
+aside .kitg.sub>summary::before{content:"";width:0;height:0;border-left:5px solid #5a4a36;border-top:4px solid transparent;border-bottom:4px solid transparent;margin:3px 7px 0 0}
+aside .kitg.sub[open]>summary::before{transform:rotate(90deg)}
+aside .kitg.sub>summary *{color:#5a4a36!important;opacity:1!important}
+aside .kitg:not(.sub):not(.fauna)>summary{font:700 12px/1.2 "Barlow Semi Condensed","DM Mono",sans-serif!important;letter-spacing:.12em;text-transform:uppercase;color:#e2c27a!important}
+aside input[type=search]{background:#050807!important;color:#9fe6d0!important;border:0!important;box-shadow:inset 0 0 0 1px #000,inset 0 2px 8px rgba(0,0,0,.9)!important;font-family:"Barlow Semi Condensed","DM Mono",monospace!important;letter-spacing:.06em}
+aside input[type=search]::placeholder{color:rgba(159,230,208,.45)!important}
 /* jugement externe : la règle d'un seul tenant (les raccords du jonc répété tombaient hors des mesures) */
 #ruler{background:linear-gradient(rgba(11,9,8,.45),rgba(11,9,8,.55)),url(img/jonc.webp) left center/100% 100% no-repeat!important}
 body.simple .thead input[aria-label="Volume"],body.simple .thead .r3 input:not([title="Pan"]){width:100%!important}
