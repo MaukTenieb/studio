@@ -635,6 +635,13 @@ aside.min{height:auto!important}
 /* analyse FaunEye, point 7 : l'export se dit par la flèche, comme dans Musik ; le mot reste dans l'infobulle et pour les lecteurs d'écran */
 #bExport span{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}aside.min .gsearch{display:none!important}
 </style>
+<style>/* 21 nov. 2026 (Mauk Tenieb : « l'ergonomie, la simplicité, la beauté internes des programmes ») : épure du mode simple.
+ Tête de piste : nom, menu, M, S, volume. Armement, effet, automation et panoramique passent dans l'Atelier (et restent dans le menu … de la piste).
+ Barre du maître : Mastering et volume. Cible de loudness, mesure LUFS, préréglage et limiteur passent dans l'Atelier. */
+body.simple .thead .rec,body.simple .thead .fxk,body.simple .thead .au,body.simple .thead input[title="Pan"],
+body.simple #mTgt,body.simple #mMeas,body.simple #mPre,body.simple #mLim{display:none!important}
+body.simple .thead input[aria-label="Volume"],body.simple .thead .r3 input:not([title="Pan"]){width:100%!important}
+</style>
 </head>
 <body>
 <div id="kaveIn" aria-hidden="true"></div>
