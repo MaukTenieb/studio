@@ -851,7 +851,7 @@ const T={
   semis:"Demi-tons (−12 … +12)",speed:"Vitesse en % (50 … 200)",times:"Combien de répétitions ?",working:"Calcul…",addFx:"+ effet",presets:"Chaînes d'effets",none:"—",lyrics:"Paroles, notes…",tuner:"Accordeur",exportT:"Export",wav:"Mix WAV",mp3:"Mix MP3",stems:"Pistes séparées WAV (un fichier par piste)",countIn:"Décompte",monitor:"Écoute de contrôle (casque)",master:"Master",autoV:"Automation du volume",autoP:"Automation du panoramique",autoHelp:"Clic : ajoute un point. Glisser : déplace. Double-clic : retire."}
 };
 /* une seule clé de langue pour tout l'écosystème (ik.lang d'Insert Koin), StudioRhogo compris */
-let lang=(localStorage.getItem("ik.lang")||localStorage.getItem("st.lang")||((navigator.language||"en").startsWith("fr")?"fr":"en"));
+let lang=(localStorage.getItem("ik.lang")||localStorage.getItem("st.lang")||"en");/* 22 nov. 2026 (Mauk Tenieb) : anglais par défaut, le français à un clic */
 const t=k=>T[lang][k]||T.en[k]||k;
 const $=s=>document.querySelector(s);
 const el=(tag,attrs={},...kids)=>{const e=document.createElement(tag);for(const k in attrs){if(k==="class")e.className=attrs[k];else if(k.startsWith("on"))e.addEventListener(k.slice(2),attrs[k]);else if(k==="style")e.style.cssText=attrs[k];else e.setAttribute(k,attrs[k]);}for(const c of kids)if(c!=null)e.append(c);return e};
